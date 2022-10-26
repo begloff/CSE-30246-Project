@@ -1,7 +1,7 @@
 <template>
 
 
-    <div class = "card" style="margin-bottom: 20px;">
+    <!-- <div class = "card" style="margin-bottom: 20px;">
         <label for="weeks">Financial Info For:</label>
         <select name="weeks" id="weeks" @change="changeView" v-model="week">
             <option v-for="week in this.$store.state.weeksOfOperation" :value="week">{{ week.replace('-',' ',).replace('-',' ',).replace('-','/',) }}</option>
@@ -119,7 +119,7 @@
             <p style="font-size: 10px;">Weekly Cash Profit: ${{ Number((this.$store.state.weeklyCashRev)).toFixed(2)}}</p>
         </div>
         
-    </div>
+    </div> -->
 
   
 </template>
@@ -128,224 +128,224 @@
 // Need to Adjust the Size of the labels for the chart based on days of the week
 // Start With Sunday and advance to the current day --> need to adjust for end of month
 
-import { weeklyCollection, db, operationCollection, viewCollection, weeklyPrefix } from "../../firebase"
-import { deleteDoc, getDocs, updateDoc, doc, collection, onSnapshot, query, orderBy, setDoc, addDoc, getDoc } from "firebase/firestore"
-import Chart from 'chart.js/auto'
-import ChartDataLabels from 'chartjs-plugin-datalabels'
-import { useStore } from 'vuex'
+// import { weeklyCollection, db, operationCollection, viewCollection, weeklyPrefix } from "../../firebase"
+// import { deleteDoc, getDocs, updateDoc, doc, collection, onSnapshot, query, orderBy, setDoc, addDoc, getDoc } from "firebase/firestore"
+// import Chart from 'chart.js/auto'
+// import ChartDataLabels from 'chartjs-plugin-datalabels'
+// import { useStore } from 'vuex'
 
 
-export default {
+// export default {
 
-    data(){
-        return{
-            totalRev: 0,
-            weeks: [],
-            week: this.$store.state.selectedWeek,
-            myBarChart: null,
-            myDoughnutChart: null,
-            storeDate: null,
-            storeCost: null,
-            storeRuns: [],
-            storeReason: "",
-            totalCost: 0,
-            workerHours: this.combineHours()
-        }
-    },
+//     data(){
+//         return{
+//             totalRev: 0,
+//             weeks: [],
+//             week: this.$store.state.selectedWeek,
+//             myBarChart: null,
+//             myDoughnutChart: null,
+//             storeDate: null,
+//             storeCost: null,
+//             storeRuns: [],
+//             storeReason: "",
+//             totalCost: 0,
+//             workerHours: this.combineHours()
+//         }
+//     },
 
-    async mounted(){
+//     async mounted(){
         
-        this.barChart(this.$store.state.venmo, this.$store.state.cash, this.$store.state.days.flat());
-        this.doughnutChart(this.$store.state.employeeWages, this.$store.state.workingEmployees )
+//         this.barChart(this.$store.state.venmo, this.$store.state.cash, this.$store.state.days.flat());
+//         this.doughnutChart(this.$store.state.employeeWages, this.$store.state.workingEmployees )
 
-    },
+//     },
 
-    methods:{
+//     methods:{
 
-        combineHours(){
-            const x = []
-            for(let i = 0; i < this.$store.state.workingEmployees.length; i++){
-                x.push(this.$store.state.workingEmployees[i] + ": " + this.$store.state.hours[i])
-            }
-            return x
-        },
+//         combineHours(){
+//             const x = []
+//             for(let i = 0; i < this.$store.state.workingEmployees.length; i++){
+//                 x.push(this.$store.state.workingEmployees[i] + ": " + this.$store.state.hours[i])
+//             }
+//             return x
+//         },
 
-        async changeView(){
+//         async changeView(){
 
-            //Need to change selected week --> update view collection and recall Data and store runs
-            this.$store.dispatch("changeWeek", this.week)
+//             //Need to change selected week --> update view collection and recall Data and store runs
+//             this.$store.dispatch("changeWeek", this.week)
 
-            viewCollection.view = collection(db, "finances", this.week, "daily-totals")
+//             viewCollection.view = collection(db, "finances", this.week, "daily-totals")
             
-            this.myBarChart.destroy()
-            this.myDoughnutChart.destroy()
+//             this.myBarChart.destroy()
+//             this.myDoughnutChart.destroy()
 
-            await this.$store.dispatch("getFinancialData")
-            await this.$store.dispatch("getStoreData")
-            await this.$store.dispatch("getSchedule")
-            await this.$store.dispatch("getHours")
+//             await this.$store.dispatch("getFinancialData")
+//             await this.$store.dispatch("getStoreData")
+//             await this.$store.dispatch("getSchedule")
+//             await this.$store.dispatch("getHours")
 
 
-            this.barChart(this.$store.state.venmo, this.$store.state.cash, this.$store.state.days.flat());
-            this.doughnutChart(this.$store.state.employeeWages, this.$store.state.workingEmployees);
+//             this.barChart(this.$store.state.venmo, this.$store.state.cash, this.$store.state.days.flat());
+//             this.doughnutChart(this.$store.state.employeeWages, this.$store.state.workingEmployees);
 
-            this.workerHours = this.combineHours()
-        },
+//             this.workerHours = this.combineHours()
+//         },
         
-        async addStoreRun(){
+//         async addStoreRun(){
 
-            const newRun = await addDoc(collection(db,"finances",this.$store.state.selectedWeek,"store-runs"),{
-                date: this.storeDate,
-                cost: this.storeCost,
-                reason: this.storeReason
-            })
+//             const newRun = await addDoc(collection(db,"finances",this.$store.state.selectedWeek,"store-runs"),{
+//                 date: this.storeDate,
+//                 cost: this.storeCost,
+//                 reason: this.storeReason
+//             })
 
-            this.$store.dispatch("addStoreRun",{
-                date: this.storeDate,
-                cost: this.storeCost,
-                reason: this.storeReason,
-                id: newRun.id
-            })
+//             this.$store.dispatch("addStoreRun",{
+//                 date: this.storeDate,
+//                 cost: this.storeCost,
+//                 reason: this.storeReason,
+//                 id: newRun.id
+//             })
 
-            this.$store.dispatch("addCost",this.storeCost)
+//             this.$store.dispatch("addCost",this.storeCost)
 
-            this.storeDate = null
-            this.storeCost = 0
-            this.storeReason = "-"
-        },
+//             this.storeDate = null
+//             this.storeCost = 0
+//             this.storeReason = "-"
+//         },
 
-        async delStoreRun(id){
+//         async delStoreRun(id){
 
-            await deleteDoc(doc(collection(db,"finances",this.$store.state.selectedWeek,"store-runs"),id))
-            this.$store.dispatch("deleteStoreRun",id)
+//             await deleteDoc(doc(collection(db,"finances",this.$store.state.selectedWeek,"store-runs"),id))
+//             this.$store.dispatch("deleteStoreRun",id)
             
-        },
+//         },
 
-        barChart( venmo, cash, week ){
+//         barChart( venmo, cash, week ){
 
-            const ctx = document.getElementById('myBarChart').getContext('2d');
+//             const ctx = document.getElementById('myBarChart').getContext('2d');
 
-            this.myBarChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: week,
-                    datasets: [
-                        {
-                            label: 'Venmo Total',
-                            data: venmo,
-                            backgroundColor: "#008CFF",
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Cash Total',
-                            data: cash,
-                            backgroundColor: "#85bb65",
-                            borderWidth: 1                      
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grace: "10%",
-                            stacked: true,                     
-                        },
-                        x: {
-                            stacked: true,
-                        }
-                    },
-                    maintainAspectRatio: false,
-                    plugins:{
-                        datalabels:{
-                            anchor: 'end',
-                            align: 'top',
-                            formatter: (value, context) => {
-                                const datasetArray = [];
-                                context.chart.data.datasets.forEach((dataset) => {
-                                    if(dataset.data[context.dataIndex] != undefined){
-                                        datasetArray.push(dataset.data[context.dataIndex]);
-                                    }
-                                });
+//             this.myBarChart = new Chart(ctx, {
+//                 type: 'bar',
+//                 data: {
+//                     labels: week,
+//                     datasets: [
+//                         {
+//                             label: 'Venmo Total',
+//                             data: venmo,
+//                             backgroundColor: "#008CFF",
+//                             borderWidth: 1
+//                         },
+//                         {
+//                             label: 'Cash Total',
+//                             data: cash,
+//                             backgroundColor: "#85bb65",
+//                             borderWidth: 1                      
+//                         }
+//                     ]
+//                 },
+//                 options: {
+//                     scales: {
+//                         y: {
+//                             beginAtZero: true,
+//                             grace: "10%",
+//                             stacked: true,                     
+//                         },
+//                         x: {
+//                             stacked: true,
+//                         }
+//                     },
+//                     maintainAspectRatio: false,
+//                     plugins:{
+//                         datalabels:{
+//                             anchor: 'end',
+//                             align: 'top',
+//                             formatter: (value, context) => {
+//                                 const datasetArray = [];
+//                                 context.chart.data.datasets.forEach((dataset) => {
+//                                     if(dataset.data[context.dataIndex] != undefined){
+//                                         datasetArray.push(dataset.data[context.dataIndex]);
+//                                     }
+//                                 });
 
-                                function totalSum(total, datapoint){
-                                    return total + datapoint;
-                                }
+//                                 function totalSum(total, datapoint){
+//                                     return total + datapoint;
+//                                 }
 
-                                let sum = datasetArray.reduce(totalSum, 0);
+//                                 let sum = datasetArray.reduce(totalSum, 0);
 
-                                if(context.datasetIndex == datasetArray.length - 1){
-                                    return `$ ${Number(sum).toFixed(2)} `;
-                                } else {
-                                    return '';
-                                }
+//                                 if(context.datasetIndex == datasetArray.length - 1){
+//                                     return `$ ${Number(sum).toFixed(2)} `;
+//                                 } else {
+//                                     return '';
+//                                 }
 
-                            }
-                        },
-                        tooltip:{
-                            callbacks:{
-                                label: function(tooltipItem, data){
-                                   return tooltipItem.dataset.label + ": $" + Number(tooltipItem.formattedValue).toFixed(2);
-                                }
-                            }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-            this.myBarChart;
+//                             }
+//                         },
+//                         tooltip:{
+//                             callbacks:{
+//                                 label: function(tooltipItem, data){
+//                                    return tooltipItem.dataset.label + ": $" + Number(tooltipItem.formattedValue).toFixed(2);
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 },
+//                 plugins: [ChartDataLabels]
+//             });
+//             this.myBarChart;
            
-        },
+//         },
 
-        doughnutChart(hours,employees){
-            const ctx = document.getElementById('myDoughnutChart').getContext('2d');
+//         doughnutChart(hours,employees){
+//             const ctx = document.getElementById('myDoughnutChart').getContext('2d');
 
-            this.myDoughnutChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: employees,
-                    datasets:[{
-                        label:'Hours',
-                        data: hours,
-                        backgroundColor: [
-                            'red',
-                            'orange',
-                            'yellow',
-                            'green',
-                            'blue',
-                            'indigo',
-                            'violet',
-                            'brown',
-                            'black',
-                            'white',
-                        ],
-                        hoverOffset: 4
-                    }]
-                },
-                options:{
-                    maintainAspectRatio: false,
-                    plugins:{
-                        tooltip:{
-                            callbacks:{
-                                label: function(tooltipItem, data){
-                                   return tooltipItem.label + ": $" + Number(tooltipItem.parsed).toFixed(2);
-                                }
-                            }
-                        }
-                    }
-                }
+//             this.myDoughnutChart = new Chart(ctx, {
+//                 type: 'doughnut',
+//                 data: {
+//                     labels: employees,
+//                     datasets:[{
+//                         label:'Hours',
+//                         data: hours,
+//                         backgroundColor: [
+//                             'red',
+//                             'orange',
+//                             'yellow',
+//                             'green',
+//                             'blue',
+//                             'indigo',
+//                             'violet',
+//                             'brown',
+//                             'black',
+//                             'white',
+//                         ],
+//                         hoverOffset: 4
+//                     }]
+//                 },
+//                 options:{
+//                     maintainAspectRatio: false,
+//                     plugins:{
+//                         tooltip:{
+//                             callbacks:{
+//                                 label: function(tooltipItem, data){
+//                                    return tooltipItem.label + ": $" + Number(tooltipItem.parsed).toFixed(2);
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
                 
-            });
-            this.myDoughnutChart;            
-        }
+//             });
+//             this.myDoughnutChart;            
+//         }
 
-    }
-
-
+//     }
 
 
-}
-</script>
+
+
+// }
+// </script>
 
 <style>
 

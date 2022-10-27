@@ -1,0 +1,490 @@
+{
+    "week-of-10-9": {
+        "10-10-totals": {
+            "cashTotal": 6,
+            "date": {
+                "__time__": "2022-10-11T04:02:19.788Z"
+            },
+            "onlineFee": 3,
+            "total": 96.5,
+            "totalOrders": 20,
+            "venmoTotal": 90.5
+        },
+        "10-11-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-11T18:52:18.480Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        },
+        "10-12-totals": {
+            "cashTotal": 10,
+            "date": {
+                "__time__": "2022-10-13T04:54:23.672Z"
+            },
+            "onlineFee": 0,
+            "total": 411,
+            "totalOrders": 57,
+            "venmoTotal": 401
+        },
+        "10-13-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-14T03:53:29.396Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        },
+        "10-14-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-14T14:46:40.962Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        },
+        "10-15-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-16T02:25:41.185Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        },
+        "10-9-totals": {
+            "cashTotal": 15.5,
+            "date": {
+                "__time__": "2022-10-10T03:46:18.526Z"
+            },
+            "onlineFee": 5,
+            "total": 217.5,
+            "totalOrders": 45,
+            "venmoTotal": 202
+        }
+    },
+    "week-of-9-25": {
+        "9-25-totals": {
+            "cashTotal": 12,
+            "date": {
+                "__time__": "2022-09-26T04:33:48.389Z"
+            },
+            "onlineFee": 4,
+            "total": 226,
+            "totalOrders": 49,
+            "venmoTotal": 214
+        },
+        "9-26-totals": {
+            "cashTotal": 13,
+            "date": {
+                "__time__": "2022-09-27T04:57:29.886Z"
+            },
+            "onlineFee": 8.5,
+            "total": 255.5,
+            "totalOrders": 48,
+            "venmoTotal": 242.5
+        },
+        "9-27-totals": {
+            "cashTotal": 3,
+            "date": {
+                "__time__": "2022-09-28T04:02:05.937Z"
+            },
+            "onlineFee": 3,
+            "total": 160,
+            "totalOrders": 35,
+            "venmoTotal": 157
+        },
+        "9-28-totals": {
+            "cashTotal": 3,
+            "date": {
+                "__time__": "2022-09-29T04:05:51.376Z"
+            },
+            "onlineFee": 5.5,
+            "total": 139,
+            "totalOrders": 29,
+            "venmoTotal": 136
+        },
+        "9-29-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-30T04:40:46.802Z"
+            },
+            "onlineFee": 2,
+            "total": 138,
+            "totalOrders": 30,
+            "venmoTotal": 138
+        },
+        "9-30-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-30T14:51:58.033Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    },
+    "week-of-9-4": {
+        "9-4-totals": {
+            "cashTotal": 10,
+            "date": {
+                "__time__": "2022-09-05T04:30:21.836Z"
+            },
+            "onlineFee": 4,
+            "total": 169.75,
+            "totalOrders": 33,
+            "venmoTotal": 159.75
+        },
+        "9-5-totals": {
+            "cashTotal": 15,
+            "date": {
+                "__time__": "2022-09-06T04:28:33.829Z"
+            },
+            "onlineFee": 3.5,
+            "total": 208,
+            "totalOrders": 44,
+            "venmoTotal": 193
+        },
+        "9-6-totals": {
+            "cashTotal": 19.5,
+            "date": {
+                "__time__": "2022-09-07T04:44:09.143Z"
+            },
+            "onlineFee": 5,
+            "total": 177.5,
+            "totalOrders": 37,
+            "venmoTotal": 158
+        },
+        "9-7-totals": {
+            "cashTotal": 15,
+            "date": {
+                "__time__": "2022-09-08T04:05:55.337Z"
+            },
+            "onlineFee": 2.5,
+            "total": 236,
+            "totalOrders": 45,
+            "venmoTotal": 218.5
+        },
+        "9-8-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-09T02:53:36.019Z"
+            },
+            "onlineFee": 1,
+            "total": 168,
+            "totalOrders": 10,
+            "venmoTotal": 168
+        },
+        "9-9-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-10T01:06:21.757Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    },
+    "week-of-10-23": {
+        "10-23-totals": {
+            "cashTotal": 9.5,
+            "date": {
+                "__time__": "2022-10-24T03:22:13.342Z"
+            },
+            "onlineFee": 2.5,
+            "total": 145,
+            "totalOrders": 29,
+            "venmoTotal": 135.5
+        }
+    },
+    "week-of-8-28": {
+        "8-28-totals": {
+            "cashTotal": 37,
+            "date": {
+                "__time__": "2022-08-29T03:59:58.170Z"
+            },
+            "onlineFee": 10,
+            "total": 298,
+            "totalOrders": 53,
+            "venmoTotal": 261
+        },
+        "8-29-totals": {
+            "cashTotal": 27,
+            "date": {
+                "__time__": "2022-08-30T04:53:09.771Z"
+            },
+            "onlineFee": 6.5,
+            "total": 238.5,
+            "totalOrders": 48,
+            "venmoTotal": 211.5
+        },
+        "8-30-totals": {
+            "cashTotal": 60,
+            "date": {
+                "__time__": "2022-08-31T04:39:46.460Z"
+            },
+            "onlineFee": 5,
+            "total": 219.5,
+            "totalOrders": 47,
+            "venmoTotal": 155.5
+        },
+        "8-31-totals": {
+            "cashTotal": 16,
+            "date": {
+                "__time__": "2022-09-01T04:24:34.925Z"
+            },
+            "onlineFee": 4,
+            "total": 164.5,
+            "totalOrders": 39,
+            "venmoTotal": 148.5
+        },
+        "9-1-totals": {
+            "cashTotal": 22.5,
+            "date": {
+                "__time__": "2022-09-02T04:56:58.185Z"
+            },
+            "onlineFee": 1,
+            "total": 129.25,
+            "totalOrders": 27,
+            "venmoTotal": 106.75
+        },
+        "9-2-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-02T22:53:36.724Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        },
+        "9-3-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-03T17:13:44.715Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    },
+    "week-of-9-18": {
+        "9-18-totals": {
+            "cashTotal": 14,
+            "date": {
+                "__time__": "2022-09-19T04:52:51.628Z"
+            },
+            "onlineFee": 4.5,
+            "total": 159.5,
+            "totalOrders": 32,
+            "venmoTotal": 145.5
+        },
+        "9-19-totals": {
+            "cashTotal": 5,
+            "date": {
+                "__time__": "2022-09-20T04:01:03.604Z"
+            },
+            "onlineFee": 3,
+            "total": 140.5,
+            "totalOrders": 29,
+            "venmoTotal": 135.5
+        },
+        "9-20-totals": {
+            "cashTotal": 10,
+            "date": {
+                "__time__": "2022-09-21T04:04:53.973Z"
+            },
+            "onlineFee": 2,
+            "total": 153,
+            "totalOrders": 34,
+            "venmoTotal": 145
+        },
+        "9-21-totals": {
+            "cashTotal": 6,
+            "date": {
+                "__time__": "2022-09-22T04:35:09.117Z"
+            },
+            "onlineFee": 4,
+            "total": 180,
+            "totalOrders": 37,
+            "venmoTotal": 174
+        },
+        "9-22-totals": {
+            "cashTotal": 8,
+            "date": {
+                "__time__": "2022-09-23T04:05:20.727Z"
+            },
+            "onlineFee": 1.5,
+            "total": 125,
+            "totalOrders": 27,
+            "venmoTotal": 117
+        },
+        "9-23-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-23T19:51:09.972Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    },
+    "week-of-10-2": {
+        "10-2-totals": {
+            "cashTotal": 15,
+            "date": {
+                "__time__": "2022-10-03T04:02:13.783Z"
+            },
+            "onlineFee": 3.5,
+            "total": 185,
+            "totalOrders": 39,
+            "venmoTotal": 170
+        },
+        "10-3-totals": {
+            "cashTotal": 5,
+            "date": {
+                "__time__": "2022-10-04T04:49:50.168Z"
+            },
+            "onlineFee": 3.5,
+            "total": 173,
+            "totalOrders": 37,
+            "venmoTotal": 168
+        },
+        "10-4-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-05T04:47:30.554Z"
+            },
+            "onlineFee": 3,
+            "total": 145.5,
+            "totalOrders": 35,
+            "venmoTotal": 145.5
+        },
+        "10-5-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-06T04:18:18.183Z"
+            },
+            "onlineFee": 4.5,
+            "total": 180,
+            "totalOrders": 40,
+            "venmoTotal": 180
+        },
+        "10-6-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-07T04:22:04.618Z"
+            },
+            "onlineFee": 2,
+            "total": 84.25,
+            "totalOrders": 20,
+            "venmoTotal": 84.25
+        },
+        "10-7-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-07T15:14:53.914Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    },
+    "week-of-9-11": {
+        "9-11-totals": {
+            "cashTotal": 25,
+            "date": {
+                "__time__": "2022-09-12T04:23:17.817Z"
+            },
+            "onlineFee": 2.5,
+            "total": 161,
+            "totalOrders": 36,
+            "venmoTotal": 136
+        },
+        "9-12-totals": {
+            "cashTotal": 21,
+            "date": {
+                "__time__": "2022-09-13T04:36:49.032Z"
+            },
+            "onlineFee": 0,
+            "total": 176.75,
+            "totalOrders": 0,
+            "venmoTotal": 155.75
+        },
+        "9-13-totals": {
+            "cashTotal": 8,
+            "date": {
+                "__time__": "2022-09-14T02:16:22.379Z"
+            },
+            "onlineFee": 1.5,
+            "total": 175,
+            "totalOrders": 8,
+            "venmoTotal": 167
+        },
+        "9-14-totals": {
+            "cashTotal": 20,
+            "date": {
+                "__time__": "2022-09-15T04:34:50.156Z"
+            },
+            "onlineFee": 2,
+            "total": 165,
+            "totalOrders": 38,
+            "venmoTotal": 145
+        },
+        "9-15-totals": {
+            "cashTotal": 10,
+            "date": {
+                "__time__": "2022-09-16T04:34:30.756Z"
+            },
+            "onlineFee": 3.5,
+            "total": 189,
+            "totalOrders": 41,
+            "venmoTotal": 179
+        },
+        "9-16-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-09-17T04:48:29.807Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    },
+    "week-of-10-16": {
+        "10-17-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-17T18:07:36.487Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        },
+        "10-20-totals": {
+            "cashTotal": 0,
+            "date": {
+                "__time__": "2022-10-20T17:50:59.230Z"
+            },
+            "onlineFee": 0,
+            "total": 0,
+            "totalOrders": 0,
+            "venmoTotal": 0
+        }
+    }
+}

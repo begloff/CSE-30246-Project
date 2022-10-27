@@ -5,17 +5,16 @@ import json
 j               = open('finances.json')
 financeWeeks    = json.load(j)['data']
 
-financesOut = []
-schedOut    = []
+out = []
 
 for week in financeWeeks:
     for obj in financeWeeks[week]['__collections__']:
-        if obj == 'store-runs':
+        if obj == 'daily-totals':
             for day in financeWeeks[week]['__collections__'][obj]:
                 temp = []
                 for thing in financeWeeks[week]['__collections__'][obj][day]:
                     temp.append(financeWeeks[week]['__collections__'][obj][day][thing])
-                financesOut.append(temp)
+                out.append(temp)
 
 with open("financeAdj.json", "w") as outfile:
-    json.dump(financesOut, outfile)
+    json.dump(out, outfile)

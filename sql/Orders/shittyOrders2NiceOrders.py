@@ -2,7 +2,7 @@
 
 import json
 
-j       = open('orders.json')
+j           = open('orders.json')
 orderWeeks  = json.load(j)['data']
 
 out = []
@@ -16,5 +16,5 @@ for week in orderWeeks:
             out.append(temp)
 
 
-with open("ordersAdj.json", "w") as outfile:
+with open("hours.json", "w") as outfile:
     json.dump(out, outfile)

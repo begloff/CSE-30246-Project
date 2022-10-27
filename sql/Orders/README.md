@@ -1,6 +1,6 @@
 # Orders
 
-# File name & description
+* File name & description
 order.json          :   unsorted base file with all info
 
 sorterOrter.json    :   sorted list of orders [cash (bool), comments, time, done (bool), email, items (prime fact), name, NOT SURE (ignore), price, time (display), random empty collections]

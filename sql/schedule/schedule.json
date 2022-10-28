@@ -1,0 +1,425 @@
+{
+    "week-of-10-9": {
+        "Monday": {
+            "date": "Monday 10/10",
+            "order": 1,
+            "schedule": {
+                "0": "McPhee",
+                "1": "Gary",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 10/9",
+            "order": 0,
+            "schedule": {
+                "0": "Ben",
+                "1": "Connor",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 10/13",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 10/11",
+            "order": 2,
+            "schedule": {
+                "0": "Xander",
+                "1": "Neol",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 10/12",
+            "order": 3,
+            "schedule": {
+                "0": "Cam",
+                "1": "-",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-9-25": {
+        "Monday": {
+            "date": "Monday 9/26",
+            "order": 1,
+            "schedule": {
+                "0": "Cam",
+                "1": "Gary",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 9/25",
+            "order": 0,
+            "schedule": {
+                "0": "Ben",
+                "1": "McPhee",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 9/29",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 9/27",
+            "order": 2,
+            "schedule": {
+                "0": "Neol",
+                "1": "Xander",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 9/28",
+            "order": 3,
+            "schedule": {
+                "0": "Connor",
+                "1": "-",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-9-4": {
+        "Monday": {
+            "date": "Monday 9/5",
+            "order": 1,
+            "schedule": {
+                "0": "Ben",
+                "1": "McPhee",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 9/4",
+            "order": 0,
+            "schedule": {
+                "0": "Connor",
+                "1": "Gary",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 9/8",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 9/6",
+            "order": 2,
+            "schedule": {
+                "0": "Neol",
+                "1": "Cam",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 9/7",
+            "order": 3,
+            "schedule": {
+                "0": "Xander",
+                "1": "Connor",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-10-23": {
+        "Monday": {
+            "date": "Monday 10/24",
+            "order": 1,
+            "schedule": {
+                "0": "Cam",
+                "1": "Gary",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 10/23",
+            "order": 0,
+            "schedule": {
+                "0": "Ben",
+                "1": "Xander",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 10/27",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 10/25",
+            "order": 2,
+            "schedule": {
+                "0": "Neol",
+                "1": "McPhee",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 10/26",
+            "order": 3,
+            "schedule": {
+                "0": "Connor",
+                "1": "-",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-8-28": {
+        "Monday": {
+            "date": "Monday 8/29",
+            "order": 1,
+            "schedule": {
+                "0": "Ben",
+                "1": "McPhee",
+                "2": "Cam (Pops) "
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 8/28",
+            "order": 0,
+            "schedule": {
+                "0": "Ben",
+                "1": "Cam",
+                "2": "Will"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 9/1",
+            "order": 4,
+            "schedule": {
+                "0": "Ben",
+                "1": "Bonini",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 8/30",
+            "order": 2,
+            "schedule": {
+                "0": "Ben",
+                "1": "Neol",
+                "2": "Xander"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 8/31",
+            "order": 3,
+            "schedule": {
+                "0": "Ben",
+                "1": "Gary",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-9-18": {
+        "Monday": {
+            "date": "Monday 9/19",
+            "order": 1,
+            "schedule": {
+                "0": "McPhee",
+                "1": "Cam",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 9/18",
+            "order": 0,
+            "schedule": {
+                "0": "Ben",
+                "1": "Gary",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 9/22",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "( Cam -- On Call)",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 9/20",
+            "order": 2,
+            "schedule": {
+                "0": "Connor",
+                "1": "Neol",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 9/21",
+            "order": 3,
+            "schedule": {
+                "0": "Xander",
+                "1": "(Ben -- On Call)",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-10-2": {
+        "Monday": {
+            "date": "Monday 10/3",
+            "order": 1,
+            "schedule": {
+                "0": "Ben",
+                "1": "Cam",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 10/2",
+            "order": 0,
+            "schedule": {
+                "0": "Connor",
+                "1": "Xander",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 10/6",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 10/4",
+            "order": 2,
+            "schedule": {
+                "0": "Neol",
+                "1": "McPhee",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 10/5",
+            "order": 3,
+            "schedule": {
+                "0": "Gary",
+                "1": "-",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-9-11": {
+        "Monday": {
+            "date": "Monday 9/12",
+            "order": 1,
+            "schedule": {
+                "0": "Gary",
+                "1": "Cam",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 9/11",
+            "order": 0,
+            "schedule": {
+                "0": "Ben",
+                "1": "Connor",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 9/15",
+            "order": 4,
+            "schedule": {
+                "0": "Bonini",
+                "1": "Ben",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 9/13",
+            "order": 2,
+            "schedule": {
+                "0": "Xander",
+                "1": "McPhee",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 9/14",
+            "order": 3,
+            "schedule": {
+                "0": "Neol",
+                "1": "McPhee",
+                "2": "-"
+            }
+        }
+    },
+    "week-of-10-16": {
+        "Monday": {
+            "date": "Monday 10/17",
+            "order": 1,
+            "schedule": {
+                "0": "-",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Sunday": {
+            "date": "Sunday 10/16",
+            "order": 0,
+            "schedule": {
+                "0": "-",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Thursday": {
+            "date": "Thursday 10/20",
+            "order": 4,
+            "schedule": {
+                "0": "-",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Tuesday": {
+            "date": "Tuesday 10/18",
+            "order": 2,
+            "schedule": {
+                "0": "-",
+                "1": "-",
+                "2": "-"
+            }
+        },
+        "Wednesday": {
+            "date": "Wednesday 10/19",
+            "order": 3,
+            "schedule": {
+                "0": "-",
+                "1": "-",
+                "2": "-"
+            }
+        }
+    }
+}

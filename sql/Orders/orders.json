@@ -6904,7 +6904,7 @@
                         "time": "6:10:24 PM",
                         "__collections__": {}
                     },
-                    "GMdvazCvee5Z3Geul0zp": {
+                    "GMdvazCvee5Z3Geul0zp": {         
                         "cash": false,
                         "comments": "",
                         "date": {
@@ -7274,7 +7274,7 @@
                         "cash": false,
                         "comments": "",
                         "date": {
-                            "__time__": "2022-08-06T21:50:20.712Z"
+                            "__time__": "2022-08-06T21:50:20.712Z"  
                         },
                         "done": true,
                         "items": [
@@ -7285,7 +7285,7 @@
                         "price": 5.5,
                         "time": "5:50:28 PM",
                         "__collections__": {}
-                    }
+                    }               
                 }
             }
         },

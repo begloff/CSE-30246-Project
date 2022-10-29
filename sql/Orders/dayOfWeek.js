@@ -46,7 +46,7 @@ for(let i = 0; i < orders.length; i++){
     if(d==6){
         dst="SU"
     }
-    s.weekofday=dst
+    s.dayofweek=dst
 }
 //console.log(test)
 

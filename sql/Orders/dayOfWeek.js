@@ -1,5 +1,5 @@
 var fs = require('fs')
-const orders = require('./ordersql.json')
+const orders = require('./output.json')
 test=[
     {
       "cash": false,
@@ -17,34 +17,36 @@ test=[
 for(let i = 0; i < orders.length; i++){
     s=orders[i]
 
-    dat=s.datetime.slice(0,10)
-    end = new Date(dat)
-    let d=end.getDay()
-    time=s.time.slice(0,2)
-    if(time=="12"){
-        d--;
-    }
+    x = new Date(s.datetime)
+
+    console.log(x)
+
+    let d=x.getDay() - 1
+
+    console.log(d)
+    
+
     if(d==-1) d=6
     if(d==0){
-        dst="MO"
+        dst="SU"
     }
     if(d==1){
-        dst="TU"
+        dst="MO"
     }
     if(d==2){
-        dst="WE"
+        dst="TU"
     }
     if(d==3){
-        dst="TH"
+        dst="WE"
     }
     if(d==4){
-        dst="FR"
+        dst="TH"
     }
     if(d==5){
-        dst="SA"
+        dst="FR"
     }
     if(d==6){
-        dst="SU"
+        dst="SA"
     }
     s.dayofweek=dst
 }

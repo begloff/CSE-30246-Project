@@ -16,3 +16,9 @@ CREATE TABLE schedule(
    w2 char(20),
    w3 char(20)
 );
+
+CREATE TABLE hours(
+   week_id int(11),
+   employee_id int(11),
+   hours_worked decimal(3,2)
+);

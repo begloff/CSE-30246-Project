@@ -20,6 +20,9 @@
         <li class="nav-item">
           <router-link class="nav-link" active-class="active" to="/orders">Orders</router-link>
         </li>    
+        <li class="nav-item">
+          <router-link class="nav-link" active-class="active" to="/past-orders">Past Orders</router-link>
+        </li>    
         <li class="nav-item" >
           <a class="nav-link"  v-if="$store.state.user" @click = "$store.dispatch('logout')" href="#">Log Out</a>
         </li>

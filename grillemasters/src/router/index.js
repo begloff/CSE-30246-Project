@@ -8,6 +8,7 @@ import InventoryPage from '../views/InventoryPage.vue'
 import HomePage from '../views/HomePage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import CustomerPage from '../views/CustomerPage.vue'
+import PastOrders from '../views/PastOrders.vue'
 import { auth } from '../firebase'
 
 import store from '../store/store'
@@ -85,6 +86,16 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: "Duncan Grille - Inventory"
+    }
+  },
+
+  {
+    path: '/past-orders',
+    name: 'inventory',
+    component: PastOrders,
+    meta: {
+      requiresAuth: true,
+      title: "Duncan Grille - Past Orders"
     }
   },
 

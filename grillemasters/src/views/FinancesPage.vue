@@ -1,6 +1,6 @@
 <template>
   <h3>Duncan Grille Finances</h3>
-    <WeeklyFinances/>
+<!--WeeklyFinances/-->
 </template>
 
 <script>

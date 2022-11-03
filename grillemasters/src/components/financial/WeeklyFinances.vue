@@ -1,7 +1,7 @@
 <template>
 
 
-    <div class = "card" style="margin-bottom: 20px;">
+    <!-- <div class = "card" style="margin-bottom: 20px;">
         <label for="weeks">Financial Info For:</label>
         <select name="weeks" id="weeks" @change="changeView" v-model="week">
             <option v-for="week in this.$store.state.weeksOfOperation" :value="week">{{ week.replace('-',' ',).replace('-',' ',).replace('-','/',) }}</option>
@@ -119,7 +119,7 @@
             <p style="font-size: 10px;">Weekly Cash Profit: ${{ Number((this.$store.state.weeklyCashRev)).toFixed(2)}}</p>
         </div>
         
-    </div>
+    </div> -->
 
   
 </template>

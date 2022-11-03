@@ -1,5 +1,5 @@
 <template>
-    <div class="new-backdrop" @click.self="$router.push({name: 'orders'})">
+    <div class="new-backdrop" @click.self="$router.push({name: 'past-orders'})">
         <div class="new-modal" @click.self="modal=false, toggleQuantity=false">
 
             <div style="display: inline">

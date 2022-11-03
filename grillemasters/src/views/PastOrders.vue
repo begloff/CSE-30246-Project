@@ -20,6 +20,9 @@
   <div style="float: right; width: 30%; margin-right: 15px; margin-top: 60px;">
     <button @click="fetchOrders()" :disabled = "!(this.$store.state.sWeek && this.selectedDay)" >Get Orders</button>
   </div>
+  <div style="float: right; width: 30%; margin-right: 15px; margin-top: 60px;">
+    <button @click="fetchTestOrders()">Get Test Orders</button>
+  </div>
   <div v-if="this.orders">
     
     <table class="table">
@@ -36,7 +39,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="(order,index) in orders">
+        <tr v-for="(order,index) in orders" :class="
+        { online: order[9] == '1' && order[10] == '0', completed : order[10] == '1' }">
         <th scope="row"> {{ index + 1 }}</th>
         <td>
             <fa icon="money-bill" v-if="order[8] == '1'" style="color:green;"/>
@@ -54,6 +58,12 @@
         <td v-if="order[9] == '0'">${{Number(order[1]).toFixed(2)}}</td>
         <td v-else>${{Number(order[1] - .5).toFixed(2)}}</td>
         
+        <td>
+            <fa icon="check-to-slot" @click="toggleDone(  )" style="color:green; cursor:pointer;"/>
+        </td>
+        <td>
+            <fa icon="trash-can" @click="toggleDel( )" style="color:red; cursor:pointer;"/>
+        </td>
 
         </tr>
 
@@ -105,7 +115,11 @@ export default {
             const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
             this.orders = response.data
 
-            console.log(this.orders)
+        },
+        async fetchTestOrders(){
+            const sql = `SELECT * from orders where order_day = 'TT' order by order_datetime asc`
+            const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
+            this.orders = response.data
 
         }
 

@@ -4,6 +4,7 @@ import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, collection, onSnapshot, query, orderBy, setDoc, getDocs, getDoc, } from "firebase/firestore"
 import { ordersCollection, viewCollection, operationCollection, weeklyPrefix, db} from "../firebase"
+import axios from 'axios';
 
 export default createStore({
     
@@ -15,6 +16,9 @@ export default createStore({
     venmo: null,
     cash: null,
     days: [],
+    weeks: null, //SQL
+    sWeek: null, //SQL
+    customerBase: {}, //SQL
     weeklyRev: null,
     weeklyCashRev: null,
     weeklyVenmoRev: null,
@@ -97,6 +101,15 @@ export default createStore({
     },
     SET_QUEUE(state,payload){
       state.queue = payload;
+    },
+    SET_WEEKS(state,payload){
+      state.weeks = payload
+    },
+    SELECT_WEEK(state,payload){
+      state.sWeek = payload
+    },
+    SET_CUSTOMERS(state,payload){
+      state.customerBase = payload
     }
   },
 
@@ -137,6 +150,7 @@ export default createStore({
           await this.dispatch('getSchedule')
           await this.dispatch('getHours')
           await this.dispatch('getCustomerBase')
+          await this.dispatch('getWeeksSQL')
           this.dispatch('getOrders')
           commit('SET_LOGGED_IN', auth.currentUser)
           router.push('/finances')
@@ -208,6 +222,9 @@ export default createStore({
                 await this.dispatch('getSchedule')
                 await this.dispatch('getHours')
                 await this.dispatch('getCustomerBase')
+                await this.dispatch('getWeeksSQL')
+                await this.dispatch('getCustomerBase')
+
                 this.dispatch('getOrders')
 
                 if (router.isReady() && router.currentRoute.value.path == '/login'){
@@ -483,7 +500,39 @@ export default createStore({
 
     changeWeek({commit}, week){
       commit("CHANGE_SELECTED_WEEK",week)
+    },
+
+    async getWeeksSQL( {commit} ){
+      const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks order by start_date desc;'})
+      const weeks = []
+
+      for (let i = 0; i < response.data.length; i++){
+        // Take list and build an object with each week id and the start date
+        weeks.push([response.data[i][0],response.data[i][1] ])
+      }
+
+      commit("SET_WEEKS", weeks)
+
+    },
+
+    async selectWeek({commit}, week){
+      commit("SELECT_WEEK",week)
+    },
+
+    async getCustomerBase({commit}){
+
+      var obj = {}
+
+      const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from customers;'})
+      const data = response.data
+
+      for( var i = 0; i < data.length; i++){
+        obj[data[i][0]] = data[i]
+      }
+
+      commit("SET_CUSTOMERS",obj)
     }
+
   }
 
 });

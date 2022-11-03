@@ -8,7 +8,7 @@
             </div>
 
             <hr>
-            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="currentOrder.name" autocomplete="off" @input="filterCustomers" @focus="modal=true">
+            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="currentOrder.name" autocomplete="off"  @focus="modal=true">
             <div v-if="filteredCustomers && modal" class="listContainer">
                 <ul style="padding-left: 0px;">
                     <li class="listItem" v-for="customer in filteredCustomers" @click="setCustomer(customer)">{{customer}}</li>
@@ -18,8 +18,6 @@
 
             <button style="background: green; margin-right: 50px; " @click="addItem('DubBuff')">DubBuff</button>
             <button style="background: red; margin-right: 50px;" @click="addItem('SingleBuff')" >SingleBuff</button>
-            <button style="background: #47ad64; margin-right: 50px;" @click="addItem('DubBuff - HS')" >DubBuff - HS</button>
-            <button style="background: #9e4f4f; margin-right: 50px;" @click="addItem('SingleBuff - HS')" >SingleBuff - HS</button>
             <button style="margin-right: 50px;" @click="addItem('CBR')" >CBR</button>
             <button style="background: black; margin-right: 50px;" @click="addItem('Single CBR')">Single CBR</button>
             <button style="background: #918e2d; margin-right: 50px;" @click="addItem('Chicken Nachos')">Chicken Nachos</button>
@@ -64,6 +62,7 @@
 
 import { ordersCollection, db } from '../../firebase'
 import { addDoc, getDoc, doc } from 'firebase/firestore'
+import axios from 'axios';
 
 export default {
 
@@ -75,13 +74,7 @@ export default {
 
         filterCustomers(){
 
-            if (this.currentOrder.name.length == 0){
-                this.filteredCustomers = this.customers
-            }
-
-            this.filteredCustomers = this.customers.filter( customer => {
-                return customer.toLowerCase().includes(this.currentOrder.name.toLowerCase());
-            })
+         
         },
 
         setCustomer(customer){
@@ -104,12 +97,6 @@ export default {
                         this.currentOrder.price += 5
                         break
                     case 'SingleBuff':
-                        this.currentOrder.price += 3
-                        break
-                    case 'DubBuff - HS':
-                        this.currentOrder.price += 5
-                        break
-                    case 'SingleBuff - HS':
                         this.currentOrder.price += 3
                         break
                     case 'CBR':
@@ -143,12 +130,6 @@ export default {
                         this.currentOrder.price -= 5
                         break
                     case 'SingleBuff':
-                        this.currentOrder.price -= 3
-                        break
-                    case 'DubBuff - HS':
-                        this.currentOrder.price -= 5
-                        break
-                    case 'SingleBuff - HS':
                         this.currentOrder.price -= 3
                         break
                     case 'CBR':
@@ -224,8 +205,60 @@ export default {
             let d = new Date()
 
             this.currentOrder.time = d.toLocaleTimeString()
-            await addDoc( ordersCollection, this.currentOrder )
+            let items = this.encodeOrders(this.currentOrder.items)
+            try{
+                let o = this.currentOrder
+                this.insertOrder(o.price, items, 10, "TT", 100, o.cash, o.online, o.done, o.comments)
+                // console.log("Inserted order")
+            }
+            catch (err){
+                // console.log(err)
+            }
+            
 
+        },
+        async insertOrder(price, items, cust_id, dayofweek, week_id, cash, online, done, comments) {
+            let today = new Date()
+            const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
+            // console.log(sql)
+            const res = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+            // console.log(res.data)
+            return res
+        },
+        /*
+        currentOrder: {
+                name: '',
+                items: [],
+                comments: '',
+                price: 0,
+                date: new Date(),
+                time: null,
+                done: false,
+                cash: false,
+                online: false,
+                email: null,
+            },
+        */ 
+        encodeOrders(items){
+            let primes = {
+                'pizza'                 : 2,
+                'dubbuff'               : 3,
+                'singlebuff'            : 5,
+                'cbr'                   : 7,
+                'half'                  : 11,
+                'cheese'                : 13,
+                'chicken'               : 17,
+                'soda/gatorade'         : 19,
+                'ice cream'             : 23
+            }
+            let num = 1
+            for(let i = 0 ; i < items.length; i++){
+                num *= primes[items[i].toLowerCase()]
+            }
+            return num
+        },
+        formatDate(date) {
+            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
         },
 
         hallStaffCheckBox(){

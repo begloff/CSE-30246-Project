@@ -23,8 +23,10 @@
   <div style="float: right; width: 30%; margin-right: 15px; margin-top: 60px;">
     <button @click="fetchTestOrders()">Get Test Orders</button>
   </div>
+
+
   <div v-if="this.orders">
-    
+
     <table class="table">
     <thead>
         <tr>
@@ -59,10 +61,10 @@
         <td v-else>${{Number(order[1] - .5).toFixed(2)}}</td>
         
         <td>
-            <fa icon="check-to-slot" @click="toggleDone(  )" style="color:green; cursor:pointer;"/>
+            <fa icon="check-to-slot" @click="toggleDone(order)" style="color:green; cursor:pointer;"/>
         </td>
         <td>
-            <fa icon="trash-can" @click="toggleDel( )" style="color:red; cursor:pointer;"/>
+            <fa icon="trash-can" @click="toggleDel(order)" style="color:red; cursor:pointer;"/>
         </td>
 
         </tr>
@@ -121,6 +123,23 @@ export default {
             const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
             this.orders = response.data
 
+        },
+        async toggleDel(order){  
+            const sql = `delete from orders where id = ${order[0]}`
+            await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+            this.orders = this.orders.filter( (item) => {
+                return item[0] != order[0];
+            });
+        },
+        async toggleDone(order) {
+            if (order[10] == "1"){
+                order[10] = "0"
+            }
+            else {
+                order[10] = "1"
+            }
+            const sql = `UPDATE orders set done = ${order[10]} where id = ${order[0]}`
+            await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
         }
 
     }

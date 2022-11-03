@@ -91,7 +91,7 @@ const routes = [
 
   {
     path: '/past-orders',
-    name: 'inventory',
+    name: 'past-orders',
     component: PastOrders,
     meta: {
       requiresAuth: true,

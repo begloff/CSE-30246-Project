@@ -20,7 +20,47 @@
   <div style="float: right; width: 30%; margin-right: 15px; margin-top: 60px;">
     <button @click="fetchOrders()" :disabled = "!(this.$store.state.sWeek && this.selectedDay)" >Get Orders</button>
   </div>
-  <p>{{this.orders}}</p>
+  <div v-if="this.orders">
+    
+    <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">$</th>
+        <th scope="col">Type</th>
+        <th scope="col">Time</th>
+        <th scope="col">Name</th>
+        <th scope="col">Order</th>
+        <th scope="col">Comments</th>
+        <th scope="col">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="(order,index) in orders">
+        <th scope="row"> {{ index + 1 }}</th>
+        <td>
+            <fa icon="money-bill" v-if="order[8] == '1'" style="color:green;"/>
+            <fa icon="v" style="color:blue;" v-else/>
+        </td>
+        <td>
+            <fa icon="computer" v-if="order[9] == '1'" style="color: black;"/>
+            <fa icon="people-arrows" v-else />
+        </td>
+        <td>{{ order[3] }}</td>
+        <td v-if="order[7] == 'None'">Customer</td>
+        <td v-else>{{ this.$store.state.customerBase[order[7]][2] }}</td>
+        <td>{{ order[2] }}</td>
+        <td style="word-wrap: break-word; max-width: 400px;">{{ order[11]}}</td>
+        <td v-if="order[9] == '0'">${{Number(order[1]).toFixed(2)}}</td>
+        <td v-else>${{Number(order[1] - .5).toFixed(2)}}</td>
+        
+
+        </tr>
+
+    </tbody>
+    </table>
+
+  </div>
 </template>
 
 <script>
@@ -63,8 +103,9 @@ export default {
         async fetchOrders(){
             const sql = `SELECT * from orders where week_id = ${this.$store.state.sWeek[0]} and order_day = '${this.selectedDay}' order by order_datetime asc`
             const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
-
             this.orders = response.data
+
+            console.log(this.orders)
 
         }
 

@@ -18,6 +18,7 @@ export default createStore({
     days: [],
     weeks: null, //SQL
     sWeek: null, //SQL
+    customerBase: {}, //SQL
     weeklyRev: null,
     weeklyCashRev: null,
     weeklyVenmoRev: null,
@@ -106,6 +107,9 @@ export default createStore({
     },
     SELECT_WEEK(state,payload){
       state.sWeek = payload
+    },
+    SET_CUSTOMERS(state,payload){
+      state.customerBase = payload
     }
   },
 
@@ -219,6 +223,7 @@ export default createStore({
                 await this.dispatch('getHours')
                 await this.dispatch('getCustomerBase')
                 await this.dispatch('getWeeksSQL')
+                await this.dispatch('getCustomerBase')
 
                 this.dispatch('getOrders')
 
@@ -512,6 +517,20 @@ export default createStore({
 
     async selectWeek({commit}, week){
       commit("SELECT_WEEK",week)
+    },
+
+    async getCustomerBase({commit}){
+
+      var obj = {}
+
+      const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from customers;'})
+      const data = response.data
+
+      for( var i = 0; i < data.length; i++){
+        obj[data[i][0]] = data[i]
+      }
+
+      commit("SET_CUSTOMERS",obj)
     }
 
   }

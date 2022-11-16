@@ -54,7 +54,7 @@
         </td>
         <td>{{ order[3] }}</td>
         <td v-if="order[7] == 'None'">Customer</td>
-        <td v-else>{{ this.$store.state.customerBase[order[7]][2] }}</td>
+        <td v-else>{{ this.$store.state.customerBaseInd[order[7]][2] }}</td>
         <td>{{ order[2] }}</td>
         <td style="word-wrap: break-word; max-width: 400px;">{{ order[11]}}</td>
         <td v-if="order[9] == '0'">${{Number(order[1]).toFixed(2)}}</td>

@@ -8,7 +8,7 @@
             </div>
 
             <hr>
-            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="currentOrder.name" autocomplete="off"  @focus="modal=true">
+            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="currentOrder.name" autocomplete="off" @input="filterCustomers" @focus="modal=true">
             <div v-if="filteredCustomers && modal" class="listContainer">
                 <ul style="padding-left: 0px;">
                     <li class="listItem" v-for="customer in filteredCustomers" @click="setCustomer(customer)">{{customer}}</li>
@@ -70,11 +70,15 @@ export default {
         this.filterCustomers();
     },
 
-    methods: {
-
+    methods: { 
         filterCustomers(){
-
-         
+            let name = this.currentOrder.name;
+            if(name){
+                this.filteredCustomers =  this.customers.map(cust => cust[2]).filter(cust => cust.toLowerCase().includes(name.toLowerCase())) 
+            }
+            else{
+                this.filteredCustomers =  this.customers.map(cust => cust[2]) 
+            }
         },
 
         setCustomer(customer){
@@ -196,10 +200,18 @@ export default {
 
             this.$emit('close')
 
-            const person = await getDoc(doc(db,"customers",this.currentOrder.name))
+            const person = this.customers.reduce((cust, acc) => {
+                if(cust[2] == this.currentOrder.name){
+                    acc = cust;
+                }
+                return acc
+            })
 
-            if(person.data()){
-                this.currentOrder.email = person.data().email
+            if(person){
+                this.currentOrder.custId = Number(person[0]);
+            }
+            else{
+                this.currentOrder.custId = 1;
             }
 
             let d = new Date()
@@ -208,11 +220,11 @@ export default {
             let items = this.encodeOrders(this.currentOrder.items)
             try{
                 let o = this.currentOrder
-                this.insertOrder(o.price, items, 10, "TT", 100, o.cash, o.online, o.done, o.comments)
+                this.insertOrder(o.price, items, this.currentOrder.custId, "TT", 100, o.cash, o.online, o.done, o.comments)
                 // console.log("Inserted order")
             }
             catch (err){
-                // console.log(err)
+                console.log(err)
             }
             
 
@@ -315,6 +327,7 @@ export default {
             
             currentOrder: {
                 name: '',
+                custId: null,
                 items: [],
                 comments: '',
                 price: 0,

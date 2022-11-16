@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, collection, onSnapshot, query, orderBy, setDoc, getDocs, getDoc, } from "firebase/firestore"
 import { ordersCollection, viewCollection, operationCollection, weeklyPrefix, db} from "../firebase"
 import axios from 'axios';
+import { end } from '@popperjs/core';
 
 export default createStore({
     
@@ -17,8 +18,10 @@ export default createStore({
     cash: null,
     days: [],
     weeks: null, //SQL
-    sWeek: null, //SQL
-    customerBase: {}, //SQL
+    currWeek: null,
+    currDay: null,
+    sWeek: 3, //SQL
+    sDay: 'TU',
     weeklyRev: null,
     weeklyCashRev: null,
     weeklyVenmoRev: null,
@@ -37,6 +40,7 @@ export default createStore({
     employeeRole: null,
     customer: null,
     customerBase: [],
+    customerBaseInd: {},
     queue: [],
 
   },
@@ -110,6 +114,15 @@ export default createStore({
     },
     SET_CUSTOMERS(state,payload){
       state.customerBase = payload
+    },
+    SET_CUSTOMERS_IND(state, payload){
+      state.customerBaseInd = payload
+    },
+    SET_CURR_WEEK(state, payload){
+      state.currWeek = payload
+    },
+    SET_CURR_DAY(state, payload){
+      state.currDay = payload
     }
   },
 
@@ -151,7 +164,7 @@ export default createStore({
           await this.dispatch('getHours')
           await this.dispatch('getCustomerBase')
           await this.dispatch('getWeeksSQL')
-          this.dispatch('getOrders')
+          
           commit('SET_LOGGED_IN', auth.currentUser)
           router.push('/finances')
 
@@ -223,9 +236,8 @@ export default createStore({
                 await this.dispatch('getHours')
                 await this.dispatch('getCustomerBase')
                 await this.dispatch('getWeeksSQL')
-                await this.dispatch('getCustomerBase')
 
-                this.dispatch('getOrders')
+                
 
                 if (router.isReady() && router.currentRoute.value.path == '/login'){
                     router.push('/finances')
@@ -251,71 +263,34 @@ export default createStore({
         }
      },
 
-     getOrders({ commit }){
-      const q = query( ordersCollection, orderBy("date") )
 
-      onSnapshot( q, (querySnapshot) => {
-          const orders = [];
-          let total = 0;
-          let cashTotal = 0;
-          let venmoTotal = 0;
-          let onlineFee = 0;
-          let queue = [];
 
-          querySnapshot.forEach( (order) => {
+     /*
+     SET_ORDERS(state,payload){
+      state.orders = payload.o;
+      state.nightTotal = payload.t;
+      state.nightOnlineFee = payload.of;
+    }
+     */
 
-              orders.push( {
-                  id: order.id,
-                  data: order.data()
-              });
+    async getOrdersByDay({ commit }){
+      const sql = `SELECT * from orders where week_id = ${this.state.sWeek} and order_day = '${this.state.sDay}' order by order_datetime asc`
+      const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
+      let orders = response.data
+      let nightTot = 0;
+      let onlineTot = 0;
+      for(let i = 0; i < orders.length; i++){
+        nightTot += Number(orders[i][1])
+        if(orders[i][9] == '1'){
+          onlineTot += .5;
+        }
+      }
+      console.log(nightTot, onlineTot)
+      commit("SET_ORDERS", {o: orders, t: nightTot, of: onlineTot})
+    },
 
-              total += order.data().price
-
-              if( order.data().cash){
-                cashTotal += order.data().price
-              } else {
-                if( order.data().online ){
-                  venmoTotal += (order.data().price - 0.5)
-                  onlineFee += 0.5
-                  total -= 0.5
-                } else {
-                  venmoTotal += order.data().price
-                }
-              }
-              
-              if( !order.data().done ){
-                queue.push(order.data().name);
-              }
-
-          })
-
-          let d = new Date
-
-          if(d.getHours() == 21 || d.getHours() == 22 || d.getHours() == 23 || d.getHours() == 0){ //Adjusts Minutes so totals reflect previous day rather than the next
-            d.setMinutes(d.getMinutes() - 60);
-          }
-          
-          let weekly = (d.getMonth()+ 1) + "-" + d.getDate() + "-totals"
-
-          setDoc( doc( db, "finances",weeklyPrefix,"daily-totals",weekly ), {
-
-            total: total,
-            cashTotal: cashTotal,
-            venmoTotal: venmoTotal,
-            totalOrders: orders.length,
-            onlineFee: onlineFee,
-            date: new Date()
-
-          });
-
-          setDoc( doc(db,"orders","daily-queue"),{
-            queue: queue,
-          });
-
-        commit('SET_ORDERS', {o: orders, t: total, of: onlineFee} )
-
-      })
-
+    async getOrdersByWeek({ commit }){
+      
     },
 
     async getFinancialData( {commit} ){
@@ -399,21 +374,6 @@ export default createStore({
       })
 
       commit("SET_WEEKS",weeks)
-
-    },
-
-    async getCustomerBase({commit}){
-
-      const customerSnapshot = await getDocs(collection(db,"customers"));
-      const customerBase = []
-
-      customerSnapshot.forEach((customer) => {
-        customerBase.push(
-          customer.id
-        )
-      })
-
-      commit("SET_CUSTOMER_BASE", customerBase)
 
     },
 
@@ -513,7 +473,50 @@ export default createStore({
 
       commit("SET_WEEKS", weeks)
 
+      //get week id from the database if it exists
+      let date = new Date()
+      let d = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
+      let response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
+      
+      if(response2.data.length == 0){
+        //insert new week if the week doesn't exist yet
+        let start_date = new Date()
+        let end_date = new Date()
+        start_date.setDate(date.getDate() - date.getDay()) 
+        end_date.setDate(start_date.getDate() + 6)
+        start_date.setHours(-5); start_date.setMinutes(0); start_date.setSeconds(0);
+        end_date.setHours(18); end_date.setMinutes(59); end_date.setSeconds(59);
+        console.log(start_date, end_date)
+        axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO weeks (start_date, end_date) values( "${start_date.toISOString().slice(0, 19).replace('T', ' ')}", "${end_date.toISOString().slice(0, 19).replace('T', ' ')}")`})
+        response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
+      }
+
+
+      commit("SET_CURR_WEEK", Number(response2.data[0][0]))
+      
+      //find day of the week as a number and make it a day code
+      let wkday = null;
+      if(date.getHours() < 5){
+        console.log('here')
+        wkday = date.getDay() - 1;
+      }
+      else {
+        wkday = date.getDay();
+      }
+      let daysOfWeek = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+
+      commit('SET_CURR_DAY', daysOfWeek[wkday])
+
     },
+
+
+
+
+
+
+
+
+
 
     async selectWeek({commit}, week){
       commit("SELECT_WEEK",week)
@@ -521,16 +524,19 @@ export default createStore({
 
     async getCustomerBase({commit}){
 
+      var arr = []
       var obj = {}
 
       const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from customers;'})
       const data = response.data
 
       for( var i = 0; i < data.length; i++){
+        arr.push(data[i])
         obj[data[i][0]] = data[i]
       }
-
-      commit("SET_CUSTOMERS",obj)
+      
+      commit("SET_CUSTOMERS",arr)
+      commit("SET_CUSTOMERS_IND",obj)
     }
 
   }

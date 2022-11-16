@@ -25,7 +25,9 @@ export default {
             total: 0
         }
     },
-
+    mounted(){
+        this.$store.dispatch('getOrdersByDay');
+    },  
     methods:{
         toggleOrderModal(){
             this.showOrderModal = !this.showOrderModal

@@ -22,3 +22,12 @@ CREATE TABLE hours(
    employee_id int(11),
    hours_worked decimal(3,2)
 );
+
+CREATE TABLE costs(
+   cost_id int NOT NULL AUTO_INCREMENT,
+   week_id int(11),
+   cost decimal(5,2),
+   date datetime,
+   reason char(100),
+   PRIMARY KEY (cost_id)
+);

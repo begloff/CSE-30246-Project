@@ -8,6 +8,7 @@ financeWeeks    = json.load(j)['data']
 finances = dict()
 
 for week in financeWeeks:
+    financesOut = ""
     for obj in financeWeeks[week]['__collections__']:
         if obj == 'hours':
             financesOut = dict()
@@ -18,7 +19,9 @@ for week in financeWeeks:
                         temp[thing] = financeWeeks[week]['__collections__'][obj][day][thing]
                 financesOut[day] = temp
 
+    print(week, financesOut,'\n')
     if(financesOut):
+        print(financesOut)
         finances[week] = financesOut
 
 with open("hours.json", "w") as outfile:

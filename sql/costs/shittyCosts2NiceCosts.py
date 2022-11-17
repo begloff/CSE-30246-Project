@@ -8,6 +8,7 @@ financeWeeks    = json.load(j)['data']
 finances = dict()
 
 for week in financeWeeks:
+    financesOut = ""
     for obj in financeWeeks[week]['__collections__']:
         if obj == 'store-runs':
             financesOut = dict()

@@ -17,17 +17,18 @@ export default createStore({
     cash: null,
     days: [],
     weeks: null, //SQL
-    sWeek: null, //SQL
+    sWeek: [], //SQL
     customerBase: {}, //SQL
-    weeklyRev: null,
+    weeklyRev: 50,
     weeklyCashRev: null,
     weeklyVenmoRev: null,
     weeklyOnlineFee: null,
     nightOnlineFee: null,
     selectedWeek: weeklyPrefix,
     storeRuns: [],
-    totalCost: null,
-    weeksOfOperation: [],
+    totalCost: 40,
+    // so pretty much we have to get weeksOfOperation from SQL (?)
+    weeksOfOperation: ['week of 11/3', 'week of 11/10'],
     schedule: [],
     employees: [],
     hours: [],

@@ -6,12 +6,21 @@
   <div style="max-width:40%; margin-left:30%; margin-right:30%; margin-bottom:20px; text-align:center;">
     <label for="weeks">Financial Info For:</label>
     
-    <select name="weeks" id="weeks" @change="changeView" v-model="week" > 
+    <select name="weeks" id="weeks" @change="changeWeek" v-model="selectedWeek" > 
       <!-- so pretty much we have to get weeks of operation from sql to the store-->
-      <option v-for="week in this.$store.state.weeksOfOperation" :value="week"> {{ week }} </option>
+      <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
       <!-- This line is fucked ^^^ -->
+
+      <!-- Fixed it Tommy <3 -->
+      <!-- What you need to do from here is make queries to db using axios based on the selected week -->
+      <!-- Make requests to axios within the methods below -->
+
     </select>
-    {{ week }}
+
+    <p>Value for selected week is {{selectedWeek}} </p>
+
+
+
   </div>
 
   <div style="margin-top: 50px; margin-bottom: 50px;">
@@ -53,6 +62,21 @@ export default{
   components:{
     WeeklyFinances,
   },
+
+  methods:{
+    // Insert methods here
+    changeWeek(){
+      //The change week method is referenced above in the select tag
+      //Can extract week id (first entry in selectedWeek list)
+      
+    }
+  },
+
+  data(){
+    return{
+      selectedWeek: []
+    }
+  }
   
 }
 

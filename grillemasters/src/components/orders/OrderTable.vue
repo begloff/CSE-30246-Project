@@ -30,20 +30,20 @@
         <td>{{ order[3] }}</td>
         <td v-if="order[7] == 'None'">Customer</td>
         <td v-else>{{ this.$store.state.customerBaseInd[order[7]][2] }}</td>
-        <td>{{ order[2] }}</td>
+        <td>{{ decodeOrder(order[2]) }}</td>
         <td style="word-wrap: break-word; max-width: 400px;">{{ order[11]}}</td>
         <td v-if="order[9] == '0'">${{Number(order[1]).toFixed(2)}}</td>
         <td v-else>${{Number(order[1] - .5).toFixed(2)}}</td>
       
 
       <td>
-        <fa icon="check-to-slot" @click="toggleDone( order.id, order.data )" style="color:green; cursor:pointer;"/>
+        <fa icon="check-to-slot" @click="toggleDone( order )" style="color:green; cursor:pointer;"/>
       </td>
       <td>
-        <fa icon="pen-to-square" @click="$router.push( { path: `/orders/edit/${order.id}` })" style="color:#2c3e50; cursor: pointer"/>
+        <fa icon="pen-to-square" @click="$router.push( { path: `/orders/edit/${order[0]}` })" style="color:#2c3e50; cursor: pointer"/>
       </td>
       <td>
-        <fa icon="trash-can" @click="toggleDel( order.id )" style="color:red; cursor:pointer;"/>
+        <fa icon="trash-can" @click="toggleDel( order[0] )" style="color:red; cursor:pointer;"/>
       </td>
       
 
@@ -76,14 +76,9 @@ export default {
 
     methods: {
 
-        async toggleDone( id, order ){
+        async toggleDone( order ){
           // Read done value from order and flip it
-
-            await updateDoc( doc(ordersCollection, id),{
-                done: !order.done
-            })
-
-            order.done = !order.done
+          this.$store.dispatch('completeOrder', {order: order});
         },
 
         toggleModal(){
@@ -91,13 +86,45 @@ export default {
         },
 
         toggleDel( id ){
-            this.delId = id
-            this.deleteModal = !this.deleteModal
+            this.$store.dispatch('deleteOrder', {id: id});
         },
 
         async confirmDelete(){
             this.deleteModal = !this.deleteModal
             await deleteDoc( doc( ordersCollection, this.delId ))
+        },
+        decodeOrder(order){
+          let primes = {
+                2:'pizza'                 ,
+                3:'Dubbuff'               ,
+                5:'Singlebuff'            ,
+                7:'CBR'                   ,
+                11:'Half CBR'                 ,
+                13:'Cheese Nachos'               ,
+                17:'Chicken Nachos'              ,
+                19:'Soda/Gatorade'        ,
+                23:'Ice Cream'            
+          }
+          let orderlist = []
+          let pizza = 0
+          while(order % 2 == 0){
+            order /= 2;
+            pizza++;
+          }
+          if(pizza){
+            orderlist.push(`${pizza} Pizza Rolls`)
+          }
+          for(const key in primes){
+            if(key == 2){
+              continue;
+            }
+            while(order % key == 0){
+              orderlist.push(primes[key])
+              order /= key;
+            }
+          } 
+          return orderlist.join(', ');
+        
         },
     },
 

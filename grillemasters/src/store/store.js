@@ -274,9 +274,14 @@ export default createStore({
      */
 
     async getOrdersByDay({ commit }){
-      const sql = `SELECT * from orders where week_id = ${this.state.sWeek} and order_day = '${this.state.sDay}' order by order_datetime asc`
+      const sql = `SELECT * from orders where week_id = ${this.state.currWeek} and order_day = '${this.state.currDay}' order by order_datetime asc`
       const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
       let orders = response.data
+      this.dispatch('commitOrders', { o: orders})
+    },
+
+    async commitOrders({commit}, o) {
+      let orders = o.o
       let nightTot = 0;
       let onlineTot = 0;
       for(let i = 0; i < orders.length; i++){
@@ -497,7 +502,6 @@ export default createStore({
       //find day of the week as a number and make it a day code
       let wkday = null;
       if(date.getHours() < 5){
-        console.log('here')
         wkday = date.getDay() - 1;
       }
       else {
@@ -510,13 +514,29 @@ export default createStore({
     },
 
 
+    async deleteOrder( {commit}, payload){
+      let id = payload.id;
+      console.log(payload);
+      const sql = `delete from orders where id = ${id}`
+      await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+      let orders = this.state.orders.filter( (item) => {
+          return item[0] != id;
+      });
 
+      this.dispatch('commitOrders', { o: orders})
+    },
 
-
-
-
-
-
+    async completeOrder( {commit}, payload){
+      let order = payload.order
+      if (order[10] == "1"){
+        order[10] = "0"
+      }
+      else {
+          order[10] = "1"
+      }
+      const sql = `UPDATE orders set done = ${order[10]} where id = ${order[0]}`
+      await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+    },
 
     async selectWeek({commit}, week){
       commit("SELECT_WEEK",week)

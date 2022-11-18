@@ -200,19 +200,19 @@ export default {
 
             this.$emit('close')
 
-            const person = this.customers.reduce((cust, acc) => {
-                if(cust[2] == this.currentOrder.name){
-                    acc = cust;
-                }
-                return acc
+            const person = this.customers.filter((cust) => {
+                cust[2] == this.currentOrder.name
             })
 
-            if(person){
+
+            if(person.length != 0){
                 this.currentOrder.custId = Number(person[0]);
             }
             else{
-                this.currentOrder.custId = 1;
+                this.currentOrder.custId = 155;
             }
+
+            console.log(this.currentOrder.custId)
 
             let d = new Date()
 
@@ -220,7 +220,8 @@ export default {
             let items = this.encodeOrders(this.currentOrder.items)
             try{
                 let o = this.currentOrder
-                this.insertOrder(o.price, items, this.currentOrder.custId, "TT", 100, o.cash, o.online, o.done, o.comments)
+                console.log(this.currentOrder.custId)
+                this.insertOrder(o.price, items, this.currentOrder.custId, this.$store.state.currDay, this.$store.state.currWeek, o.cash, o.online, o.done, o.comments)
                 // console.log("Inserted order")
             }
             catch (err){
@@ -233,9 +234,14 @@ export default {
             let today = new Date()
             const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
             // console.log(sql)
-            const res = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+            try{
+                await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+            }
+            catch (err){
+                console.log(err)
+            }
             // console.log(res.data)
-            return res
+            await this.$store.dispatch('getOrdersByDay');
         },
         /*
         currentOrder: {
@@ -265,7 +271,14 @@ export default {
             }
             let num = 1
             for(let i = 0 ; i < items.length; i++){
-                num *= primes[items[i].toLowerCase()]
+                console.log(items[i])
+                if(items[i].includes("Pizza")){
+                    let p = items[i].split(" ")
+                    num *= Math.pow(2,Number(p[0]))
+                }
+                else {
+                    num *= primes[items[i].toLowerCase()]
+                }
             }
             return num
         },

@@ -21,55 +21,27 @@
   </div>
 
   <div>
-    <h2 style="font-weight: bold;" 
+    <h1 style="font-weight: bold;" 
     :class="{ negative: this.$store.state.weeklyRev - this.$store.state.totalCost < 0, 
               positive: this.$store.state.weeklyRev - this.$store.state.totalCost > 0}">
     Weekly Profit: ${{Number(this.$store.state.weeklyRev - this.$store.state.totalCost).toFixed(2)}}
-    </h2>
-    <p style="font-size:6px; text-align: right; margin-right: 38.2%; color:red;">Grille Valuation: bussin 💯</p>
+    </h1>
+      <p style="font-size: 15px; color:green; text-align: right; margin-bottom:15px; margin-right: 35.2%;">Venmo Profit: ${{ Number((this.$store.state.weeklyVenmoRev - this.$store.state.totalCost)).toFixed(2)}}</p>
+      <p style="font-size: 15px; color:green; text-align: right; margin-bottom:15px; margin-right: 35.2%;">Cash Profit: ${{ Number((this.$store.state.weeklyCashRev)).toFixed(2)}}</p>
+      <p style="font-size: 15px; text-align: right; margin-bottom:15px; margin-right: 35.2%; color:red;">Grille Valuation: bussin 💯</p>
   </div>
-
+  <hr style="width:80%; margin: auto; margin-bottom:40px;">
   <div style="margin:auto; height:350px; width:95%; border:0px solid #000;">
     <div class="lCard">
       <p style="color: green; font-size: 22px;">Weekly Revenue: ${{Number(this.$store.state.weeklyRev).toFixed(2)}}</p>
       <div>
         <canvas id="myBarChart" width="500" height="200" style="align: center; margin-top: 5px; border:1px solid #000000;"></canvas>
       </div>
-  </div>
+    </div>
     
     <div class="rCard">
       <p style="color: red; font-size: 22px;">Weekly Cost: ${{Number(this.$store.state.totalCost).toFixed(2)}}</p>
-      <div>
-        <canvas id="myBarChart" width="500" height="200" style="align: center; margin-top: 5px; border:1px solid #000000;"></canvas>
-      </div>
-    </div>
-  </div>
-
-<div style="margin:auto; height:675px; width:95%; border:0px solid #000;">
-    <div class="lCard">
-      <h2> Profit Distribution: </h2>
-      <p style="font-size: 12px;">Weekly Profit: ${{ Number((this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
-      <p style="font-size: 12px; color: red;">10% Operations Cut: ${{ Number(0.1 * (this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
-      <p style="font-size: 12px; color: red;">Weekly Online Fees: ${{ Number(this.$store.state.weeklyOnlineFee).toFixed(2)}}</p>
-      <p style="font-size: 12px; color: green;">Employee Wage Pool: ${{ Number(0.9 * (this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
-      <p style="font-size: 12px; color: orange;">Hours Worked: {{this.$store.state.totalHours}}</p>
-      <hr style="width:80%; margin: auto; margin-bottom:20px;">
-      <p style="color: green; font-size: 24px;"> 
-          Hourly Wage: ${{ Number( (0.9 * (this.$store.state.weeklyRev - this.$store.state.totalCost) ) / this.$store.state.totalHours ).toFixed(2)}}/hour
-      </p>
-
-      <div id="chart-wrapper">
-          <canvas id="myDoughnutChart" width="250" height="250" style="margin-top: 5px"></canvas>
-      </div>
-
-      <p style="font-size: 10px;">Full Amount May Include Both Venmo and Cash</p>
-      <p style="font-size: 10px;">Weekly Venmo Profit: ${{ Number((this.$store.state.weeklyVenmoRev - this.$store.state.totalCost)).toFixed(2)}}</p>
-      <p style="font-size: 10px;">Weekly Cash Profit: ${{ Number((this.$store.state.weeklyCashRev)).toFixed(2)}}</p>
-    </div>
-
-    <div class="rCard">
-        <p style="color: red; font-size: 22px;">Costs: {{this.$store.state.selectedWeek.replace('-',' ',).replace('-',' ',).replace('-','/',)}}</p>
-        
+      <div>        
         <table class="table">
             <thead>
                 <tr>
@@ -95,19 +67,42 @@
                 </tr>
             </tbody>
         </table>
-
-        <label for="dateInput">Date of Cost</label>
-        <input type="date" v-model="storeDate" name="dateInput">
-        <label for="dollarInput">Cost in $</label>
-        <input type="number" min="0.01" step="0.01" name="dollarInput" v-model="storeCost">
-        <label for="costInput">Reason for Cost</label>
-        <input type="text" name="costInput" v-model="storeReason">
-        <button @click="addStoreRun">Add Cost</button>
+      </div>
     </div>
-
   </div>
-  
-  <div style="margin:auto; height:400px; width:95%; border:0px solid #000;">
+
+  <div style="margin:auto; margin-bottom: 15px; height:430px; width:95%; border:1px solid #000;">
+    <div class="lCard">
+      <h2> Profit Distribution: </h2>
+      <p style="font-size: 14px;">Weekly Profit: ${{ Number((this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
+      <p style="font-size: 14px; color: red;">10% Operations Cut: ${{ Number(0.1 * (this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
+      <p style="font-size: 14px; color: red;">Weekly Online Fees: ${{ Number(this.$store.state.weeklyOnlineFee).toFixed(2)}}</p>
+      <p style="font-size: 14px; color: green;">Employee Wage Pool: ${{ Number(0.9 * (this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
+      <p style="font-size: 14px; color: orange;">Hours Worked: {{this.$store.state.totalHours}}</p>
+      <hr style="width:80%; margin: auto; margin-bottom:40px;">
+      <p style="color: green; font-size: 40px;"> 
+          Hourly Wage: ${{ Number( (0.9 * (this.$store.state.weeklyRev - this.$store.state.totalCost) ) / this.$store.state.totalHours ).toFixed(2)}}/hour
+      </p>
+    </div>
+    <div class="rCard">
+
+      <div id="chart-wrapper">
+        <canvas id="myDoughnutChart" width="250" height="250" style="margin-top: 5px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div style="width:95%; margin:auto; height:400px; border:1px solid #000000;">
+    <label for="dateInput">Date of Cost</label>
+    <input type="date" v-model="storeDate" name="dateInput">
+    <label for="dollarInput">Cost in $</label>
+    <input type="number" min="0.01" step="0.01" name="dollarInput" v-model="storeCost">
+    <label for="costInput">Reason for Cost</label>
+    <input type="text" name="costInput" v-model="storeReason">
+    <button @click="addStoreRun">Add Cost</button>
+  </div>
+
+  <div style="margin:auto; margin-top:60px; height:600px; width:90%; border:1px solid #000;">
     <h2 style="margin-top:20px;">Schedule</h2>
     <table class="table">
     <thead>
@@ -136,7 +131,6 @@
   <div style="float:right; margin:auto;">
       <p style="color: green; font-size: 8px; margin-right: 50px;">Go Dawgs ΔΩΓ</p>
   </div>
-
 </template>
 <script>
 import WeeklyFinances from '../components/financial/WeeklyFinances.vue'

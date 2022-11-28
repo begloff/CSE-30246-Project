@@ -56,11 +56,42 @@
     <button @click="addStoreRun" :disabled="!storeDate || !storeCost || !storeReason">Add Cost</button>
 
   </div>
+  <hr>
+  <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+    <p> Inventory in Stock for Week of  {{selectedWeek[1].split(" ")[0]}}</p>
+    <p>Chicken Units: {{chickenStorage}} Bags</p>
+    <p>Cheese Units: {{cheeseStorage}} Bags</p>
+    <p>Chips Units: {{chipsStorage}} Bags</p>
+    <p>Bacon Units: {{baconStorage}} Bags</p>
+
+  </div>
+  <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+    <!-- <label for="dateInput">Week of Inventory Update</label>
+
+    <select name="weeks" id="weeks" v-model="selectedWeekInven" >
+      <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
+    </select>
+    <p> {{selectedWeekInven}} </p> -->
+
+    <p>Update Inventory for Week of {{selectedWeek[1].split(" ")[0]}}</p>
+    <label for="chickenInput">Chicken Storage</label>
+    <input type="number" min="0" step="1" name="chickenInput" v-model="chickenInvenUpdate">
+    <label for="cheeseInput">Cheese Storage</label>
+    <input type="number" min="0" step="1" name="cheeseInput" v-model="cheeseInvenUpdate">
+    <label for="chipsInput">Chips Storage</label>
+    <input type="number" min="0" step="1" name="chipsnInput" v-model="chipsInvenUpdate">
+    <label for="baconInput">bacon Storage</label>
+    <input type="number" min="0" step="1" name="baconInput" v-model="baconInvenUpdate">
+    <button @click="updateInventory" :disabled="!chickenInvenUpdate && !cheeseInvenUpdate && !chipsInvenUpdate && ! baconInvenUpdate">Update Inventory</button>
+    
+  </div>
+
 
 </template>
 
 <script>
 
+import { faBuildingCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Chart from 'chart.js/auto'
 
@@ -69,6 +100,7 @@ export default {
   data(){
     return{
       selectedWeek: null,
+      selectedWeekInven: null,
       dubbuff_count: 0,
       singlebuff_count: 0,
       singleCBR_count: 0,
@@ -84,10 +116,19 @@ export default {
       cheeseUsage: 0,
       chipsUsage: 0,
       baconUsage: 0,
+      chickenStorage: 0,
+      cheeseStorage: 0,
+      chipsStorage: 0,
+      baconStorage: 0,
+      chickenInvenUpdate: null,
+      cheeseInvenUpdate: null,
+      chipsInvenUpdate: null,
+      baconInvenUpdate: null,
       weeklyCosts: null,
       storeDate: null,
       storeCost: null,
       storeReason: null,
+      inventoryExist: true
     }
   },
 
@@ -97,6 +138,7 @@ export default {
       if(this.myBarChart) this.myBarChart.destroy()
       await this.compileSupply()
       await this.fetchCosts()
+      await this.fetchInventory()
     },
 
     async compileSupply(){
@@ -201,6 +243,23 @@ export default {
 
     },
 
+    async fetchInventory(){
+
+      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory where week_id = ${this.selectedWeek[0]};`})
+      console.log("yes")
+      if(chickenStorage.data.length==0) this.inventoryExist=false
+      this.chickenStorage = Number(chickenStorage.data[0])
+
+      const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory where week_id = ${this.selectedWeek[0]};`})
+      this.cheeseStorage=Number(cheeseStorage.data[0])
+
+      const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory where week_id = ${this.selectedWeek[0]};`})
+      this.chipsStorage=Number(chipsStorage.data[0])
+
+      const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory where week_id = ${this.selectedWeek[0]};`})
+      this.baconStorage=Number(baconStorage.data[0])
+    },
+
     async fetchCosts(){
       const costs = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT * from costs where week_id = ${this.selectedWeek[0]};`})
       this.weeklyCosts = costs.data
@@ -211,6 +270,38 @@ export default {
       this.weeklyCosts = this.weeklyCosts.filter( (item) => {
         return item[0] != id;
       })
+    },
+    async updateInventory(){
+      let chick=this.chickenStorage
+      let chips=this.chipsStorage
+      let cheese=this.cheeseStorage
+      let bacon=this.baconStorage
+      if(this.chickenInvenUpdate) chick=this.chickenInvenUpdate
+      if(this.chipsInvenUpdate) chips=this.chipsInvenUpdate
+      if(this.cheeseInvenUpdate) cheese=this.cheeseInvenUpdate
+      if(this.baconInvenUpdate) bacon=this.baconInvenUpdate
+
+      if(this.inventoryExist){
+        const sql=`UPDATE inventory SET chicken = ${chick}, cheese = ${cheese}, chips= ${chips},bacon=${bacon} WHERE week_id = ${this.selectedWeek[0]};`
+        console.log("Success")
+        const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
+      }else{
+        if(!this.chickenInvenUpdate) chick=0
+        if(!this.chipsInvenUpdate) chips=0
+        if(!this.cheeseInvenUpdate) cheese=0
+        if(!this.baconInvenUpdate) bacon=0
+        const sql=`insert into inventory values (${this.selectedWeek[0]}, ${chick}, ${cheese}, ${chips},${bacon});`
+        const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
+
+      }
+
+      
+
+      //Need to get week id
+      this.chickenStorage=chick
+      this.chipsStorage=chips
+      this.cheeseStorage=cheese
+      this.baconStorage=bacon
     },
 
     async addStoreRun(){

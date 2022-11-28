@@ -22,3 +22,16 @@ CREATE TABLE hours(
    employee_id int(11),
    hours_worked decimal(3,2)
 );
+-- create a new table called inventory
+CREATE TABLE inventory (
+    week_id int(11),
+    chicken int(11),
+    cheese int(11),
+    chips int(11),
+    bacon int(11),
+    PRIMARY KEY (week_id)
+);
+
+--insert into inventory
+INSERT INTO inventory
+VALUES (1, 10, 10, 10, 10);

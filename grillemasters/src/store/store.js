@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, collection, onSnapshot, query, orderBy, setDoc, getDocs, getDoc, } from "firebase/firestore"
 import { ordersCollection, viewCollection, operationCollection, weeklyPrefix, db} from "../firebase"
 import axios from 'axios';
+import { data } from 'autoprefixer';
 
 export default createStore({
     
@@ -17,7 +18,7 @@ export default createStore({
     cash: null,
     days: [],
     weeks: null, //SQL
-    sWeek: [], //SQL
+    sWeek: 0, //SQL
     customerBase: {}, //SQL
     weeklyRev: 50,
     weeklyCashRev: null,
@@ -26,9 +27,8 @@ export default createStore({
     nightOnlineFee: null,
     selectedWeek: weeklyPrefix,
     storeRuns: [],
-    totalCost: 40,
-    // so pretty much we have to get weeksOfOperation from SQL (?)
-    weeksOfOperation: ['week of 11/3', 'week of 11/10'],
+    totalCost: [],
+
     schedule: [],
     employees: [],
     hours: [],
@@ -39,6 +39,7 @@ export default createStore({
     customer: null,
     customerBase: [],
     queue: [],
+    weekData: {}
 
   },
   mutations: {
@@ -111,6 +112,21 @@ export default createStore({
     },
     SET_CUSTOMERS(state,payload){
       state.customerBase = payload
+    },
+    SET_WEEK_DATA(state,payload){
+      state.weekData = payload
+    },
+    SET_VENMO_REV(state,payload){
+      state.weeklyVenmoRev = payload
+    },
+    SET_CASH_REV(state, payload){
+      state.weeklyCashRev = payload
+    },
+    SET_TOTAL_REV(state, payload){
+      state.weeklyRev = payload
+    },
+    SET_COST(state, payload){
+      state.totalCost = payload
     }
   },
 
@@ -499,9 +515,6 @@ export default createStore({
       commit("DEL_STORE_RUN",id)
     },
 
-    changeWeek({commit}, week){
-      commit("CHANGE_SELECTED_WEEK",week)
-    },
 
     async getWeeksSQL( {commit} ){
       const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks order by start_date desc;'})
@@ -516,10 +529,6 @@ export default createStore({
 
     },
 
-    async selectWeek({commit}, week){
-      commit("SELECT_WEEK",week)
-    },
-
     async getCustomerBase({commit}){
 
       var obj = {}
@@ -532,8 +541,61 @@ export default createStore({
       }
 
       commit("SET_CUSTOMERS",obj)
-    }
+    },
 
+
+  // !!!!!!!
+    async updateFinancePage({commit}){
+
+      var revObj = {}
+      var costObj = {}
+      const revString     = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue FROM nightly_stats WHERE week_id = ${this.state.selectedWeek[0]};`
+      const costString    = `select cost, date, reason from costs where week_id = ${this.state.selectedWeek[0]};`
+      const revResponse   = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
+      const costResponse  = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
+      const revData       = revResponse.data
+      const costData      = costResponse.data
+
+      // prepare week revenue data for charts
+      for( var i=0; i<revData.length; i++) {
+        revObj[revData[i][0]] = [revData[i][1], revData[i][2], revData[i][3]]
+      }
+      
+      // prepare week cost data for table
+      for( var i=0; i<costData.length; i++) {
+        costObj[costData[i][1]] = [costData[i][0], costData[i][2]]
+      }
+
+      // find total weekly revenue
+      var totalRev = 0
+      for( var i = 0; i<revData.length; i++) {
+        totalRev = totalRev + Number(revObj[revData[i][0]][0])
+      }
+
+      // find total cash revenue
+      var totalCashRev = 0
+      for( var i = 0; i<revData.length; i++) {
+        totalCashRev = totalCashRev + Number(revObj[revData[i][0]][1])
+      }
+
+      // find total venmo revenue
+      var totalVenmoRev = 0
+      for( var i = 0; i<revData.length; i++) {
+        totalVenmoRev = totalVenmoRev + Number(revObj[revData[i][0]][2])
+      }
+
+      // find total cost
+      var totalCost = 0
+      for( var i= 0; i < costData.length; i++) {
+        totalCost = totalCost + Number(costObj[costData[i][1]][0])
+      }
+
+      commit("SET_WEEK_DATA", revObj)
+      commit("SET_TOTAL_REV", totalRev)
+      commit("SET_CASH_REV", totalCashRev)
+      commit("SET_VENMO_REV", totalVenmoRev)
+      commit("SET_COST", totalCost)
+    }
   }
 
 });

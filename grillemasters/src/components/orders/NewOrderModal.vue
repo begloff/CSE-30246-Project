@@ -8,7 +8,7 @@
             </div>
 
             <hr>
-            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="currentOrder.name" autocomplete="off"  @focus="modal=true">
+            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="currentOrder.name" autocomplete="off" @input="filterCustomers" @focus="modal=true">
             <div v-if="filteredCustomers && modal" class="listContainer">
                 <ul style="padding-left: 0px;">
                     <li class="listItem" v-for="customer in filteredCustomers" @click="setCustomer(customer)">{{customer}}</li>
@@ -59,39 +59,33 @@
 </template>
 
 <script>
-
 import { ordersCollection, db } from '../../firebase'
 import { addDoc, getDoc, doc } from 'firebase/firestore'
 import axios from 'axios';
-
 export default {
-
     mounted(){
         this.filterCustomers();
     },
-
-    methods: {
-
+    methods: { 
         filterCustomers(){
-
-         
+            let name = this.currentOrder.name;
+            if(name){
+                this.filteredCustomers =  this.customers.map(cust => cust[2]).filter(cust => cust.toLowerCase().includes(name.toLowerCase())) 
+            }
+            else{
+                this.filteredCustomers =  this.customers.map(cust => cust[2]) 
+            }
         },
-
         setCustomer(customer){
             this.currentOrder.name = customer
             this.modal = false
         },
-
         closeModal(){
             this.$emit('close')
         },
-
         addItem( item ){
-
             this.currentOrder.items.push(item)
-
             if(!this.hallStaffOrder){
-
                 switch(item){
                     case 'DubBuff':
                         this.currentOrder.price += 5
@@ -117,13 +111,10 @@ export default {
                     case 'Ice Cream Sandwich':
                         this.currentOrder.price += 1.50
                         break
-
                 }
             }
         },
-
         delItem( item ){
-
             if(!this.hallStaffOrder){
                 switch(item){
                     case 'DubBuff':
@@ -168,19 +159,14 @@ export default {
             
             this.currentOrder.items.splice(index,1)
         },
-
         addPizzaRolls(){
-
             let match = this.currentOrder.items.find(value => /^([0-9]*) (Pizza Rolls)$/.test(value))
-
             if(match){ //If there are already Pizza Rolls in the order --> Replace
                 const index = this.currentOrder.items.indexOf(match)
-
                 const num = Number(this.currentOrder.items[index].slice(0,-11))
                 if(!this.hallStaffOrder){
                     this.currentOrder.price -= (0.25 * num)
                 }
-
                 this.currentOrder.items.splice(index,1)
             }
             if(this.pizzaRolls > 0){
@@ -189,41 +175,45 @@ export default {
                     this.currentOrder.price += (0.25 * this.pizzaRolls)
                 }
             }
-
         },
-
         async submitOrder(){
-
             this.$emit('close')
+            
+            const person = this.customers.filter((cust) => {
+                return cust[2] == this.currentOrder.name
+            })
 
-            const person = await getDoc(doc(db,"customers",this.currentOrder.name))
 
-            if(person.data()){
-                this.currentOrder.email = person.data().email
+            if(person.length != 0){
+                this.currentOrder.custId = Number(person[0][0]);
             }
-
+            else{
+                this.currentOrder.custId = 155;
+            }
             let d = new Date()
-
             this.currentOrder.time = d.toLocaleTimeString()
             let items = this.encodeOrders(this.currentOrder.items)
             try{
                 let o = this.currentOrder
-                this.insertOrder(o.price, items, 10, "TT", 100, o.cash, o.online, o.done, o.comments)
+                this.insertOrder(o.price, items, this.currentOrder.custId, this.$store.state.currDay, this.$store.state.currWeek, o.cash, o.online, o.done, o.comments)
                 // console.log("Inserted order")
             }
             catch (err){
-                // console.log(err)
+                console.log(err)
             }
             
-
         },
         async insertOrder(price, items, cust_id, dayofweek, week_id, cash, online, done, comments) {
             let today = new Date()
             const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
-            // console.log(sql)
-            const res = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+            try{
+                await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+            }
+            catch (err){
+                console.log(err)
+            }
             // console.log(res.data)
-            return res
+            await this.$store.dispatch('getOrdersByDay');
         },
         /*
         currentOrder: {
@@ -245,26 +235,30 @@ export default {
                 'dubbuff'               : 3,
                 'singlebuff'            : 5,
                 'cbr'                   : 7,
-                'half'                  : 11,
+                'single'                : 11,
                 'cheese'                : 13,
                 'chicken'               : 17,
                 'soda/gatorade'         : 19,
-                'ice cream'             : 23
+                'ice'                   : 23
             }
             let num = 1
             for(let i = 0 ; i < items.length; i++){
-                num *= primes[items[i].toLowerCase()]
+                if(items[i].includes("Pizza")){
+                    let p = items[i].split(" ")
+                    num *= Math.pow(2,Number(p[0]))
+                }
+                else {
+                    let x = items[i].split(" ")[0]
+                    num *= primes[x.toLowerCase()]
+                }
             }
             return num
         },
         formatDate(date) {
             return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
         },
-
         hallStaffCheckBox(){
-
             //Takes time to model to this.hallStaffOrder so flip the values
-
             if(!this.hallStaffOrder){
                 this.currentOrder.price = 0
             } else {
@@ -308,13 +302,12 @@ export default {
             }
         }
     },
-
-
     data(){
         return{
             
             currentOrder: {
                 name: '',
+                custId: null,
                 items: [],
                 comments: '',
                 price: 0,
@@ -332,7 +325,6 @@ export default {
             toggleQuantity: false,
             pizzaRolls: null,
             hallStaffOrder: false,
-
         }
     },
 }
@@ -353,7 +345,6 @@ export default {
     border-radius: 10px;
     overflow-y: auto;
   }
-
   .new-backdrop {
     top: 0;
     position: fixed;
@@ -361,7 +352,6 @@ export default {
     width: 100%;
     height: 100%;
   }
-
     /* If you are updating style for one specific component need to use .modal */
     .new-modal h1 {
     color: #2c3e50;
@@ -373,7 +363,6 @@ export default {
       font-style: italic;
       color: #2c3e50;
   }
-
   .new-modal .actions {
     text-align: center;
     margin: 30px 0 10px 0;
@@ -387,17 +376,14 @@ export default {
     text-decoration: none;
     margin: 10px;
   }
-
   .nameInput{
     border: 2px solid lightgray;
   }
-
   .listContainer{
     max-height: 120px;
     overflow-y: scroll;
     text-align: left;
   }
-
   .listItem{
     width: 100%; 
     cursor: pointer; 
@@ -406,12 +392,10 @@ export default {
     background: rgb(232, 233, 233);
     color: black;
   }
-
   .listItem:hover {
     background: rgb(182, 248, 182);
     font-weight: bold;
   }
-
   input[type="checkbox"] {
     display: inline-block;
     width: 75px;
@@ -419,5 +403,4 @@ export default {
     position: relative;
     top: 7px;
   }
-
 </style>

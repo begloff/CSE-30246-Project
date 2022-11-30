@@ -54,7 +54,7 @@
         </td>
         <td>{{ order[3] }}</td>
         <td v-if="order[7] == 'None'">Customer</td>
-        <td v-else>{{ this.$store.state.customerBase[order[7]][2] }}</td>
+        <td v-else>{{ this.$store.state.customerBaseInd[order[7]][2] }}</td>
         <td>{{ order[2] }}</td>
         <td style="word-wrap: break-word; max-width: 400px;">{{ order[11]}}</td>
         <td v-if="order[9] == '0'">${{Number(order[1]).toFixed(2)}}</td>
@@ -77,7 +77,6 @@
 
 <script>
 import axios from 'axios';
-
 export default {
     data(){
         return{
@@ -86,43 +85,35 @@ export default {
             orders: null
         }
     },
-
     mounted(){
         //Front end --> only display the week, but have week id once selected
     },
-
     methods:{
         setWeek(week){
             this.$store.dispatch("selectWeek", week)
         },
-
         setDay(day){
             this.selectedDay = day
         },
-
         isSelectedWeek(week){
             if(this.$store.state.sWeek == week){
                 return true
             }
         },
-
         isSelectedDay(day){
             if(this.selectedDay == day){
                 return true
             }
         },
-
         async fetchOrders(){
             const sql = `SELECT * from orders where week_id = ${this.$store.state.sWeek[0]} and order_day = '${this.selectedDay}' order by order_datetime asc`
             const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
             this.orders = response.data
-
         },
         async fetchTestOrders(){
             const sql = `SELECT * from orders where order_day = 'TT' order by order_datetime asc`
             const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
             this.orders = response.data
-
         },
         async toggleDel(order){  
             const sql = `delete from orders where id = ${order[0]}`
@@ -141,9 +132,7 @@ export default {
             const sql = `UPDATE orders set done = ${order[10]} where id = ${order[0]}`
             await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
         }
-
     }
-
 }
 </script>
 
@@ -156,12 +145,10 @@ export default {
         background: rgb(232, 233, 233);
         color: black;
     }
-
     li:hover{
         background: rgb(182, 248, 182);
         font-weight: bold;    
     }
-
     .selected{
         background: rgb(182, 248, 182);
     }

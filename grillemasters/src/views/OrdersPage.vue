@@ -11,13 +11,10 @@
 </template>
 
 <script>
-
 import NewOrderModal from '../components/orders/NewOrderModal.vue'
 import OrderTable from '../components/orders/OrderTable.vue'
 import LogHoursModal from '../components/financial/LogHoursModal.vue'
-
 export default {
-
     data(){
         return{
             showOrderModal: false,
@@ -25,7 +22,9 @@ export default {
             total: 0
         }
     },
-
+    mounted(){
+        this.$store.dispatch('getOrdersByDay');
+    },  
     methods:{
         toggleOrderModal(){
             this.showOrderModal = !this.showOrderModal
@@ -39,10 +38,8 @@ export default {
         OrderTable,
         LogHoursModal,
     }
-
 }
 </script>
 
 <style>
-
 </style>

@@ -21,6 +21,10 @@ export default createStore({
     orders: [],
     nightTotal: null,
     nightOnlineFee: null,
+    weekLabels: [],
+    weekVenmo: [],
+    weekCash: [],
+
 
   },
   mutations: mutations,

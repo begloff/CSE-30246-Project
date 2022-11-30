@@ -31,7 +31,7 @@
       <p style="font-size: 15px; color:green; text-align: right; margin-bottom:15px;">Cash Revenue: ${{ Number(this.$store.state.weeklyCashRev).toFixed(2)}}</p>
       </div>
       <div>
-        <canvas id="myBarChart" width="500" height="200" style="align: center; margin-top: 5px; border:1px solid #000000;"></canvas>
+        <canvas id="myBarChart" width="500" height="200" style="margin-top: 5px;"></canvas>
       </div>
     </div>
     
@@ -120,6 +120,8 @@
 </template>
 <script>
 import WeeklyFinances from '../components/financial/WeeklyFinances.vue'
+import Chart from 'chart.js/auto'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 // Gonna need to import data for both the date and Sales Done
 // Snapshot for the totals page
 export default{
@@ -128,12 +130,103 @@ export default{
   },
   methods:{
     async updateFinances(){
+
+      //Something Fucked in DB for first week
+
       await this.$store.dispatch("updateFinancePage")
+
+      if(this.myBarChart){
+        this.myBarChart.destroy()
+      }
+
+      this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
+
     },
+
+    barChart( venmo, cash, week ){
+
+    const ctx = document.getElementById('myBarChart').getContext('2d');
+
+    this.myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: week,
+            datasets: [
+                {
+                    label: 'Venmo Total',
+                    data: venmo,
+                    backgroundColor: "#008CFF",
+                    borderWidth: 1
+                },
+                {
+                    label: 'Cash Total',
+                    data: cash,
+                    backgroundColor: "#85bb65",
+                    borderWidth: 1                      
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grace: "10%",
+                    stacked: true,                     
+                },
+                x: {
+                    stacked: true,
+                }
+            },
+            // maintainAspectRatio: false,
+            plugins:{
+                datalabels:{
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: (value, context) => {
+                        const datasetArray = [];
+                        context.chart.data.datasets.forEach((dataset) => {
+                            if(dataset.data[context.dataIndex] != undefined){
+                                datasetArray.push(dataset.data[context.dataIndex]);
+                            }
+                        });
+
+                        function totalSum(total, datapoint){
+                            return Number(total) + Number(datapoint);
+                        }
+
+                        let sum = datasetArray.reduce(totalSum, 0);
+
+                        if(context.datasetIndex == datasetArray.length - 1){
+                            return `$ ${Number(sum).toFixed(2)} `;
+                        } else {
+                            return '';
+                        }
+
+                    }
+                },
+                tooltip:{
+                    callbacks:{
+                        label: function(tooltipItem, data){
+                            return tooltipItem.dataset.label + ": $" + Number(tooltipItem.formattedValue).toFixed(2);
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+    this.myBarChart;
+    
+  },
+
+
+
+
   },
   data(){
     return{
-      selectedWeek: []
+      selectedWeek: [],
+      myBarChart: null,
     }
   }
   

@@ -61,6 +61,12 @@ const SET_CURR_DAY = (state, payload) => {
     state.currDay = payload
 }
 
+const SET_CHART_DATA = (state, payload) =>{
+    state.weekLabels = payload.l;
+    state.weekVenmo = payload.v;
+    state.weekCash = payload.c;
+}
+
 export default{
     SET_LOGGED_IN,
     CLEAR_USER,
@@ -76,6 +82,7 @@ export default{
     SET_ORDERS,
     SET_CURR_WEEK,
     SET_CURR_DAY,
-    SET_CUSTOMERS_IND
+    SET_CUSTOMERS_IND,
+    SET_CHART_DATA
     
 }

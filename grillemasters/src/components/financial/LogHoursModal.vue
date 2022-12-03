@@ -6,7 +6,7 @@
 
             <label for="employees">Select Your Name:</label>
             <select name="employees" id="employees" v-model="this.hoursObj.employee">
-                <option v-for="employee in this.$store.state.employees">{{employee}}</option>
+                <option v-for="employee in this.$store.state.employees">{{employee[2]}}</option>
             </select>
 
             <label for="hours"> Enter Your Hours:</label>
@@ -37,7 +37,6 @@ export default {
             hoursObj: {
                 employee: null,
                 hours: null,
-                time: null,
             }
         }
     },
@@ -50,19 +49,10 @@ export default {
         async submitHours(){
             
             this.$emit('close')
-
-            let d = new Date()
-
-            this.hoursObj.time = d
-
-            await addDoc( collection(db, "finances", weeklyPrefix, "hours"), this.hoursObj )
-
+            let employee = this.$store.state.employees.filter(employee => employee[2] == this.hoursObj.employee)[0];
+            this.$store.dispatch('logHours', {id: Number(employee[0]), hours: this.hoursObj.hours});
         }
     },
-
-    async created(){
-        await this.$store.dispatch("getEmployees")
-    }
 }
 </script>
 

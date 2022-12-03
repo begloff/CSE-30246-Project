@@ -11,6 +11,10 @@ const SET_EMPLOYEE_ROLE = (state,payload) => {
     state.customer = payload.n
 }
 
+const SET_EMPLOYEES = (state, payload) => {
+    state.employees = payload;
+}
+
 const SET_WEEKS = (state,payload) => {
     state.weeks = payload
 }
@@ -83,6 +87,7 @@ export default{
     SET_CURR_WEEK,
     SET_CURR_DAY,
     SET_CUSTOMERS_IND,
-    SET_CHART_DATA
+    SET_CHART_DATA,
+    SET_EMPLOYEES,
     
 }

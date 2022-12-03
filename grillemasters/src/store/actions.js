@@ -136,6 +136,17 @@ const getRole = async (context) => {
     }
 }
 
+const getEmployees = async (context) => {
+    const employees = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from customers where employee = 1;'})
+    context.commit("SET_EMPLOYEES", employees.data);
+}
+
+const logHours = async (context, payload) => {
+    let id = payload.id;
+    let hours = payload.hours;
+    await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO hours values(${context.state.currWeek}, ${id}, ${hours});`})
+}
+
 const getWeeksSQL = async ( context ) => {
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks order by start_date desc;'})
     const weeks = []
@@ -328,5 +339,7 @@ export default{
     commitOrders,
     deleteOrder,
     completeOrder,
+    getEmployees,
+    logHours,
 }
 

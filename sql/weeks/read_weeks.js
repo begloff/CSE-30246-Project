@@ -8,7 +8,7 @@ async function q() {
         password:"Dubbuff$5", 
         database:"duncan_grille", 
         port:3306, 
-        ssl:{ca: fs.readFileSync("cert.pem")}});
+        ssl:{ca: fs.readFileSync("../cert.pem")}});
 
     await conn.connect(function(err) {
         if (err) {
@@ -42,7 +42,7 @@ async function readWeeks(){
         month = week.split('-')[2]
         day = week.split('-')[3]
 
-        start = new Date(2022,month-1,day,-4,0,0,0).toISOString().slice(0, 19).replace('T', ' ');
+        start = new Date(2022,month-1,day,0,0,0,0).toISOString().slice(0, 19).replace('T', ' ');
         end = new Date(2022,month-1,day,23-4,59,0,0)
         end.setDate(end.getDate() + 6)
         end = end.toISOString().slice(0, 19).replace('T', ' ');

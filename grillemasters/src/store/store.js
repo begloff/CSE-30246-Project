@@ -25,7 +25,7 @@ export default createStore({
     weekLabels: [],
     weekVenmo: [],
     weekCash: [],
-
+    editOrder: [],
 
   },
   mutations: mutations,

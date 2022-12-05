@@ -57,6 +57,10 @@ const SET_ORDERS = (state,payload) => {
     state.nightOnlineFee = payload.of;
 }
 
+const SET_EDIT_ORDER = (state, payload) => {
+    state.editOrder = payload
+}
+
 const SET_CURR_WEEK = (state, payload) => {
     state.currWeek = payload
 }
@@ -89,5 +93,5 @@ export default{
     SET_CUSTOMERS_IND,
     SET_CHART_DATA,
     SET_EMPLOYEES,
-    
+    SET_EDIT_ORDER,
 }

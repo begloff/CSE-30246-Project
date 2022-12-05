@@ -8,7 +8,7 @@
             </div>
 
             <hr>
-            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="selectedOrder.name" autocomplete="off" @input="filterCustomers" @focus="modal=true">
+            <input type="text" class="nameInput" id="nameInput" placeholder="Name (First and Last)" v-model="name" autocomplete="off" @input="filterCustomers" @focus="modal=true">
             <div v-if="filteredCustomers && modal" class="listContainer">
                 <ul style="padding-left: 0px;">
                     <li class="listItem" v-for="customer in filteredCustomers" @click="setCustomer(customer)">{{customer}}</li>
@@ -18,8 +18,6 @@
 
             <button style="background: green; margin-right: 50px; " @click="addItem('DubBuff')">DubBuff</button>
             <button style="background: red; margin-right: 50px;" @click="addItem('SingleBuff')" >SingleBuff</button>
-            <button style="background: #47ad64; margin-right: 50px;" @click="addItem('DubBuff - HS')" >DubBuff - HS</button>
-            <button style="background: #9e4f4f; margin-right: 50px;" @click="addItem('SingleBuff - HS')" >SingleBuff - HS</button>
             <button style="margin-right: 50px;" @click="addItem('CBR')" >CBR</button>
             <button style="background: black; margin-right: 50px;" @click="addItem('Single CBR')">Single CBR</button>
             <button style="background: #918e2d; margin-right: 50px;" @click="addItem('Chicken Nachos')">Chicken Nachos</button>
@@ -36,25 +34,25 @@
             <p style="">Items (click to delete)</p>
             
 
-            <div v-for="item in selectedOrder.items" :key="item" class="pill">
+            <div v-for="item in items" :key="item" class="pill">
                 <span @click="delItem(item)" >{{item}}</span>
             </div>
             <hr>
 
-            <input type="text" placeholder="Comments (optional)" v-model="selectedOrder.comments">
+            <input type="text" placeholder="Comments (optional)" v-model="comments">
 
             <hr>
-            <h2>Ticket Total: ${{Number(selectedOrder.price).toFixed(2)}}</h2>
+            <h2>Ticket Total: ${{Number(price).toFixed(2)}}</h2>
 
             <hr>
 
             <label for="cash">Cash Order: </label>
-            <input type="checkbox" id="cash" v-model="selectedOrder.cash" style="height: 20px;">
+            <input type="checkbox" id="cash" v-model="cash" style="height: 20px;">
             <label for="cash">Hall Staff Order: </label>
             <input type="checkbox" id="cash" v-model="hallStaffOrder" @click="hallStaffCheckBox" style="height: 20px;">
             <hr>
 
-            <button :disabled="(!selectedOrder.price && !hallStaffOrder)|| !selectedOrder.name" @click="updateOrder">Update Order</button>
+            <button :disabled="(!price && !hallStaffOrder)|| !name" @click="updateOrder">Update Order</button>
 
         </div>
     </div>
@@ -78,18 +76,17 @@ export default {
     methods: {
 
         filterCustomers(){
-
-            if (this.selectedOrder.name.length == 0){
-                this.filteredCustomers = this.customers
+            let name = this.name;
+            if(name){
+                this.filteredCustomers =  this.customers.map(cust => cust[2]).filter(cust => cust.toLowerCase().includes(name.toLowerCase())) 
             }
-
-            this.filteredCustomers = this.customers.filter( customer => {
-                return customer.toLowerCase().includes(this.selectedOrder.name.toLowerCase());
-            })
+            else{
+                this.filteredCustomers =  this.customers.map(cust => cust[2]) 
+            }
         },
 
         setCustomer(customer){
-            this.selectedOrder.name = customer
+            this.name = customer
             this.modal = false
         },
 
@@ -98,39 +95,33 @@ export default {
         },
 
         addItem( item ){
-            this.selectedOrder.items.push(item)
+            this.items.push(item)
 
             if(!this.hallStaffOrder){
                 switch(item){
                     case 'DubBuff':
-                        this.selectedOrder.price += 5
+                        this.price += 5
                         break
                     case 'SingleBuff':
-                        this.selectedOrder.price += 3
-                        break
-                    case 'DubBuff - HS':
-                        this.selectedOrder.price += 5
-                        break
-                    case 'SingleBuff - HS':
-                        this.selectedOrder.price += 3
+                        this.price += 3
                         break
                     case 'CBR':
-                        this.selectedOrder.price += 5
+                        this.price += 5
                         break
                     case 'Cheese Nachos':
-                        this.selectedOrder.price += 2.50
+                        this.price += 2.50
                         break
                     case 'Chicken Nachos':
-                        this.selectedOrder.price += 3.50
+                        this.price += 3.50
                         break
                     case 'Single CBR':
-                        this.selectedOrder.price += 3
+                        this.price += 3
                         break
                     case 'Soda/Gatorade':
-                        this.selectedOrder.price += 1.50
+                        this.price += 1.50
                         break                    
                     case 'Ice Cream Sandwich':
-                        this.selectedOrder.price += 1.50
+                        this.price += 1.50
                         break
 
                 }
@@ -138,41 +129,35 @@ export default {
         },
 
         delItem( item ){
-
+            
             if(!this.hallStaffOrder){
                 switch(item){
                     case 'DubBuff':
-                        this.selectedOrder.price -= 5
+                        this.price -= 5
                         break
                     case 'SingleBuff':
-                        this.selectedOrder.price -= 3
-                        break
-                    case 'DubBuff - HS':
-                        this.selectedOrder.price -= 5
-                        break
-                    case 'SingleBuff - HS':
-                        this.selectedOrder.price -= 3
+                        this.price -= 3
                         break
                     case 'CBR':
-                        this.selectedOrder.price -= 5
+                        this.price -= 5
                         break
                     case 'Cheese Nachos':
-                        this.selectedOrder.price -= 2.50
+                        this.price -= 2.50
                         break
                     case 'Chicken Nachos':
-                        this.selectedOrder.price -= 3.50
+                        this.price -= 3.50
                         break
                     case 'Single CBR':
-                        this.selectedOrder.price -= 3
+                        this.price -= 3
                         break
                     case 'Soda/Gatorade':
-                        this.selectedOrder.price -= 1.50
+                        this.price -= 1.50
                         break                    
                     case 'Ice Cream Sandwich':
-                        this.selectedOrder.price -= 1.50
+                        this.price -= 1.50
                         break
                     default: //Pizza Rolls
-                        this.selectedOrder.price -= (0.25 * this.pizzaRolls)
+                        this.price -= (0.25 * this.pizzaRolls)
                         this.pizzaRolls = 0
                         this.toggleQuantity = 0
                         break
@@ -186,65 +171,123 @@ export default {
                 }
             }
 
-            const index = this.selectedOrder.items.indexOf(item)
+            const index = this.items.indexOf(item)
             
-            this.selectedOrder.items.splice(index,1)
+            this.items.splice(index,1)
         },
 
         addPizzaRolls(){
 
-            let match = this.selectedOrder.items.find(value => /^([0-9]*) (Pizza Rolls)$/.test(value))
+            let match = this.items.find(value => /^([0-9]*) (Pizza Rolls)$/.test(value))
 
             if(match){ //If there are already Pizza Rolls in the order --> Replace
-                const index = this.selectedOrder.items.indexOf(match)
+                const index = this.items.indexOf(match)
 
-                const num = Number(this.selectedOrder.items[index].slice(0,-11))
+                const num = Number(this.items[index].slice(0,-11))
                 if(!this.hallStaffOrder){
-                    this.selectedOrder.price -= (0.25 * num)
+                    this.price -= (0.25 * num)
                 }
 
-                this.selectedOrder.items.splice(index,1)
+                this.items.splice(index,1)
             }
             if(this.pizzaRolls > 0){
-                this.selectedOrder.items.push(`${this.pizzaRolls} Pizza Rolls`)
+                this.items.push(`${this.pizzaRolls} Pizza Rolls`)
                 if(!this.hallStaffOrder){
-                    this.selectedOrder.price += (0.25 * this.pizzaRolls)
+                    this.price += (0.25 * this.pizzaRolls)
                 }
             }
 
         },
 
         async updateOrder(){
+            let cust = this.$store.state.customerBase.filter(cust => cust[2].toLowerCase() == this.name.toLowerCase())
+            this.selectedOrder[7] = cust[0][0];
+            this.selectedOrder[2] = this.encodeOrders(this.items);
+            this.selectedOrder[11] = this.comments;
+            this.selectedOrder[8] = this.cash ? 1 : 0;
+            this.selectedOrder[1] = this.price;
 
-            const person = await getDoc(doc(db,"customers",this.selectedOrder.name))
-
-            if(person.data()){
-                this.selectedOrder.email = person.data().email
-            }
-
-            const updateOrder = await setDoc( this.docRef , this.selectedOrder )
+            this.$store.dispatch('updateOrder', {order: this.selectedOrder})
+            
             this.$router.push({name: 'orders'})
         },
 
         async getOrder(){
-            const orderRef = doc(ordersCollection,this.orderId)
-            this.docRef = orderRef;
 
-            const order = await getDoc(this.docRef)
+            await this.$store.dispatch('getOrderById', {id: this.orderId})
 
-            this.selectedOrder.name = order.data().name
-            this.selectedOrder.items = order.data().items
-            this.selectedOrder.comments = order.data().comments
-            this.selectedOrder.price = order.data().price
-            this.selectedOrder.date = order.data().date
-            this.selectedOrder.time = order.data().time
-            this.selectedOrder.cash = order.data().cash
-            this.selectedOrder.online = order.data().online
-            this.selectedOrder.email = order.data().email
+            const order = this.$store.state.editOrder;
+            this.selectedOrder = order
 
-            if(!order.data().price){
+            this.name = this.$store.state.customerBaseInd[Number(order[7])][2]
+            this.items = this.decodeOrder(Number(order[2]))
+            this.comments = order[11]
+            this.cash = Number(order[8]) == 1 ? true : false
+            this.price = Number(order[1])
+            
+            if(!this.price){
                 this.hallStaffOrder = true;
             }
+        },
+
+        decodeOrder(order){
+          let primes = {
+                2:'pizza'                 ,
+                3:'DubBuff'               ,
+                5:'SingleBuff'            ,
+                7:'CBR'                   ,
+                11:'Single CBR'                 ,
+                13:'Cheese Nachos'               ,
+                17:'Chicken Nachos'              ,
+                19:'Soda/Gatorade'        ,
+                23:'Ice Cream'            
+          }
+          let orderlist = []
+          let pizza = 0
+          while(order % 2 == 0){
+            order /= 2;
+            pizza++;
+          }
+          if(pizza){
+            orderlist.push(`${pizza} Pizza Rolls`)
+          }
+          for(const key in primes){
+            if(key == 2){
+              continue;
+            }
+            while(order % key == 0){
+              orderlist.push(primes[key])
+              order /= key;
+            }
+          } 
+          return orderlist;
+        
+        },
+
+        encodeOrders(items){
+            let primes = {
+                'pizza'                 : 2,
+                'dubbuff'               : 3,
+                'singlebuff'            : 5,
+                'cbr'                   : 7,
+                'single'                : 11,
+                'cheese'                : 13,
+                'chicken'               : 17,
+                'soda/gatorade'         : 19,
+                'ice'                   : 23
+            }
+            let num = 1
+            for(let i = 0 ; i < items.length; i++){
+                if(items[i].includes("Pizza")){
+                    let p = items[i].split(" ")
+                    num *= Math.pow(2,Number(p[0]))
+                }
+                else {
+                    let x = items[i].split(" ")[0]
+                    num *= primes[x.toLowerCase()]
+                }
+            }
+            return num
         },
 
         hallStaffCheckBox(){
@@ -252,42 +295,36 @@ export default {
             //Takes time to model to this.hallStaffOrder so flip the values
 
             if(!this.hallStaffOrder){
-                this.selectedOrder.price = 0
+                this.price = 0
             } else {
-                for( let i = 0; i < this.selectedOrder.items.length; i++ ){
-                    switch(this.selectedOrder.items[i]){
+                for( let i = 0; i < this.items.length; i++ ){
+                    switch(this.items[i]){
                         case 'DubBuff':
-                            this.selectedOrder.price += 5
+                            this.price += 5
                             break
                         case 'SingleBuff':
-                            this.selectedOrder.price += 3
-                            break
-                        case 'DubBuff - HS':
-                            this.selectedOrder.price += 5
-                            break
-                        case 'SingleBuff - HS':
-                            this.selectedOrder.price += 3
+                            this.price += 3
                             break
                         case 'CBR':
-                            this.selectedOrder.price += 5
+                            this.price += 5
                             break
                         case 'Cheese Nachos':
-                            this.selectedOrder.price += 2.50
+                            this.price += 2.50
                             break
                         case 'Chicken Nachos':
-                            this.selectedOrder.price += 3.50
+                            this.price += 3.50
                             break
                         case 'Single CBR':
-                            this.selectedOrder.price += 3
+                            this.price += 3
                             break
                         case 'Soda/Gatorade':
-                            this.selectedOrder.price += 1.50
+                            this.price += 1.50
                             break                    
                         case 'Ice Cream Sandwich':
-                            this.selectedOrder.price += 1.50
+                            this.price += 1.50
                             break
                         default:
-                            this.selectedOrder.price += (0.25 * this.pizzaRolls)
+                            this.price += (0.25 * this.pizzaRolls)
                             break;
                     }
                 }
@@ -300,21 +337,19 @@ export default {
     data(){
         return{
             
-            selectedOrder: {},
+            selectedOrder: [],
             orderId: null,
-            docRef: null,
-            orderNo: 0,
-            name: '',
-            items: [],
-            comments: '',
-            price: 0,
             customers: this.$store.state.customerBase,
             filteredCustomers: [],
             modal: false,
-            toggleQuantity: false,
-            pizzaRolls: null,
             hallStaffOrder: false,
-
+            toggleQuantity: false,
+            name: '',
+            items: [],
+            comments: '',
+            cash: null,
+            price: null,
+            pizzaRolls: null,
         }
     }
 }

@@ -14,6 +14,7 @@ export default createStore({
     weeklyRev: 0,
     weeklyCashRev: null,
     weeklyVenmoRev: null,
+    weeklyOnlineFee: 0,
     weekData: {},
     totalCost: [],
     currDay: null,
@@ -24,8 +25,11 @@ export default createStore({
     weekLabels: [],
     weekVenmo: [],
     weekCash: [],
-
-
+    weekCosts: [],
+    totalHours: 10,
+    workerHours: [],
+    totalHours: 0,
+    wage: 5
   },
   mutations: mutations,
 

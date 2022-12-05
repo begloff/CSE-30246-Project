@@ -67,6 +67,23 @@ const SET_CHART_DATA = (state, payload) =>{
     state.weekCash = payload.c;
 }
 
+const SET_WEEK_COSTS = (state, payload) =>{
+    state.weekCosts = payload;
+}
+
+const SET_WEEK_FEE = (state, payload) => {
+    state.weeklyOnlineFee = payload;
+}
+
+const SET_WORKER_HOURS = (state, payload) => {
+    state.workerHours = payload.wH;
+    state.totalHours  = payload.tH;
+}
+
+const SET_WAGE = (state,payload) => {
+    state.wage = payload;
+}
+
 export default{
     SET_LOGGED_IN,
     CLEAR_USER,
@@ -83,6 +100,9 @@ export default{
     SET_CURR_WEEK,
     SET_CURR_DAY,
     SET_CUSTOMERS_IND,
-    SET_CHART_DATA
-    
+    SET_CHART_DATA,
+    SET_WEEK_COSTS,
+    SET_WEEK_FEE,
+    SET_WORKER_HOURS,
+    SET_WAGE
 }

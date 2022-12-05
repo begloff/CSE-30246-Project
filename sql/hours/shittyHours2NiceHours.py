@@ -18,8 +18,8 @@ for week in financeWeeks:
                         temp[thing] = financeWeeks[week]['__collections__'][obj][day][thing]
                 financesOut[day] = temp
 
-    if(financesOut):
-        finances[week] = financesOut
+            if(financesOut):
+                finances[week] = financesOut
 
 with open("hours.json", "w") as outfile:
     json.dump(finances, outfile)

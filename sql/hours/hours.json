@@ -1,4 +1,199 @@
 {
+    "week-of-10-2": {
+        "1ZsmOUv07crjt6C1X1tt": {
+            "employee": "James McPhee",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-10-05T03:21:29.663Z"
+            }
+        },
+        "1rwXhawtDl3gpMh72eLq": {
+            "employee": "Ben Egloff",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-10-04T02:56:54.375Z"
+            }
+        },
+        "72kKOohWGmfuoKUvfXm6": {
+            "employee": "Cameron Rodzik",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-04T04:30:40.478Z"
+            }
+        },
+        "BuGWEthDBodYMk4QejA5": {
+            "employee": "Gary Fletcher",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-06T04:20:26.971Z"
+            }
+        },
+        "Cy9iiuTgi7tcYIa2mYrc": {
+            "employee": "Alexander Steele",
+            "hours": 1.75,
+            "time": {
+                "__time__": "2022-10-03T03:21:32.746Z"
+            }
+        },
+        "YmsKmzoGgfl2GlzNXEhm": {
+            "employee": "Connor Riley",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-10-03T04:06:18.408Z"
+            }
+        },
+        "iJjh0JjA5p2qyThCBcrY": {
+            "employee": "John Bonini",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-07T06:10:51.754Z"
+            }
+        },
+        "s69XhLFd2Ki7Wo8irYkl": {
+            "employee": "Neol Gutierrez",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-05T04:16:44.976Z"
+            }
+        }
+    },
+    "week-of-10-23": {
+        "6wAtkcbIdfGrSurev1Uo": {
+            "employee": "John Bonini",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-10-24T03:18:43.264Z"
+            }
+        },
+        "BalhhFMi0UjulvKvWuRR": {
+            "employee": "Ben Egloff",
+            "hours": 0.25,
+            "time": {
+                "__time__": "2022-10-27T02:05:32.703Z"
+            }
+        },
+        "FwZLeZcwe35BYpWrcgT4": {
+            "employee": "Connor Riley",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-10-27T14:03:18.635Z"
+            }
+        },
+        "JpPDb4hiJN9d6oTjCfd5": {
+            "employee": "Ben Egloff",
+            "hours": 1.5,
+            "time": {
+                "__time__": "2022-10-24T03:18:35.642Z"
+            }
+        },
+        "M9G6r2iOMOceTTd3KnJY": {
+            "employee": "Alexander Steele",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-28T04:52:02.272Z"
+            }
+        },
+        "MpSwg5XFURSZ4rSqyj1v": {
+            "employee": "Gary Fletcher",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-25T03:59:13.382Z"
+            }
+        },
+        "VWRrfTK7clMKkFpdOshy": {
+            "employee": "Neol Gutierrez",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-10-26T03:54:48.026Z"
+            }
+        },
+        "XXkrn7awViXQlhSlv4Ha": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-10-28T14:39:57.401Z"
+            }
+        },
+        "oS8gYq7Qv5N7cKWUh0za": {
+            "employee": "James McPhee",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-10-26T03:54:35.524Z"
+            }
+        },
+        "r0x3cJXGnmfEaeAOnS1a": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-10-25T21:28:53.100Z"
+            }
+        }
+    },
+    "week-of-10-30": {
+        "7YBm9E2LA8a4XHWoM7aq": {
+            "employee": "Gary Fletcher",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-01T13:39:35.530Z"
+            }
+        },
+        "Bbhus9yHQpTvJL0GqaOy": {
+            "employee": "John Bonini",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-03T04:14:26.003Z"
+            }
+        },
+        "S5mthpsRsBMAmBwQzwr8": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-11-02T04:42:37.052Z"
+            }
+        },
+        "bkDXbAo79NP1xyXg73WQ": {
+            "employee": "Ben Egloff",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-11-01T13:39:17.633Z"
+            }
+        },
+        "ktxYkJ88V9hUeti7MZZa": {
+            "employee": "Alexander Steele",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-10-31T03:07:22.245Z"
+            }
+        },
+        "lO0ySmibbk4UVGnwAkCr": {
+            "employee": "Neol Gutierrez",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-11-02T03:12:59.388Z"
+            }
+        },
+        "tbDdW5MfycB11DSFqetx": {
+            "employee": "Connor Riley",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-11-02T04:42:43.940Z"
+            }
+        },
+        "wQp1OsjXzWOSuJ4nl1ta": {
+            "employee": "Cameron Rodzik",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-10-31T04:07:17.410Z"
+            }
+        },
+        "ws1thIf1ikzLhfu885AI": {
+            "employee": "James McPhee",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-04T05:09:54.513Z"
+            }
+        }
+    },
     "week-of-10-9": {
         "3iiSxY7LlWGEkOLT0rUr": {
             "employee": "James McPhee",
@@ -61,6 +256,477 @@
             "hours": 0.05,
             "time": {
                 "__time__": "2022-10-13T04:24:36.545Z"
+            }
+        }
+    },
+    "week-of-11-13": {
+        "0h6POCezvGs8JVLwNYLv": {
+            "employee": "Gary Fletcher",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-14T05:17:19.240Z"
+            }
+        },
+        "9qZHL942Hzt937bK5OYC": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-11-15T21:15:27.410Z"
+            }
+        },
+        "GAdPRTp5ufQBJjgc2a1u": {
+            "employee": "John Bonini",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-18T05:09:17.425Z"
+            }
+        },
+        "UqlURiyG1hBd2m0eEeW8": {
+            "employee": "Connor Riley",
+            "hours": 1.5,
+            "time": {
+                "__time__": "2022-11-16T19:33:09.256Z"
+            }
+        },
+        "af2UvxAulzDwNaNaITj7": {
+            "employee": "James McPhee",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-18T15:19:25.836Z"
+            }
+        },
+        "cqFPNkLch07CqnEMySXP": {
+            "employee": "Neol Gutierrez",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-11-16T04:02:00.440Z"
+            }
+        },
+        "fE7uhFibSBXoEwxXF6Fm": {
+            "employee": "Ben Egloff",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-16T19:32:56.607Z"
+            }
+        },
+        "ieh3paOeywOubObg4MKr": {
+            "employee": "Cameron Rodzik",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-16T05:08:19.122Z"
+            }
+        },
+        "mslX5JmwxGxJypspWWxW": {
+            "employee": "Alexander Steele",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-11-18T15:13:17.673Z"
+            }
+        }
+    },
+    "week-of-11-20": {
+        "Hp1eH6Eqzb98fEFYTqw9": {
+            "employee": "James McPhee",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-22T14:36:13.009Z"
+            }
+        },
+        "QDAKIOYhsZPjIcAb3wDZ": {
+            "employee": "Ben Egloff",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-11-22T02:24:52.296Z"
+            }
+        },
+        "y330hnKuGCfH6TF9vXnq": {
+            "employee": "Ben Egloff",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-21T05:43:57.680Z"
+            }
+        }
+    },
+    "week-of-11-27": {
+        "1CpMJEEUCnvs17vXSQHu": {
+            "employee": "James McPhee",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-30T04:49:51.810Z"
+            }
+        },
+        "7vY1BFYIEakdR3Dznbc6": {
+            "employee": "John Bonini",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-12-01T05:02:30.624Z"
+            }
+        },
+        "GMfyXgyKSN2F6U6adXfq": {
+            "employee": "Neol Gutierrez",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-12-02T04:59:43.065Z"
+            }
+        },
+        "TDCPIp6FJj7h9cv0JFff": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-11-29T02:53:23.304Z"
+            }
+        },
+        "UcChTnN84POV3yOo7O1Q": {
+            "employee": "Gary Fletcher",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-11-29T03:58:06.086Z"
+            }
+        },
+        "dlvRdUVEWQVjcsUNAETF": {
+            "employee": "Cameron Rodzik",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-29T04:55:42.223Z"
+            }
+        },
+        "fJRpOiP7vw8pofx8ZcGV": {
+            "employee": "Gary Fletcher",
+            "hours": 0.25,
+            "time": {
+                "__time__": "2022-11-30T03:13:46.013Z"
+            }
+        },
+        "iKzU6FqORrVlOBexdvCf": {
+            "employee": "Ben Egloff",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-28T14:29:40.332Z"
+            }
+        }
+    },
+    "week-of-11-6": {
+        "1BEwR1QiVlQyDnmH8SeR": {
+            "employee": "Alexander Steele",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-09T04:44:31.499Z"
+            }
+        },
+        "I7SUFfwZ1sN0DUEkTpBB": {
+            "employee": "Cameron Rodzik",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-09T04:45:21.039Z"
+            }
+        },
+        "KlHmIeR5UfVzRKwiuqD2": {
+            "employee": "Gary Fletcher",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-08T05:23:07.938Z"
+            }
+        },
+        "YNWiREzo8nzY8gVI5GaC": {
+            "employee": "Ben Egloff",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-07T05:02:34.049Z"
+            }
+        },
+        "ZGuMqLtChsELvKtjNdAx": {
+            "employee": "John Bonini",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-10T04:59:31.556Z"
+            }
+        },
+        "bPNPZcxoxuAJuvcvw4Tj": {
+            "employee": "Connor Riley",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-11-07T04:11:52.585Z"
+            }
+        },
+        "vAD08RPn80aJoBIkZaMG": {
+            "employee": "James McPhee",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-11-09T18:55:42.057Z"
+            }
+        },
+        "w8REYF73udXuudrsqJ6l": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-11-09T04:45:28.850Z"
+            }
+        },
+        "xwFImCkMeKMHIzNlzgo0": {
+            "employee": "Neol Gutierrez",
+            "hours": 2.5,
+            "time": {
+                "__time__": "2022-11-11T05:32:00.473Z"
+            }
+        }
+    },
+    "week-of-12-4": {
+        "NLvkClJE6W33Z9nkeiba": {
+            "employee": "Neol Gutierrez",
+            "hours": 2.25,
+            "time": {
+                "__time__": "2022-12-05T05:18:21.344Z"
+            }
+        },
+        "dyGwewilkHlzJKW6oz5o": {
+            "employee": "Ben Egloff",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-12-05T16:27:50.193Z"
+            }
+        }
+    },
+    "week-of-8-28": {
+        "B3vUSHw9bZFaCi4EPELL": {
+            "employee": "John Bonini",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-02T04:14:41.386Z"
+            }
+        },
+        "BV6gpadLwbn6nUQSzlnL": {
+            "employee": "Cameron Rodzik",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-29T04:11:57.211Z"
+            }
+        },
+        "FvxAVCIQzzLA4tiJ9CVq": {
+            "employee": "Neol Gutierrez",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-31T04:13:18.868Z"
+            }
+        },
+        "HQjnKS6Sx9TBHegHRcNv": {
+            "employee": "Ben Egloff",
+            "hours": 2.3,
+            "time": {
+                "__time__": "2022-08-29T04:11:48.508Z"
+            }
+        },
+        "Jvn7UVNvUjwYkFPXveWz": {
+            "employee": "Will Truluck",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-29T04:12:06.790Z"
+            }
+        },
+        "M0jyz1pt030hc5QSjgj6": {
+            "employee": "James McPhee",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-30T04:20:28.100Z"
+            }
+        },
+        "M7yZJgyiqabBCEraqD29": {
+            "employee": "Cameron Rodzik",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-30T04:20:21.313Z"
+            }
+        },
+        "PaOFic4ISj5MR4N1NrCw": {
+            "employee": "Ben Egloff",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-31T04:13:39.119Z"
+            }
+        },
+        "QM5gyXkUHQn4YYQoiBZZ": {
+            "employee": "Ben Egloff",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-30T04:20:15.395Z"
+            }
+        },
+        "S4B72Wromi7cjLIJkY9n": {
+            "employee": "Gary Fletcher",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-01T04:18:07.819Z"
+            }
+        },
+        "e2dyG4GZWcXAALvpKcSB": {
+            "employee": "Ben Egloff",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-01T04:17:58.554Z"
+            }
+        },
+        "wrJdOgJKyhbOS5kEci5k": {
+            "employee": "Ben Egloff",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-02T04:14:25.018Z"
+            }
+        },
+        "xN0z2dTJRtFuulyh5njv": {
+            "employee": "Alexander Steele",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-08-31T04:12:52.079Z"
+            }
+        },
+        "xNRW6579R19qr908c729": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-08-28T15:22:59.076Z"
+            }
+        }
+    },
+    "week-of-9-11": {
+        "2zxls2KPOY3iFuLSOHfB": {
+            "employee": "Connor Riley",
+            "hours": 1.25,
+            "time": {
+                "__time__": "2022-09-12T03:17:40.154Z"
+            }
+        },
+        "6dclExBUbUW6QFf0LCRm": {
+            "employee": "Alexander Steele",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-14T04:09:47.988Z"
+            }
+        },
+        "70WMEq0qQkIAEiAjZ5iY": {
+            "employee": "James McPhee",
+            "hours": 0.7,
+            "time": {
+                "__time__": "2022-09-15T04:34:33.265Z"
+            }
+        },
+        "AVEWAocfd0eTRPrNMpOG": {
+            "employee": "James McPhee",
+            "hours": 2.3,
+            "time": {
+                "__time__": "2022-09-15T04:09:44.049Z"
+            }
+        },
+        "EOFtPWvaHykThpfQsUTm": {
+            "employee": "Ben Egloff",
+            "hours": 2.3,
+            "time": {
+                "__time__": "2022-09-12T04:23:11.074Z"
+            }
+        },
+        "EoNGvNUqpArDB5DSE8SX": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-09-15T14:29:38.896Z"
+            }
+        },
+        "VzEjoX1onBW83DCgq7Fq": {
+            "employee": "James McPhee",
+            "hours": 2.3,
+            "time": {
+                "__time__": "2022-09-14T04:09:30.288Z"
+            }
+        },
+        "jOzSzQcQrEBrWcbMTDwr": {
+            "employee": "Gary Fletcher",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-13T04:02:48.105Z"
+            }
+        },
+        "lUPwIv1PbImah1scj1c9": {
+            "employee": "John Bonini",
+            "hours": 3,
+            "time": {
+                "__time__": "2022-09-16T04:23:10.155Z"
+            }
+        },
+        "xpmXKEesTZgkjvwlfcYG": {
+            "employee": "Cameron Rodzik",
+            "hours": 2.3,
+            "time": {
+                "__time__": "2022-09-13T04:02:31.161Z"
+            }
+        }
+    },
+    "week-of-9-18": {
+        "6rh5ToyRY7HrIPAxCBpS": {
+            "employee": "Neol Gutierrez",
+            "hours": 2.3,
+            "time": {
+                "__time__": "2022-09-21T03:58:00.681Z"
+            }
+        },
+        "9cbIFk1nl81EWvNjMVKr": {
+            "employee": "Ben Egloff",
+            "hours": 1.3,
+            "time": {
+                "__time__": "2022-09-19T03:05:23.912Z"
+            }
+        },
+        "LrtEzJkH760dcS7L4vyZ": {
+            "employee": "Alexander Steele",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-22T04:34:02.796Z"
+            }
+        },
+        "LsRxgkWwY9UvyXi1PMDU": {
+            "employee": "Cameron Rodzik",
+            "hours": 3,
+            "time": {
+                "__time__": "2022-09-20T14:15:11.922Z"
+            }
+        },
+        "PbbOLiRlymWbMTZsIWpM": {
+            "employee": "James McPhee",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-21T03:57:40.972Z"
+            }
+        },
+        "Q4ZeXkdCHZIWhXbZu7av": {
+            "employee": "Ben Egloff",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-09-22T13:31:12.457Z"
+            }
+        },
+        "UbPaNgZOZuIuad2LHqec": {
+            "employee": "Connor Riley",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-09-20T03:45:52.840Z"
+            }
+        },
+        "b5eLRvZW7yAYfiKg1tJV": {
+            "employee": "John Bonini",
+            "hours": 3,
+            "time": {
+                "__time__": "2022-09-23T04:05:27.059Z"
+            }
+        },
+        "bsCc6IW7iUOI0kXWn0xQ": {
+            "employee": "Cameron Rodzik",
+            "hours": 1,
+            "time": {
+                "__time__": "2022-09-23T14:41:28.427Z"
+            }
+        },
+        "klJs81PVAWPjLfpzegYG": {
+            "employee": "Gary Fletcher",
+            "hours": 2,
+            "time": {
+                "__time__": "2022-09-19T04:01:29.237Z"
             }
         }
     },
@@ -212,396 +878,6 @@
             "hours": 2.25,
             "time": {
                 "__time__": "2022-09-08T04:06:36.351Z"
-            }
-        }
-    },
-    "week-of-10-23": {
-        "6wAtkcbIdfGrSurev1Uo": {
-            "employee": "John Bonini",
-            "hours": 1.25,
-            "time": {
-                "__time__": "2022-10-24T03:18:43.264Z"
-            }
-        },
-        "JpPDb4hiJN9d6oTjCfd5": {
-            "employee": "Ben Egloff",
-            "hours": 1.5,
-            "time": {
-                "__time__": "2022-10-24T03:18:35.642Z"
-            }
-        }
-    },
-    "week-of-8-28": {
-        "B3vUSHw9bZFaCi4EPELL": {
-            "employee": "John Bonini",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-02T04:14:41.386Z"
-            }
-        },
-        "BV6gpadLwbn6nUQSzlnL": {
-            "employee": "Cameron Rodzik",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-29T04:11:57.211Z"
-            }
-        },
-        "FvxAVCIQzzLA4tiJ9CVq": {
-            "employee": "Neol Gutierrez",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-31T04:13:18.868Z"
-            }
-        },
-        "HQjnKS6Sx9TBHegHRcNv": {
-            "employee": "Ben Egloff",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-08-29T04:11:48.508Z"
-            }
-        },
-        "Jvn7UVNvUjwYkFPXveWz": {
-            "employee": "Will Truluck",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-29T04:12:06.790Z"
-            }
-        },
-        "M0jyz1pt030hc5QSjgj6": {
-            "employee": "James McPhee",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-30T04:20:28.100Z"
-            }
-        },
-        "M7yZJgyiqabBCEraqD29": {
-            "employee": "Cameron Rodzik",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-30T04:20:21.313Z"
-            }
-        },
-        "PaOFic4ISj5MR4N1NrCw": {
-            "employee": "Ben Egloff",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-31T04:13:39.119Z"
-            }
-        },
-        "QM5gyXkUHQn4YYQoiBZZ": {
-            "employee": "Ben Egloff",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-30T04:20:15.395Z"
-            }
-        },
-        "S4B72Wromi7cjLIJkY9n": {
-            "employee": "Gary Fletcher",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-01T04:18:07.819Z"
-            }
-        },
-        "e2dyG4GZWcXAALvpKcSB": {
-            "employee": "Ben Egloff",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-01T04:17:58.554Z"
-            }
-        },
-        "wrJdOgJKyhbOS5kEci5k": {
-            "employee": "Ben Egloff",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-02T04:14:25.018Z"
-            }
-        },
-        "xN0z2dTJRtFuulyh5njv": {
-            "employee": "Alexander Steele",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-08-31T04:12:52.079Z"
-            }
-        },
-        "xNRW6579R19qr908c729": {
-            "employee": "Cameron Rodzik",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-08-28T15:22:59.076Z"
-            }
-        }
-    },
-    "week-of-9-18": {
-        "6rh5ToyRY7HrIPAxCBpS": {
-            "employee": "Neol Gutierrez",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-21T03:58:00.681Z"
-            }
-        },
-        "9cbIFk1nl81EWvNjMVKr": {
-            "employee": "Ben Egloff",
-            "hours": 1.3,
-            "time": {
-                "__time__": "2022-09-19T03:05:23.912Z"
-            }
-        },
-        "LrtEzJkH760dcS7L4vyZ": {
-            "employee": "Alexander Steele",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-22T04:34:02.796Z"
-            }
-        },
-        "LsRxgkWwY9UvyXi1PMDU": {
-            "employee": "Cameron Rodzik",
-            "hours": 3,
-            "time": {
-                "__time__": "2022-09-20T14:15:11.922Z"
-            }
-        },
-        "PbbOLiRlymWbMTZsIWpM": {
-            "employee": "James McPhee",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-21T03:57:40.972Z"
-            }
-        },
-        "Q4ZeXkdCHZIWhXbZu7av": {
-            "employee": "Ben Egloff",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-09-22T13:31:12.457Z"
-            }
-        },
-        "UbPaNgZOZuIuad2LHqec": {
-            "employee": "Connor Riley",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-09-20T03:45:52.840Z"
-            }
-        },
-        "b5eLRvZW7yAYfiKg1tJV": {
-            "employee": "John Bonini",
-            "hours": 3,
-            "time": {
-                "__time__": "2022-09-23T04:05:27.059Z"
-            }
-        },
-        "bsCc6IW7iUOI0kXWn0xQ": {
-            "employee": "Cameron Rodzik",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-09-23T14:41:28.427Z"
-            }
-        },
-        "klJs81PVAWPjLfpzegYG": {
-            "employee": "Gary Fletcher",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-19T04:01:29.237Z"
-            }
-        }
-    },
-    "week-of-10-2": {
-        "1ZsmOUv07crjt6C1X1tt": {
-            "employee": "James McPhee",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-10-05T03:21:29.663Z"
-            }
-        },
-        "1rwXhawtDl3gpMh72eLq": {
-            "employee": "Ben Egloff",
-            "hours": 1.25,
-            "time": {
-                "__time__": "2022-10-04T02:56:54.375Z"
-            }
-        },
-        "72kKOohWGmfuoKUvfXm6": {
-            "employee": "Cameron Rodzik",
-            "hours": 2.5,
-            "time": {
-                "__time__": "2022-10-04T04:30:40.478Z"
-            }
-        },
-        "BuGWEthDBodYMk4QejA5": {
-            "employee": "Gary Fletcher",
-            "hours": 2.5,
-            "time": {
-                "__time__": "2022-10-06T04:20:26.971Z"
-            }
-        },
-        "Cy9iiuTgi7tcYIa2mYrc": {
-            "employee": "Alexander Steele",
-            "hours": 1.75,
-            "time": {
-                "__time__": "2022-10-03T03:21:32.746Z"
-            }
-        },
-        "YmsKmzoGgfl2GlzNXEhm": {
-            "employee": "Connor Riley",
-            "hours": 2.25,
-            "time": {
-                "__time__": "2022-10-03T04:06:18.408Z"
-            }
-        },
-        "iJjh0JjA5p2qyThCBcrY": {
-            "employee": "John Bonini",
-            "hours": 2.5,
-            "time": {
-                "__time__": "2022-10-07T06:10:51.754Z"
-            }
-        },
-        "s69XhLFd2Ki7Wo8irYkl": {
-            "employee": "Neol Gutierrez",
-            "hours": 2.5,
-            "time": {
-                "__time__": "2022-10-05T04:16:44.976Z"
-            }
-        }
-    },
-    "week-of-9-11": {
-        "2zxls2KPOY3iFuLSOHfB": {
-            "employee": "Connor Riley",
-            "hours": 1.25,
-            "time": {
-                "__time__": "2022-09-12T03:17:40.154Z"
-            }
-        },
-        "6dclExBUbUW6QFf0LCRm": {
-            "employee": "Alexander Steele",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-14T04:09:47.988Z"
-            }
-        },
-        "70WMEq0qQkIAEiAjZ5iY": {
-            "employee": "James McPhee",
-            "hours": 0.7,
-            "time": {
-                "__time__": "2022-09-15T04:34:33.265Z"
-            }
-        },
-        "AVEWAocfd0eTRPrNMpOG": {
-            "employee": "James McPhee",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-15T04:09:44.049Z"
-            }
-        },
-        "EOFtPWvaHykThpfQsUTm": {
-            "employee": "Ben Egloff",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-12T04:23:11.074Z"
-            }
-        },
-        "EoNGvNUqpArDB5DSE8SX": {
-            "employee": "Cameron Rodzik",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-09-15T14:29:38.896Z"
-            }
-        },
-        "VzEjoX1onBW83DCgq7Fq": {
-            "employee": "James McPhee",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-14T04:09:30.288Z"
-            }
-        },
-        "jOzSzQcQrEBrWcbMTDwr": {
-            "employee": "Gary Fletcher",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-13T04:02:48.105Z"
-            }
-        },
-        "lUPwIv1PbImah1scj1c9": {
-            "employee": "John Bonini",
-            "hours": 3,
-            "time": {
-                "__time__": "2022-09-16T04:23:10.155Z"
-            }
-        },
-        "xpmXKEesTZgkjvwlfcYG": {
-            "employee": "Cameron Rodzik",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-13T04:02:31.161Z"
-            }
-        }
-    },
-    "week-of-10-16": {
-        "2zxls2KPOY3iFuLSOHfB": {
-            "employee": "Connor Riley",
-            "hours": 1.25,
-            "time": {
-                "__time__": "2022-09-12T03:17:40.154Z"
-            }
-        },
-        "6dclExBUbUW6QFf0LCRm": {
-            "employee": "Alexander Steele",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-14T04:09:47.988Z"
-            }
-        },
-        "70WMEq0qQkIAEiAjZ5iY": {
-            "employee": "James McPhee",
-            "hours": 0.7,
-            "time": {
-                "__time__": "2022-09-15T04:34:33.265Z"
-            }
-        },
-        "AVEWAocfd0eTRPrNMpOG": {
-            "employee": "James McPhee",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-15T04:09:44.049Z"
-            }
-        },
-        "EOFtPWvaHykThpfQsUTm": {
-            "employee": "Ben Egloff",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-12T04:23:11.074Z"
-            }
-        },
-        "EoNGvNUqpArDB5DSE8SX": {
-            "employee": "Cameron Rodzik",
-            "hours": 1,
-            "time": {
-                "__time__": "2022-09-15T14:29:38.896Z"
-            }
-        },
-        "VzEjoX1onBW83DCgq7Fq": {
-            "employee": "James McPhee",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-14T04:09:30.288Z"
-            }
-        },
-        "jOzSzQcQrEBrWcbMTDwr": {
-            "employee": "Gary Fletcher",
-            "hours": 2,
-            "time": {
-                "__time__": "2022-09-13T04:02:48.105Z"
-            }
-        },
-        "lUPwIv1PbImah1scj1c9": {
-            "employee": "John Bonini",
-            "hours": 3,
-            "time": {
-                "__time__": "2022-09-16T04:23:10.155Z"
-            }
-        },
-        "xpmXKEesTZgkjvwlfcYG": {
-            "employee": "Cameron Rodzik",
-            "hours": 2.3,
-            "time": {
-                "__time__": "2022-09-13T04:02:31.161Z"
             }
         }
     }

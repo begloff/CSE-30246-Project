@@ -56,7 +56,7 @@ async function q() {
 
                 d = d.split('-')
 
-                da = new Date(d[0],d[1]-1,d[2],-4,0,0,0).toISOString().slice(0, 19).replace('T', ' ')
+                da = new Date(d[0],d[1]-1,d[2],0,0,0,0).toISOString().slice(0, 19).replace('T', ' ')
                 //Insert
 
                 console.log(da)

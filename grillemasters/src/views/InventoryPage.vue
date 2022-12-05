@@ -58,7 +58,7 @@
   </div>
   <hr>
   <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
-    <p> Inventory in Stock for Week of  {{selectedWeek[1].split(" ")[0]}}</p>
+    <p> Inventory in Stock</p>
     <p>Chicken Units: {{chickenStorage}} Bags</p>
     <p>Cheese Units: {{cheeseStorage}} Bags</p>
     <p>Chips Units: {{chipsStorage}} Bags</p>
@@ -72,7 +72,7 @@
     </select>
     <p> {{selectedWeekInven}} </p> -->
 
-    <p>Update Inventory for Week of {{selectedWeek[1].split(" ")[0]}}</p>
+    <p>Update Inventory</p>
     <label for="chickenInput">Chicken Storage</label>
     <input type="number" min="0" step="1" name="chickenInput" v-model="chickenInvenUpdate">
     <label for="cheeseInput">Cheese Storage</label>
@@ -222,15 +222,15 @@ export default {
       this.baconUsage = Math.round( this.bacon / 11)
     },
     async fetchInventory(){
-      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory where week_id = ${this.selectedWeek[0]};`})
-      console.log("yes")
+      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory;`})
+      // console.log("yes")
       if(chickenStorage.data.length==0) this.inventoryExist=false
       this.chickenStorage = Number(chickenStorage.data[0])
-      const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory where week_id = ${this.selectedWeek[0]};`})
+      const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory;`})
       this.cheeseStorage=Number(cheeseStorage.data[0])
-      const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory where week_id = ${this.selectedWeek[0]};`})
+      const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory;`})
       this.chipsStorage=Number(chipsStorage.data[0])
-      const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory where week_id = ${this.selectedWeek[0]};`})
+      const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory;`})
       this.baconStorage=Number(baconStorage.data[0])
     },
     async fetchCosts(){
@@ -253,7 +253,7 @@ export default {
       if(this.cheeseInvenUpdate) cheese=this.cheeseInvenUpdate
       if(this.baconInvenUpdate) bacon=this.baconInvenUpdate
       if(this.inventoryExist){
-        const sql=`UPDATE inventory SET chicken = ${chick}, cheese = ${cheese}, chips= ${chips},bacon=${bacon} WHERE week_id = ${this.selectedWeek[0]};`
+        const sql=`UPDATE inventory SET chicken = ${chick}, cheese = ${cheese}, chips= ${chips},bacon=${bacon};`
         console.log("Success")
         const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
       }else{
@@ -261,7 +261,7 @@ export default {
         if(!this.chipsInvenUpdate) chips=0
         if(!this.cheeseInvenUpdate) cheese=0
         if(!this.baconInvenUpdate) bacon=0
-        const sql=`insert into inventory values (${this.selectedWeek[0]}, ${chick}, ${cheese}, ${chips},${bacon});`
+        const sql=`insert into inventory values (${chick}, ${cheese}, ${chips},${bacon});`
         const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
       }
       

@@ -44,7 +44,7 @@ async function q() {
             //Parse total into new date
             monthNum = day.split('-')[0]
             dayNum = day.split('-')[1]
-            d = new Date(2022, month-1, dayNum, -4,0,0,0)
+            d = new Date(2022, monthNum-1, dayNum, 0,0,0,0)
             dayOfWeek = d.getDay()
 
             if(dayOfWeek < 5){
@@ -97,6 +97,7 @@ async function getWeekId(week){
     day = week.split('-')[3]
 
     let sql = `select week_id from weeks where month(start_date) = ${month} and day(start_date) = ${day};`
+
     let x = await callDB(sql)
     return x
 
@@ -106,6 +107,7 @@ async function insertNightlyStats(weekId, dayOfWeek, date, total_revenue, cash_r
 
 
     let sql = `insert into nightly_stats (week_id, day_of_week, date, total_revenue, cash_revenue, venmo_revenue, online_fee, num_orders) values (${weekId}, '${dayOfWeek}', '${date}', ${total_revenue}, ${cash_revenue}, ${venmo_revenue}, ${online_fee}, ${num_orders})`
+    console.log(sql)
     let x = await callDB(sql)
     return x
 

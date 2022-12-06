@@ -77,6 +77,7 @@ const SET_WEEK_FEE = (state, payload) => {
 
 const SET_WORKER_HOURS = (state, payload) => {
     state.workerHours = payload.wH;
+    state.workingEmployees = payload.w;
     state.totalHours  = payload.tH;
 }
 

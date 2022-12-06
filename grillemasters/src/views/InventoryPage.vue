@@ -84,8 +84,31 @@
     <button @click="updateInventory" :disabled="!chickenInvenUpdate && !cheeseInvenUpdate && !chipsInvenUpdate && ! baconInvenUpdate">Update Inventory</button>
     
   </div>
-
-
+  <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+    <p>Historical Stats</p>
+    <div id="chart-wrapper">
+      <canvas id="TotalChart" width="300" height="200" style="margin-top: 5px"></canvas>
+    </div>
+    <p>Dubbuff: {{tdubbuff_count}} </p>
+    <p>Singlebuff: {{tsinglebuff_count}} </p>
+    <p>CBR: {{tCBR_count}} </p>
+    <p>SingleCBR: {{tsingleCBR_count}} </p>
+    <p>ChickenNacho: {{tchickenNacho_count}} </p>
+    <p>CheeseNacho: {{tcheeseNacho_count}} </p>
+  </div>
+  <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+    <p>Day of Week Stats</p>
+    <p>Sunday</p>
+    <p>Dubbuff: {{wdubbuff_count['SU'].toFixed(2)}}  Singlebuff: {{wsinglebuff_count['SU'].toFixed(2)}}  CBR: {{wCBR_count['SU'].toFixed(2)}}  SingleCBR: {{wsingleCBR_count['SU'].toFixed(2)}}  ChickenNacho: {{wchickenNacho_count['SU'].toFixed(2)}}  CheeseNacho: {{wcheeseNacho_count['SU'].toFixed(2)}}</p>
+    <p>Monday</p>
+    <p>Dubbuff: {{wdubbuff_count['MO'].toFixed(2)}}  Singlebuff: {{wsinglebuff_count['MO'].toFixed(2)}}  CBR: {{wCBR_count['MO'].toFixed(2)}}  SingleCBR: {{wsingleCBR_count['MO'].toFixed(2)}}  ChickenNacho: {{wchickenNacho_count['MO'].toFixed(2)}}  CheeseNacho: {{wcheeseNacho_count['MO'].toFixed(2)}}</p>
+    <p>Tuesday</p>
+    <p>Dubbuff: {{wdubbuff_count['TU'].toFixed(2)}}  Singlebuff: {{wsinglebuff_count['TU'].toFixed(2)}}  CBR: {{wCBR_count['TU'].toFixed(2)}}  SingleCBR: {{wsingleCBR_count['TU'].toFixed(2)}}  ChickenNacho: {{wchickenNacho_count['TU'].toFixed(2)}}  CheeseNacho: {{wcheeseNacho_count['TU'].toFixed(2)}}</p>
+    <p>Wednesday</p>
+    <p>Dubbuff: {{wdubbuff_count['WE'].toFixed(2)}}  Singlebuff: {{wsinglebuff_count['WE'].toFixed(2)}}  CBR: {{wCBR_count['WE'].toFixed(2)}}  SingleCBR: {{wsingleCBR_count['WE'].toFixed(2)}}  ChickenNacho: {{wchickenNacho_count['WE'].toFixed(2)}}  CheeseNacho: {{wcheeseNacho_count['WE'].toFixed(2)}}</p>
+    <p>Thursday</p>
+    <p>Dubbuff: {{wdubbuff_count['TH'].toFixed(2)}}  Singlebuff: {{wsinglebuff_count['TH'].toFixed(2)}}  CBR: {{wCBR_count['TH'].toFixed(2)}}  SingleCBR: {{wsingleCBR_count['TH'].toFixed(2)}}  ChickenNacho: {{wchickenNacho_count['TH'].toFixed(2)}}  CheeseNacho: {{wcheeseNacho_count['TH'].toFixed(2)}}</p>
+  </div>
 </template>
 
 <script>
@@ -124,7 +147,20 @@ export default {
       storeDate: null,
       storeCost: null,
       storeReason: null,
-      inventoryExist: true
+      inventoryExist: true,
+      tdubbuff_count: 0,
+      tsinglebuff_count: 0,
+      tsingleCBR_count: 0,
+      tCBR_count: 0,
+      tchickenNacho_count: 0,
+      tcheeseNacho_count: 0,
+      TotalChart:null,
+      wdubbuff_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
+      wsinglebuff_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
+      wsingleCBR_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
+      wCBR_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
+      wchickenNacho_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
+      wcheeseNacho_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0}
     }
   },
   methods:{
@@ -134,6 +170,215 @@ export default {
       await this.compileSupply()
       await this.fetchCosts()
       await this.fetchInventory()
+      await this.historicalstats()
+    },
+    async historicalstats(){
+      var dubbuff_count = 0
+      var singlebuff_count = 0
+      var singleCBR_count = 0
+      var CBR_count = 0
+      var chickenNacho_count = 0
+      var cheeseNacho_count = 0     
+      const dubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,3) = 0;`})
+      const singlebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,5) = 0;`})
+      const singleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,11) = 0;`})
+      const CBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,7) = 0;`})
+      const chickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,17) = 0;`})
+      const cheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,13) = 0;`})
+      const test=await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,3) = 0;`})
+      console.log("yes")
+      console.log(test.data[0])
+      const wdubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,3) = 0;`})
+      const wsinglebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,5) = 0;`})
+      const wsingleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,11) = 0;`})
+      const wCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,7) = 0;`})
+      const wchickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items , order_day from orders where MOD(items,17) = 0;`})
+      const wcheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,13) = 0;`})
+      const noSU = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='SU';`})
+      const noMO= await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='MO';`})
+      const noTU = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='TU';`})
+      const noWE = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='WE';`})
+      const noTH = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='TH';`})
+      var db = {
+        'SU':0,
+        'MO':0,
+        'TU':0,
+        'WE':0,
+        'TH':0,
+      }
+      var sb = {
+        'SU':0,
+        'MO':0,
+        'TU':0,
+        'WE':0,
+        'TH':0,
+      }
+      var sc = {
+        'SU':0,
+        'MO':0,
+        'TU':0,
+        'WE':0,
+        'TH':0,
+      }
+      var c = {
+        'SU':0,
+        'MO':0,
+        'TU':0,
+        'WE':0,
+        'TH':0,
+      }
+      var cin = {
+        'SU':0,
+        'MO':0,
+        'TU':0,
+        'WE':0,
+        'TH':0,
+      }
+      var cen = {
+        'SU':0,
+        'MO':0,
+        'TU':0,
+        'WE':0,
+        'TH':0,
+      }
+      for( var item in wdubbuff.data){
+        var total = wdubbuff.data[item][0]
+        while(total % 3 == 0){
+          db[wdubbuff.data[item][1]] += 1
+          total /= 3
+        }
+      }
+      for( var item in wsinglebuff.data){
+        var total = wsinglebuff.data[item][0]
+        while(total % 5 == 0){
+          sb[wdubbuff.data[item][1]] += 1
+          total /= 5
+        }
+      }
+      for( var item in wsingleCBR.data){
+        var total = wsingleCBR.data[item][0]
+        while(total % 11 == 0){
+          sc[wdubbuff.data[item][1]] += 1
+          total /= 11
+        }
+      }
+      for( var item in wCBR.data){
+        var total = wCBR.data[item][0]
+        while(total % 7 == 0){
+          c[wdubbuff.data[item][1]] += 1
+          total /= 7
+        }
+      }
+      for( var item in wchickenNacho.data){
+        var total = wchickenNacho.data[item][0]
+        while(total % 17 == 0){
+          cin[wdubbuff.data[item][1]]+= 1
+          total /= 17
+        }
+      }
+      for( var item in wcheeseNacho.data){
+        var total = wcheeseNacho.data[item][0]
+        while(total % 13 == 0){
+          cen[wdubbuff.data[item][1]] += 1
+          total /= 13
+        }
+      }
+      console.log(db['SU']/Number(noSU.data[0]))
+      db['SU']/=Number(noSU.data[0])
+      sb['SU']/=Number(noSU.data[0])
+      sc['SU']/=Number(noSU.data[0])
+      c['SU']/=Number(noSU.data[0])
+      cin['SU']/=Number(noSU.data[0])
+      cen['SU']/=Number(noSU.data[0])
+
+      db['MO']/=Number(noMO.data[0])
+      sb['MO']/=Number(noMO.data[0])
+      sc['MO']/=Number(noMO.data[0])
+      c['MO']/=Number(noMO.data[0])
+      cin['MO']/=Number(noMO.data[0])
+      cen['MO']/=Number(noMO.data[0])
+
+      db['TU']/=Number(noTU.data[0])
+      sb['TU']/=Number(noTU.data[0])
+      sc['TU']/=Number(noTU.data[0])
+      c['TU']/=Number(noTU.data[0])
+      cin['TU']/=Number(noTU.data[0])
+      cen['TU']/=Number(noTU.data[0])
+
+      db['WE']/=Number(noWE.data[0])
+      sb['WE']/=Number(noWE.data[0])
+      sc['WE']/=Number(noWE.data[0])
+      c['WE']/=Number(noWE.data[0])
+      cin['WE']/=Number(noWE.data[0])
+      cen['WE']/=Number(noWE.data[0])
+
+      db['TH']/=Number(noTH.data[0])
+      sb['TH']/=Number(noTH.data[0])
+      sc['TH']/=Number(noTH.data[0])
+      c['TH']/=Number(noTH.data[0])
+      cin['TH']/=Number(noTH.data[0])
+      cen['TH']/=Number(noTH.data[0])
+
+      this.wdubbuff_count=db
+      this.wsinglebuff_count=sb
+      this.wCBR_count=c
+      this.wsingleCBR_count=sc
+      this.wchickenNacho_count=cin
+      this.wcheeseNacho_count=cen
+
+
+
+
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
+        while(total % 3 == 0){
+          dubbuff_count += 1
+          total /= 3
+        }
+      }
+      for( var item in singlebuff.data){
+        var total = singlebuff.data[item][0]
+        while(total % 5 == 0){
+          singlebuff_count += 1
+          total /= 5
+        }
+      }
+      for( var item in singleCBR.data){
+        var total = singleCBR.data[item][0]
+        while(total % 11 == 0){
+          singleCBR_count += 1
+          total /= 11
+        }
+      }
+      for( var item in CBR.data){
+        var total = CBR.data[item][0]
+        while(total % 7 == 0){
+          CBR_count += 1
+          total /= 7
+        }
+      }
+      for( var item in chickenNacho.data){
+        var total = chickenNacho.data[item][0]
+        while(total % 17 == 0){
+          chickenNacho_count += 1
+          total /= 17
+        }
+      }
+      for( var item in cheeseNacho.data){
+        var total = cheeseNacho.data[item][0]
+        while(total % 13 == 0){
+          cheeseNacho_count += 1
+          total /= 13
+        }
+      }
+      this.tdubbuff_count = dubbuff_count
+      this.tsinglebuff_count = singlebuff_count
+      this.tsingleCBR_count = singleCBR_count
+      this.tCBR_count = CBR_count
+      this.tchickenNacho_count = chickenNacho_count
+      this.tcheeseNacho_count = cheeseNacho_count
+      this.totalChart([dubbuff_count, singlebuff_count,  CBR_count,singleCBR_count, chickenNacho_count, cheeseNacho_count])
+
     },
     async compileSupply(){
       //Need to scale based on single or dub
@@ -288,6 +533,24 @@ export default {
       const l = ["Dubbuffs", "Singlebuffs", "SingleCBRs", "CBRs", "Chicken Nachos", "Cheese Nachos"]
       // console.log(dubbuff_count)
       this.myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data:{
+          labels: l,
+          datasets: [
+            {
+              label: "Amount Purchased",
+              data: items,
+              backgroundColor: ['red', 'orange', 'yellow','green','blue','purple', 'black']
+            },
+          ]
+        }
+      })
+    },
+    totalChart( items ){
+      const ctx = document.getElementById('TotalChart').getContext('2d');
+      const l = ["Dubbuffs", "Singlebuffs",  "CBRs", "SingleCBRs", "Chicken Nachos", "Cheese Nachos"]
+      // console.log(dubbuff_count)
+      this.TotalChart = new Chart(ctx, {
         type: 'bar',
         data:{
           labels: l,

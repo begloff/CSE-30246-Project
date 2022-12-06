@@ -78,7 +78,7 @@
     </div>
     <div class="rCard">
       <div id="chart-wrapper">
-        <!--<canvas id="myDoughnutChart" width="250" height="250" style="margin-top: 5px;"></canvas>-->
+        <canvas id="myDoughnutChart" width="500" height="250" style="margin-top: 5px;"></canvas>
       </div>
     </div>
   </div>
@@ -119,6 +119,7 @@
 import WeeklyFinances from '../components/financial/WeeklyFinances.vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+
 export default{
   components:{
     WeeklyFinances,
@@ -142,8 +143,7 @@ export default{
       }
 
       this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
-      console.log(this.$store.state.workerHours)
-      //this.doughnutChart(this.$store.state.wage, this.$store.state.workerHours[0])
+      this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
 
     },
 
@@ -151,7 +151,7 @@ export default{
       await this.$store.dispatch("setProjections")
     },
 
-    doughnutChart(wage, employees) {
+    doughnutChart(hours, employees) {
       const ctx = document.getElementById('myDoughnutChart').getContext('2d');
       this.myDoughnutChart = new Chart( ctx, {
         type: 'doughnut',
@@ -159,7 +159,7 @@ export default{
           labels: employees,
           datasets: [{
             label:'Hours',
-            data: employees,
+            data: hours,
                   backgroundColor: [
                       'red',
                       'orange',
@@ -174,19 +174,18 @@ export default{
                   ],
                   hoverOffset: 4
           }],
-//          options:{
-//            maintainAspectRatio: false,
-//            plugins:{
-//                        tooltip:{
-//                            callbacks:{
-//                                label: function(tooltipItem, data){
-//                                   return tooltipItem.label + ": $" + Number(tooltipItem.parsed).toFixed(2);
-//                                }
-//                            }
-//                        }
-//                    }
- //               }
- //               
+        },
+        options:{
+          maintainAspectRatio: false,
+          plugins:{
+              tooltip:{
+                  callbacks:{
+                      label: function(tooltipItem, data){
+                          return tooltipItem.label + ": $" + Number(tooltipItem.parsed).toFixed(2);
+                      }
+                  }
+              }
+          }
         }
       });
       this.myDoughnutChart;
@@ -276,6 +275,7 @@ export default{
     return{
       selectedWeek: [],
       myBarChart: null,
+      myDoughnutChart: null,
     }
   },
   beforeMount(){

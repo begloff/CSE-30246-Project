@@ -204,17 +204,20 @@ const updateFinancePage = async (context) => {
     var costObj = {}
     const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.sWeek}`
     const costString        = `select cost, date, reason from costs where week_id = ${context.state.sWeek}`
-    const workHoursString   = `SELECT cust_name, sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
+    const workersString   = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
+    const workerHoursString   = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
     
 
     const revResponse       = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
     const costResponse      = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
-    const workHoursResponse = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workHoursString})
+    const workersResponse = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workersString})
+    const workerHoursResponse = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workerHoursString})
     
     
     const revData           = revResponse.data
     const costData          = costResponse.data
-    const workHoursData     = workHoursResponse.data
+    const workerHoursData     = workerHoursResponse.data
+    const workersData     = workersResponse.data
 
     let weekLabels = []
     let venmo = []
@@ -255,12 +258,16 @@ const updateFinancePage = async (context) => {
     }
 
     // find workers hours
-    var totalHours = 0
-    for(var i = 0; i < workHoursData.length; i++){
-        totalHours = totalHours + Number(workHoursData[i][1])
-    }
+    var totalHours = workerHoursData.reduce((sum, a) => sum+Number(a),0)
 
-    var wage     = Number( ( (0.9 * totalRev - totalCost) / totalHours).toFixed(2) )
+    var wage     = Number( ( (0.9 * (totalRev - totalCost)) / totalHours).toFixed(2) )
+
+
+    var workerWages = workerHoursData.map( function(element){
+        return element * wage
+    })
+
+
 
 
     context.commit("SET_WEEK_DATA", revObj)
@@ -271,7 +278,7 @@ const updateFinancePage = async (context) => {
     context.commit("SET_COST", totalCost)
     context.commit("SET_WEEK_FEE", totalWeekFee)
     context.commit("SET_CHART_DATA", {l: weekLabels, v: venmo, c: cash})
-    context.commit("SET_WORKER_HOURS", {wH: workHoursData, tH:totalHours})
+    context.commit("SET_WORKER_HOURS", {wH: workerWages, w: workersData, tH:totalHours})
     context.commit("SET_WAGE", wage)
     
 }

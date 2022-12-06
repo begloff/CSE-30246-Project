@@ -1,12 +1,10 @@
 <template>
   <h3>Duncan Grille Finances</h3>
 <!--WeeklyFinances/-->
-
-
   <div style="max-width:40%; margin-left:30%; margin-right:30%; margin-bottom:20px; text-align:center;">
     <label for="weeks">Financial Info For:</label>
     
-    <select name="weeks" id="weeks" @change="updateFinances()" v-model="this.$store.state.selectedWeek" > 
+    <select name="weeks" id="weeks" @change="updateFinances()" v-model="this.selectedWeek" > 
       <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
     </select>
   </div>
@@ -17,11 +15,15 @@
               positive: this.$store.state.weeklyRev - this.$store.state.totalCost >= 0}">
     Weekly Profit: {{Number(this.$store.state.weeklyRev - this.$store.state.totalCost).toFixed(2)}}
     </h1>
+    <p>
+      <em>Projection: {{(this.$store.state.projections.r - this.$store.state.projections.c).toFixed(2)}}</em>
+    </p>
   </div>
-  <hr style="width:80%; margin: auto; margin-bottom:40px;">
-  <div style="margin:auto; height:400px; width:95%; border:0px solid #000;">
+  <hr style="width:80%; margin: auto; margin-bottom:10px;">
+  <div style="margin:auto; height:420px; width:95%;">
     <div class="lCard">
       <p style="color: green; font-size: 22px;">Weekly Revenue: ${{Number(this.$store.state.weeklyRev).toFixed(2)}}</p>
+      <p style="font-size: 12px;">Projected Revenue: ${{(this.$store.state.projections.r).toFixed(2)}}</p>
       <div style="width:30%; float:left; margin-left:12.5%;">
       <p style="font-size: 15px; color:green; text-align: left; margin-bottom:15px;">Venmo Revenue: ${{ Number(this.$store.state.weeklyVenmoRev).toFixed(2)}}</p> 
       </div>
@@ -35,6 +37,7 @@
     
     <div class="rCard">
       <p style="color: red; font-size: 22px;">Weekly Cost: ${{Number(this.$store.state.totalCost).toFixed(2)}}</p>
+      <p style="font-size: 12px;">Projected Cost: ${{(this.$store.state.projections.c).toFixed(2)}}</p>
       <div>        
         <table class="table">
             <thead>
@@ -75,7 +78,7 @@
     </div>
     <div class="rCard">
       <div id="chart-wrapper">
-        <canvas id="myDoughnutChart" width="250" height="250" style="margin-top: 5px;"></canvas>
+        <!--<canvas id="myDoughnutChart" width="250" height="250" style="margin-top: 5px;"></canvas>-->
       </div>
     </div>
   </div>
@@ -97,18 +100,17 @@
           {{entry}}
         </td>
         <td v-for="entry in 3">
-          <input type="text" name="Input" style="text-align:center;">
+          <input type="text" name="Input[{{entry}}]" style="text-align:center;">
         </td>
       </tr>
     </tbody>
     </table>
-    <button onclick="updateSchedule()"> Submit Schedule </button>
+    <button onclick="updateSchedule('Input')"> Submit Schedule </button>
   </div>
   <div style="margin:auto; margin-top:50px; width:90%;">
     <p style="font-size: 30px; font-style:oblique;"><u>Hours Worked:</u></p>
     <p style="font-size: 18px; font-style: normal; color:chocolate" v-for="workerHours in this.$store.state.workerHours">{{workerHours[0]}}: {{workerHours[1]}} Hours</p>
   </div>
-  
   <div style="float:right; margin:auto;">
       <p style="color: green; font-size: 8px; margin-right: 50px;">Go Dawgs ΔΩΓ</p>
   </div>
@@ -123,11 +125,11 @@ export default{
   },
   methods:{
 
-    async updateSchedule() {
-
+    async updateSchedule(schedule) {
     },
 
     async updateFinances(){
+      await this.$store.dispatch("selectWeek", Number(this.selectedWeek[0]))
 
       await this.$store.dispatch("updateFinancePage")
 
@@ -140,36 +142,38 @@ export default{
       }
 
       this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
-      this.doughnutChart(this.$store.state.wage, this.$store.state.workerHours)
+      console.log(this.$store.state.workerHours)
+      //this.doughnutChart(this.$store.state.wage, this.$store.state.workerHours[0])
 
     },
 
+    async setProjections() {
+      await this.$store.dispatch("setProjections")
+    },
 
     doughnutChart(wage, employees) {
       const ctx = document.getElementById('myDoughnutChart').getContext('2d');
       this.myDoughnutChart = new Chart( ctx, {
         type: 'doughnut',
         data: {
-            employees
-//          labels: 'employees',
-//          datasets: [{
-//              label:'Hours',
-//                  data: wage,
-//                  backgroundColor: [
-//                      'red',
-//                      'orange',
-//                      'yellow',
-//                      'green',
-//                      'blue',
-//                      'indigo',
-//                      'violet',
-//                      'brown',
-//                      'black',
-//                      'white',
-//                  ],
-//                  hoverOffset: 4
-//              }
-          },
+          labels: employees,
+          datasets: [{
+            label:'Hours',
+            data: employees,
+                  backgroundColor: [
+                      'red',
+                      'orange',
+                      'yellow',
+                      'green',
+                      'blue',
+                      'indigo',
+                      'violet',
+                      'brown',
+                      'black',
+                      'white',
+                  ],
+                  hoverOffset: 4
+          }],
 //          options:{
 //            maintainAspectRatio: false,
 //            plugins:{
@@ -183,8 +187,9 @@ export default{
 //                    }
  //               }
  //               
-            });
-            this.myDoughnutChart;  
+        }
+      });
+      this.myDoughnutChart;
     },
 
     barChart( venmo, cash, week ){
@@ -272,6 +277,9 @@ export default{
       selectedWeek: [],
       myBarChart: null,
     }
+  },
+  beforeMount(){
+    this.setProjections()
   }
   
 }
@@ -285,15 +293,17 @@ export default{
 }
 .lCard{
     float: left;
-    margin-left: 2%;   
+    margin-left: 2%;  
+    margin-right: 2%;  
     margin-top: 30px;
-    width: 48%;
+    width: 46%;
 }
 .rCard{
     float: right;
+    margin-left: 2%;   
     margin-right: 2%; 
     margin-top: 30px;
-    width: 48%;   
+    width: 46%;   
 }
 .table {
   float: center;

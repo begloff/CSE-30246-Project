@@ -29,7 +29,8 @@ export default createStore({
     totalHours: 10,
     workerHours: [],
     totalHours: 0,
-    wage: 5
+    wage: 0,
+    projections: {r:0, c:0}
   },
   mutations: mutations,
 

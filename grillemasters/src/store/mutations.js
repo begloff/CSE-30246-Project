@@ -84,6 +84,10 @@ const SET_WAGE = (state,payload) => {
     state.wage = payload;
 }
 
+const SET_PROJECTIONS = (state, payload) => {
+    state.projections = {r: payload.r, c: payload.c}
+}
+
 export default{
     SET_LOGGED_IN,
     CLEAR_USER,
@@ -104,5 +108,6 @@ export default{
     SET_WEEK_COSTS,
     SET_WEEK_FEE,
     SET_WORKER_HOURS,
-    SET_WAGE
+    SET_WAGE,
+    SET_PROJECTIONS
 }

@@ -204,20 +204,21 @@ const updateFinancePage = async (context) => {
     var costObj = {}
     const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.sWeek}`
     const costString        = `select cost, date, reason from costs where week_id = ${context.state.sWeek}`
-    const workersString   = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
-    const workerHoursString   = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
-    
+    const workersString     = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
+    const workerHoursString = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
+    const workingEString    = `select day_of_week, w1,w2,w3 from schedule where week_id = ${context.state.sWeek}`
 
-    const revResponse       = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
-    const costResponse      = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
-    const workersResponse = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workersString})
-    const workerHoursResponse = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workerHoursString})
-    
+    const revResponse           = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
+    const costResponse          = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
+    const workersResponse       = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workersString})
+    const workerHoursResponse   = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workerHoursString})
+    const workingEResponse      = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workingEString})
     
     const revData           = revResponse.data
     const costData          = costResponse.data
-    const workerHoursData     = workerHoursResponse.data
-    const workersData     = workersResponse.data
+    const workerHoursData   = workerHoursResponse.data
+    const workersData       = workersResponse.data
+    const workingEData      = workingEResponse.data
 
     let weekLabels = []
     let venmo = []
@@ -267,9 +268,6 @@ const updateFinancePage = async (context) => {
         return element * wage
     })
 
-
-
-
     context.commit("SET_WEEK_DATA", revObj)
     context.commit("SET_WEEK_COSTS", costData)
     context.commit("SET_TOTAL_REV", totalRev)
@@ -280,7 +278,7 @@ const updateFinancePage = async (context) => {
     context.commit("SET_CHART_DATA", {l: weekLabels, v: venmo, c: cash})
     context.commit("SET_WORKER_HOURS", {wH: workerWages, w: workersData, tH:totalHours})
     context.commit("SET_WAGE", wage)
-    
+    context.commit("SET_WORKING_E", workingEData)
 }
 
 const getOrdersByDay = async (context) => {

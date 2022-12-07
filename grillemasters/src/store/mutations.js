@@ -86,7 +86,11 @@ const SET_WAGE = (state,payload) => {
 }
 
 const SET_PROJECTIONS = (state, payload) => {
-    state.projections = {r: payload.r, c: payload.c}
+    state.projections = {r: payload.r, c: payload.c};
+}
+
+const SET_WORKING_E = (state, payload) => {
+    state.workingEmployees = payload;
 }
 
 export default{
@@ -110,5 +114,6 @@ export default{
     SET_WEEK_FEE,
     SET_WORKER_HOURS,
     SET_WAGE,
-    SET_PROJECTIONS
+    SET_PROJECTIONS,
+    SET_WORKING_E
 }

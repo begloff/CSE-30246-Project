@@ -16,7 +16,7 @@
     Weekly Profit: {{Number(this.$store.state.weeklyRev - this.$store.state.totalCost).toFixed(2)}}
     </h1>
     <p>
-      <em>Projection: {{(this.$store.state.projections.r - this.$store.state.projections.c).toFixed(2)}}</em>
+      <em>Projected Profit: {{(this.$store.state.projections.r - this.$store.state.projections.c).toFixed(2)}}</em>
     </p>
   </div>
   <hr style="width:80%; margin: auto; margin-bottom:10px;">
@@ -64,7 +64,7 @@
       </div>
     </div>
   </div>
-
+  <hr style="width:80%; margin: auto;">
   <div style="margin:auto; margin-bottom: 15px; height:430px; width:95%;">
     <div class="lCard">
       <h2> Profit Distribution: </h2>
@@ -77,14 +77,15 @@
       <p style="color: green; font-size: 40px;"> Hourly Wage: ${{this.$store.state.wage.toFixed(2)}}/hour</p>
     </div>
     <div class="rCard">
+      <h2>Weekly Wages:</h2>
       <div id="chart-wrapper">
-        <canvas id="myDoughnutChart" width="500" height="250" style="margin-top: 5px;"></canvas>
+        <canvas id="myDoughnutChart" width="500" height="270" style="margin-top: 5px;"></canvas>
       </div>
     </div>
-  </div>
-
-  <div style="margin:auto; margin-top:50px; width:90%;">
-    <h2 style="margin-top:20px;">Schedule</h2>
+</div>
+<hr style="width:80%; margin: auto;">
+<div style="margin:auto; margin-top:50px; width:90%;">
+  <h2 style="margin-top:20px;">Schedule</h2>
     <table class="table">
     <thead>
       <tr>
@@ -95,24 +96,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="entry in ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday']">
+      <tr v-for="day in this.$store.state.workingEmployees">
         <td>
-          {{entry}}
+          {{day[0]}}
         </td>
-        <td v-for="entry in 3">
-          <input type="text" name="Input[{{entry}}]" style="text-align:center;">
+        <td v-for="i in (day.length-1)">
+          <input type="text" name="" v-model=day[i] style="text-align:center;">
         </td>
       </tr>
     </tbody>
     </table>
-    <button onclick="updateSchedule('Input')"> Submit Schedule </button>
-  </div>
-  <div style="margin:auto; margin-top:50px; width:90%;">
-    <p style="font-size: 30px; font-style:oblique;"><u>Hours Worked:</u></p>
-    <p style="font-size: 18px; font-style: normal; color:chocolate" v-for="workerHours in this.$store.state.workerHours">{{workerHours[0]}}: {{workerHours[1]}} Hours</p>
-  </div>
-  <div style="float:right; margin:auto;">
-      <p style="color: green; font-size: 8px; margin-right: 50px;">Go Dawgs ΔΩΓ</p>
+    <button onclick="updateSchedule()"> Submit Schedule </button>
   </div>
 </template>
 <script>
@@ -126,7 +120,7 @@ export default{
   },
   methods:{
 
-    async updateSchedule(schedule) {
+    async updateSchedule() {
     },
 
     async updateFinances(){

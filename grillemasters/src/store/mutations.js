@@ -75,6 +75,34 @@ const SET_CHART_DATA = (state, payload) =>{
     state.weekCash = payload.c;
 }
 
+const SET_WEEK_COSTS = (state, payload) =>{
+    state.weekCosts = payload;
+}
+
+const SET_WEEK_FEE = (state, payload) => {
+    state.weeklyOnlineFee = payload;
+}
+
+const SET_WORKER_HOURS = (state, payload) => {
+    state.workerHours = payload.wH;
+    state.workingEmployees = payload.w;
+    state.totalHours  = payload.tH;
+}
+
+const SET_WAGE = (state,payload) => {
+    state.wage = payload;
+}
+
+const SET_PROJECTIONS = (state, payload) => {
+    state.projections = {r: payload.r, c: payload.c}
+}
+
+const SET_WORKING_E = (state, payload) => {
+    state.weeklyEmployees = payload;
+}
+
+
+
 export default{
     SET_LOGGED_IN,
     CLEAR_USER,
@@ -94,4 +122,10 @@ export default{
     SET_CHART_DATA,
     SET_EMPLOYEES,
     SET_EDIT_ORDER,
+    SET_WEEK_COSTS,
+    SET_WEEK_FEE,
+    SET_WORKER_HOURS,
+    SET_WAGE,
+    SET_PROJECTIONS,
+    SET_WORKING_E,
 }

@@ -1,14 +1,10 @@
 <template>
   <h3>Duncan Grille Finances</h3>
 <!--WeeklyFinances/-->
-
-
   <div style="max-width:40%; margin-left:30%; margin-right:30%; margin-bottom:20px; text-align:center;">
     <label for="weeks">Financial Info For:</label>
     
-    
-    <!-- !!!!!!! -->
-    <select name="weeks" id="weeks" @change="updateFinances()" v-model="this.$store.state.selectedWeek" > 
+    <select name="weeks" id="weeks" @change="updateFinances()" v-model="this.selectedWeek" > 
       <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
     </select>
   </div>
@@ -19,11 +15,15 @@
               positive: this.$store.state.weeklyRev - this.$store.state.totalCost >= 0}">
     Weekly Profit: {{Number(this.$store.state.weeklyRev - this.$store.state.totalCost).toFixed(2)}}
     </h1>
+    <p>
+      <em>Projected Profit: {{(this.$store.state.projections.r - this.$store.state.projections.c).toFixed(2)}}</em>
+    </p>
   </div>
-  <hr style="width:80%; margin: auto; margin-bottom:40px;">
-  <div style="margin:auto; height:350px; width:95%; border:0px solid #000;">
+  <hr style="width:80%; margin: auto; margin-bottom:10px;">
+  <div style="margin:auto; height:420px; width:95%;">
     <div class="lCard">
       <p style="color: green; font-size: 22px;">Weekly Revenue: ${{Number(this.$store.state.weeklyRev).toFixed(2)}}</p>
+      <p style="font-size: 12px;">Projected Revenue: ${{(this.$store.state.projections.r).toFixed(2)}}</p>
       <div style="width:30%; float:left; margin-left:12.5%;">
       <p style="font-size: 15px; color:green; text-align: left; margin-bottom:15px;">Venmo Revenue: ${{ Number(this.$store.state.weeklyVenmoRev).toFixed(2)}}</p> 
       </div>
@@ -37,6 +37,7 @@
     
     <div class="rCard">
       <p style="color: red; font-size: 22px;">Weekly Cost: ${{Number(this.$store.state.totalCost).toFixed(2)}}</p>
+      <p style="font-size: 12px;">Projected Cost: ${{(this.$store.state.projections.c).toFixed(2)}}</p>
       <div>        
         <table class="table">
             <thead>
@@ -47,18 +48,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="entry in this.$store.state.storeRuns">
+                <tr v-for="entry in this.$store.state.weekCosts">
                     <td>
-                        {{entry.date}}
+                        {{entry[1].split(' ')[0]}}
                     </td>
                     <td>
-                        ${{Number(entry.cost).toFixed(2)}}
+                        {{Number(entry[0]).toFixed(2)}}
                     </td>
                     <td>
-                        {{entry.reason}}
-                    </td>
-                    <td>
-                      <fa icon="trash-can" @click="delStoreRun( entry.id )" style="color:red; cursor:pointer;"/>
+                        {{entry[2]}}
                     </td>
                 </tr>
             </tbody>
@@ -66,30 +64,28 @@
       </div>
     </div>
   </div>
-
-  <div style="margin:auto; margin-bottom: 15px; height:430px; width:95%; border:1px solid #000;">
+  <hr style="width:80%; margin: auto;">
+  <div style="margin:auto; margin-bottom: 15px; height:430px; width:95%;">
     <div class="lCard">
       <h2> Profit Distribution: </h2>
       <p style="font-size: 14px;">Weekly Profit: ${{ Number((this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
       <p style="font-size: 14px; color: red;">10% Operations Cut: ${{ Number(0.1 * (this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
       <p style="font-size: 14px; color: red;">Weekly Online Fees: ${{ Number(this.$store.state.weeklyOnlineFee).toFixed(2)}}</p>
       <p style="font-size: 14px; color: green;">Employee Wage Pool: ${{ Number(0.9 * (this.$store.state.weeklyRev - this.$store.state.totalCost)).toFixed(2)}}</p>
-      <p style="font-size: 14px; color: orange;">Hours Worked: {{this.$store.state.totalHours}}</p>
+      <p style="font-size: 14px; color: orange;">Hours Worked: {{this.$store.state.totalHours.toFixed(2)}}</p>
       <hr style="width:80%; margin: auto; margin-bottom:40px;">
-      <p style="color: green; font-size: 40px;"> 
-          Hourly Wage: ${{ Number( (0.9 * (this.$store.state.weeklyRev - this.$store.state.totalCost) ) / this.$store.state.totalHours ).toFixed(2)}}/hour
-      </p>
+      <p style="color: green; font-size: 40px;"> Hourly Wage: ${{this.$store.state.wage.toFixed(2)}}/hour</p>
     </div>
     <div class="rCard">
-
+      <h2>Weekly Wages:</h2>
       <div id="chart-wrapper">
-        <canvas id="myDoughnutChart" width="250" height="250" style="margin-top: 5px;"></canvas>
+        <canvas id="myDoughnutChart" width="500" height="270" style="margin-top: 5px;"></canvas>
       </div>
     </div>
-  </div>
-
-  <div style="margin:auto; margin-top:60px; height:600px; width:90%; border:1px solid #000;">
-    <h2 style="margin-top:20px;">Schedule</h2>
+</div>
+<hr style="width:80%; margin: auto;">
+<div style="margin:auto; margin-top:50px; width:90%;">
+  <h2 style="margin-top:20px;">Schedule</h2>
     <table class="table">
     <thead>
       <tr>
@@ -100,38 +96,35 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="entry in this.$store.state.schedule">
+      <tr v-for="day in this.$store.state.weeklyEmployees">
         <td>
-          {{entry.date}}
+          {{day[0]}}
         </td>
-        <td v-for="shift in entry.schedule">
-          {{shift}}
+        <td v-for="i in (day.length-1)">
+          <input type="text" name="" v-model=day[i] style="text-align:center;">
         </td>
       </tr>
     </tbody>
     </table>
-    <p>Hours Worked:</p>
-    <!--<p style="font-size: 12px; font-style: normal;" v-for="worker in workerHours">{{worker}}</p>-->
-  </div>
-  
-  <div style="float:right; margin:auto;">
-      <p style="color: green; font-size: 8px; margin-right: 50px;">Go Dawgs ΔΩΓ</p>
+    <button onclick="updateSchedule()"> Submit Schedule </button>
   </div>
 </template>
 <script>
 import WeeklyFinances from '../components/financial/WeeklyFinances.vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
-// Gonna need to import data for both the date and Sales Done
-// Snapshot for the totals page
+
 export default{
   components:{
     WeeklyFinances,
   },
   methods:{
-    async updateFinances(){
 
-      //Something Fucked in DB for first week
+    async updateSchedule() {
+    },
+
+    async updateFinances(){
+      await this.$store.dispatch("selectWeek", Number(this.selectedWeek[0]))
 
       await this.$store.dispatch("updateFinancePage")
 
@@ -139,15 +132,64 @@ export default{
         this.myBarChart.destroy()
       }
 
-      this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
+      if(this.myDoughnutChart){
+        this.myDoughnutChart.destroy()
+      }
 
+      this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
+      this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
+
+    },
+
+    async setProjections() {
+      await this.$store.dispatch("setProjections")
+    },
+
+    doughnutChart(hours, employees) {
+      const ctx = document.getElementById('myDoughnutChart').getContext('2d');
+      this.myDoughnutChart = new Chart( ctx, {
+        type: 'doughnut',
+        data: {
+          labels: employees,
+          datasets: [{
+            label:'Hours',
+            data: hours,
+                  backgroundColor: [
+                      'red',
+                      'orange',
+                      'yellow',
+                      'green',
+                      'blue',
+                      'indigo',
+                      'violet',
+                      'brown',
+                      'black',
+                      'white',
+                  ],
+                  hoverOffset: 4
+          }],
+        },
+        options:{
+          maintainAspectRatio: false,
+          plugins:{
+              tooltip:{
+                  callbacks:{
+                      label: function(tooltipItem, data){
+                          return tooltipItem.label + ": $" + Number(tooltipItem.parsed).toFixed(2);
+                      }
+                  }
+              }
+          }
+        }
+      });
+      this.myDoughnutChart;
     },
 
     barChart( venmo, cash, week ){
 
-    const ctx = document.getElementById('myBarChart').getContext('2d');
+      const ctx = document.getElementById('myBarChart').getContext('2d');
 
-    this.myBarChart = new Chart(ctx, {
+      this.myBarChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: week,
@@ -227,7 +269,11 @@ export default{
     return{
       selectedWeek: [],
       myBarChart: null,
+      myDoughnutChart: null,
     }
+  },
+  beforeMount(){
+    this.setProjections()
   }
   
 }
@@ -241,15 +287,22 @@ export default{
 }
 .lCard{
     float: left;
-    margin-left: 2%;   
+    margin-left: 2%;  
+    margin-right: 2%;  
     margin-top: 30px;
-    width: 48%;
+    width: 46%;
 }
 .rCard{
     float: right;
+    margin-left: 2%;   
     margin-right: 2%; 
     margin-top: 30px;
-    width: 48%;   
+    width: 46%;   
 }
-</style>
+.table {
+  float: center;
+  width: 90%
+}
 
+
+</style>

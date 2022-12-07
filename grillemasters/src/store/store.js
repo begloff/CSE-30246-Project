@@ -26,7 +26,15 @@ export default createStore({
     weekVenmo: [],
     weekCash: [],
     editOrder: [],
-
+    weeklyOnlineFee: 0,
+    weekCosts: [],
+    totalHours: 10,
+    workerHours: [],
+    totalHours: 0,
+    wage: 0,
+    projections: {r:0, c:0},
+    workingEmployees: [],
+    weeklyEmployees: [],
   },
   mutations: mutations,
 

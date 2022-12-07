@@ -171,7 +171,6 @@ const getWeeksSQL = async ( context ) => {
       end_date.setDate(start_date.getDate() + 6)
       start_date.setHours(-5); start_date.setMinutes(0); start_date.setSeconds(0);
       end_date.setHours(18); end_date.setMinutes(59); end_date.setSeconds(59);
-      console.log(start_date, end_date)
       axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO weeks (start_date, end_date) values( "${start_date.toISOString().slice(0, 19).replace('T', ' ')}", "${end_date.toISOString().slice(0, 19).replace('T', ' ')}")`})
       response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
     }
@@ -202,29 +201,65 @@ const updateFinancePage = async (context) => {
 
     var revObj = {}
     var costObj = {}
-    const revString     = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date FROM nightly_stats WHERE week_id = ${context.state.selectedWeek[0]};`
-    const costString    = `select cost, date, reason from costs where week_id = ${context.state.selectedWeek[0]};`
-    const revResponse   = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
-    const costResponse  = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
-    const revData       = revResponse.data
-    const costData      = costResponse.data
+    const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.sWeek}`
+    const costString        = `select cost, date, reason from costs where week_id = ${context.state.sWeek}`
+    const workersString     = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
+    const workerHoursString = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
+    const workingEString    = `select day_of_week, w1,w2,w3 from schedule where week_id = ${context.state.sWeek}`
+
+    const revResponse           = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
+    const costResponse          = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
+    const workersResponse       = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workersString})
+    const workerHoursResponse   = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workerHoursString})
+    const workingEResponse      = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: workingEString})
+    
+    const revData           = revResponse.data
+    const costData          = costResponse.data
+    const workerHoursData   = workerHoursResponse.data
+    const workersData       = workersResponse.data
+    var workingEData      = workingEResponse.data
+
+    var x = Array.apply(null, Array(5)).map(function () {})
+
+    for( var i = 0; i < workingEData.length; i++){
+        var y = workingEData[i]
+        if(y[0] == 'SU'){
+            x[0] = y
+        }
+        if(y[0] == 'MO'){
+            x[1] = y
+        }
+        if(y[0] == 'TU'){
+            x[2] = y
+        }
+        if(y[0] == 'WE'){
+            x[3] = y
+        }
+        if(y[0] == 'TH'){
+            x[4] = y
+        }
+    }
+
+    workingEData = x
 
     let weekLabels = []
     let venmo = []
     let cash = []
 
+    var totalRev = 0
+    var totalCashRev = 0
+    var totalVenmoRev = 0
+    var totalWeekFee = 0
+
     // prepare week revenue data for charts
 
     //Need a list for labels, list for cash and list for venmo
-
-
     for( var i=0; i<revData.length; i++) {
       revObj[revData[i][0]] = [revData[i][1], revData[i][2], revData[i][3]]
-
+      totalWeekFee = totalWeekFee + Number(revData[i][5])
       weekLabels.push(revData[i][4].split(" ")[0])
       venmo.push(revData[i][3])
       cash.push(revData[i][2])
-
     }
     
     // prepare week cost data for table
@@ -233,20 +268,9 @@ const updateFinancePage = async (context) => {
     }
 
     // find total weekly revenue
-    var totalRev = 0
     for( var i = 0; i<revData.length; i++) {
       totalRev = totalRev + Number(revObj[revData[i][0]][0])
-    }
-
-    // find total cash revenue
-    var totalCashRev = 0
-    for( var i = 0; i<revData.length; i++) {
       totalCashRev = totalCashRev + Number(revObj[revData[i][0]][1])
-    }
-
-    // find total venmo revenue
-    var totalVenmoRev = 0
-    for( var i = 0; i<revData.length; i++) {
       totalVenmoRev = totalVenmoRev + Number(revObj[revData[i][0]][2])
     }
 
@@ -256,12 +280,29 @@ const updateFinancePage = async (context) => {
       totalCost = totalCost + Number(costObj[costData[i][1]][0])
     }
 
+    // find workers hours
+    var totalHours = workerHoursData.reduce((sum, a) => sum+Number(a),0)
+
+    var wage     = Number( ( (0.9 * (totalRev - totalCost)) / totalHours).toFixed(2) )
+
+
+    var workerWages = workerHoursData.map( function(element){
+        return element * wage
+    })
+
+
+
     context.commit("SET_WEEK_DATA", revObj)
+    context.commit("SET_WEEK_COSTS", costData)
     context.commit("SET_TOTAL_REV", totalRev)
     context.commit("SET_CASH_REV", totalCashRev)
     context.commit("SET_VENMO_REV", totalVenmoRev)
     context.commit("SET_COST", totalCost)
+    context.commit("SET_WEEK_FEE", totalWeekFee)
     context.commit("SET_CHART_DATA", {l: weekLabels, v: venmo, c: cash})
+    context.commit("SET_WORKER_HOURS", {wH: workerWages, w: workersData, tH:totalHours})
+    context.commit("SET_WAGE", wage)
+    context.commit("SET_WORKING_E", workingEData)
 }
 
 const getOrdersByDay = async (context) => {
@@ -294,7 +335,6 @@ const commitOrders = async (context, o) => {
 
 const deleteOrder = async (context, payload) => {
     let id = payload.id;
-    console.log(payload);
     const sql = `delete from orders where id = ${id}`
     await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
     let orders = context.state.orders.filter( (item) => {
@@ -343,7 +383,18 @@ const getCustomerBase = async (context) => {
     
     context.commit("SET_CUSTOMERS",arr)
     context.commit("SET_CUSTOMERS_IND",obj)
-  }
+}
+
+const setProjections = async (context) => {
+    const costProjectString = `select c.Tot/w.Tot from (select sum(cost) as Tot from costs) C, (select count(*) as Tot from weeks) w`
+    const revProjectString  = `select r.Tot/w.Tot from (select sum(price) as Tot from orders) r, (select count(*) as Tot from weeks) w`
+    const costPResponse     = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costProjectString})
+    const revPResponse      = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revProjectString})
+    const costProject       = costPResponse.data
+    const revProject        = revPResponse.data
+    context.commit("SET_PROJECTIONS", {r: Number(revProject[0]), c: Number(costProject[0])})
+}
+
 
 export default{
     login,
@@ -363,5 +414,6 @@ export default{
     logHours,
     getOrderById,
     updateOrder,
+    setProjections
 }
 

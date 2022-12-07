@@ -57,12 +57,12 @@
 
   </div>
   <hr>
-  <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+  <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
     <p> Inventory in Stock</p>
-    <p>Chicken Units: {{chickenStorage}} Bags</p>
-    <p>Cheese Units: {{cheeseStorage}} Bags</p>
-    <p>Chips Units: {{chipsStorage}} Bags</p>
-    <p>Bacon Units: {{baconStorage}} Bags</p>
+    <p>Chicken Units: {{chickenStorage}} Bags. Will last {{daysLeft.chicken}} days</p>
+    <p>Cheese Units: {{cheeseStorage}} Bags. Will last {{daysLeft.cheese}} days</p>
+    <p>Chips Units: {{chipsStorage}} Bags. Will last {{daysLeft.chips}} days</p>
+    <p>Bacon Units: {{baconStorage}} Bags. Will last {{daysLeft.bacon}} days</p>
 
   </div>
   <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
@@ -86,9 +86,8 @@
   </div>
   <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
     <p>Historical Stats</p>
-    <div id="chart-wrapper">
-      <canvas id="TotalChart" width="300" height="200" style="margin-top: 5px"></canvas>
-    </div>
+      <canvas id="TotalChart" style="max-width: 50%; max-height: 600px; margin-top: 5px; margin-left: 25%;"></canvas>
+    
     <p>Dubbuff: {{tdubbuff_count}} </p>
     <p>Singlebuff: {{tsinglebuff_count}} </p>
     <p>CBR: {{tCBR_count}} </p>
@@ -116,6 +115,11 @@ import { faBuildingCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Chart from 'chart.js/auto'
 export default {
+  async mounted(){
+    await this.fetchInventory()
+    await this.historicalstats()
+    this.project()
+  },  
   data(){
     return{
       selectedWeek: null,
@@ -160,7 +164,8 @@ export default {
       wsingleCBR_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
       wCBR_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
       wchickenNacho_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
-      wcheeseNacho_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0}
+      wcheeseNacho_count: {'SU':0,'MO':0,'TU':0,'WE':0,'TH':0},
+      daysLeft: {chicken: 0, cheese: 0, bacon: 0, chips: 0}
     }
   },
   methods:{
@@ -466,6 +471,62 @@ export default {
       this.chipsUsage = Math.round( this.chips / 6)
       this.baconUsage = Math.round( this.bacon / 11)
     },
+
+    async project(){
+      // this.wdubbuff_count
+      // this.wsinglebuff_count
+      // this.wCBR_count
+      // this.wsingleCBR_count
+      // this.wchickenNacho_count
+      // this.wcheeseNacho_count
+      //this.daysLeft
+      let daysofweek = ['SU','MO','TU','WE','TH']
+      let i = 0;
+      let used = false;
+      let chickenleft = this.chickenStorage
+      let cheeseleft = this.cheeseStorage
+      let chipsleft = this.chipsStorage
+      let baconleft = this.baconStorage
+
+      while(!used){
+          let d = daysofweek[i]
+          let ch = this.wdubbuff_count[d] + this.wCBR_count[d] + 0.5 * (this.wsingleCBR_count[d]) + 0.5 * (this.wsinglebuff_count[d]) + 1.5 * (this.wchickenNacho_count[d]) + 1.5 * (this.wcheeseNacho_count[d])
+          let chips = this.wchickenNacho_count[d] + this.wcheeseNacho_count[d]
+          let bacon = this.wCBR_count[d] + 0.5 * (this.wsingleCBR_count[d])
+          chickenleft -= (ch * 4) / 96;
+          cheeseleft -= ch / 15;
+          chipsleft -= chips / 6;
+          baconleft -= bacon / 11;
+          let allused = 0
+          if(chickenleft > 0){
+            allused++;
+            this.daysLeft.chicken++;
+          }
+          if(cheeseleft > 0){
+            allused++;
+            this.daysLeft.cheese++;
+          }
+          if(chipsleft > 0){
+            allused++;
+            this.daysLeft.chips++;
+          }
+          if(baconleft > 0){
+            allused++;
+            this.daysLeft.bacon++;
+          }
+          if(allused == 0){
+            used = true
+          }
+          if(i < 4){
+            i++;
+          }
+          else {
+            i = 0;
+          } 
+      }
+      console.log(this.daysLeft)
+    },
+
     async fetchInventory(){
       const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory;`})
       // console.log("yes")

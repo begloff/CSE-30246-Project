@@ -351,7 +351,7 @@ export default {
 
 #chart-wrapper{
     display: flex;   
-},
+}
 #myBarChart{
     min-height: 30%;
 }

@@ -11,6 +11,7 @@ export default createStore({
     sWeek: null, //SQL
     customerBase: [], //SQL
     customerBaseInd: {},
+    employees: [],
     weeklyRev: 0,
     weeklyCashRev: null,
     weeklyVenmoRev: null,
@@ -24,7 +25,7 @@ export default createStore({
     weekLabels: [],
     weekVenmo: [],
     weekCash: [],
-
+    editOrder: [],
 
   },
   mutations: mutations,

@@ -136,6 +136,17 @@ const getRole = async (context) => {
     }
 }
 
+const getEmployees = async (context) => {
+    const employees = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from customers where employee = 1;'})
+    context.commit("SET_EMPLOYEES", employees.data);
+}
+
+const logHours = async (context, payload) => {
+    let id = payload.id;
+    let hours = payload.hours;
+    await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO hours values(${context.state.currWeek}, ${id}, ${hours});`})
+}
+
 const getWeeksSQL = async ( context ) => {
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks order by start_date desc;'})
     const weeks = []
@@ -260,6 +271,14 @@ const getOrdersByDay = async (context) => {
     context.dispatch('commitOrders', { o: orders})
 }
 
+const getOrderById = async (context, payload) => {
+    const id = payload.id
+    const sql = `SELECT * from orders where id = ${id};`;
+    const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql});
+    let order = response.data
+    context.commit('SET_EDIT_ORDER', order[0]);
+} 
+
 const commitOrders = async (context, o) => {
     let orders = o.o
     let nightTot = 0;
@@ -283,6 +302,18 @@ const deleteOrder = async (context, payload) => {
     });
 
     context.dispatch('commitOrders', { o: orders})
+}
+
+const updateOrder = async (context, payload) => {
+    const id = Number(payload.order[0])
+    const custId = payload.order[7]
+    const items = payload.order[2]
+    const comments = payload.order[11]
+    const cash = payload.order[8]
+    const price = payload.order[1]
+    const sql = `UPDATE orders set done = 0, cust_id = ${custId}, items = ${items}, comments = '${comments}', cash = ${cash}, price = ${price} where id = ${id}`
+    await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+    context.dispatch('getOrdersByDay')
 }
 
 const completeOrder = async ( context, payload) => {
@@ -328,5 +359,9 @@ export default{
     commitOrders,
     deleteOrder,
     completeOrder,
+    getEmployees,
+    logHours,
+    getOrderById,
+    updateOrder,
 }
 

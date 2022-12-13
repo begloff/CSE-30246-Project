@@ -6,6 +6,9 @@ import { doc, collection, onSnapshot, query, orderBy, setDoc, getDocs, getDoc, }
 import { ordersCollection, viewCollection, operationCollection, weeklyPrefix, db} from "../firebase"
 import axios from 'axios';
 
+function onlyLettersAndNumbers(str) {
+    return str.replace(/[^a-z0-9]+/gi, " ");
+}
 
 const login = async (context, details) => {
     const { email, password } = details
@@ -353,7 +356,7 @@ const updateOrder = async (context, payload) => {
     const id = Number(payload.order[0])
     const custId = payload.order[7]
     const items = payload.order[2]
-    const comments = payload.order[11]
+    const comments = onlyLettersAndNumbers(payload.order[11])
     const cash = payload.order[8]
     const price = payload.order[1]
     const sql = `UPDATE orders set done = 0, cust_id = ${custId}, items = ${items}, comments = '${comments}', cash = ${cash}, price = ${price} where id = ${id}`

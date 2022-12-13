@@ -179,6 +179,10 @@ export default {
   },
 
   methods:{
+    async onlyLettersAndNumbers(str) {
+      return str.replace(/[^a-z0-9]+/gi, " ");
+    },
+
     async changeWeek(){
       //Change week and make subsequent calls for each food item --> Cheese, Chicken, Bacon, Tortillas, Chips
       if(this.myBarChart) this.myBarChart.destroy()
@@ -591,7 +595,7 @@ export default {
       const d = this.storeDate.split('-')
       const date = new Date(d[0],d[1]-1,d[2],-4,0,0,0).toISOString().slice(0, 19).replace('T', ' ')
       const cost = this.storeCost
-      const reason = this.storeReason
+      const reason = onlyLettersAndNumbers(this.storeReason)
       const sql = `insert into costs (week_id, cost, date, reason) values (${this.selectedWeek[0]}, ${cost}, '${date}', '${reason}');`
       const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
       //Need to get week id

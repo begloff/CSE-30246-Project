@@ -400,6 +400,50 @@ const setProjections = async (context) => {
     context.commit("SET_PROJECTIONS", {r: Number(revProject[0]), c: Number(costProject[0])})
 }
 
+const sendEmail = async (context, payload) => {
+    // //Sent over id, name, items, and price
+    // sql = `select email from customers where id = ${payload.id}`
+
+    // //Need to get users email
+    // var emailResponse = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
+    // var email = emailResponse.data
+
+    // let Today = new Date()
+
+    // let authData = nodemailer.createTransport({
+
+    //     host:'smtp.gmail.com',
+    //     port: 465,
+    //     secure:true,
+    //     auth:{
+    //       user: SENDER_EMAIL,
+    //       pass: SENDER_PASSWORD
+    //     }
+
+    // });
+
+
+    // authData.sendMail({
+    //     from:'Duncan Grille',
+    //     to: email ,
+    //     subject:`Order Complete: ${Today.getMonth() + 1}/${Today.getDate()}`,
+    //     text:` Hello ${payload.name},\n\n
+    //     Your Order for ${payload.items.join(",")} is complete!\n\n
+    //     CBR,\n
+    //     The Duncan Grille Staff`,
+    //     html:`Hello ${payload.name},<br><br>
+    //     Your order for <b>${payload.items.join(", ")}</b> is complete!<br>
+    //     Please <b>venmo @DuncanGrille $${Number(payload.price).toFixed(2)}</b> if you have not done so already.<br><br>
+    //     CBR,<br>
+    //     The Duncan Grille Staff<br>`,
+    //   }).then(
+    //     res=>console.log('Success'))
+    //   .catch(
+    //     err => console.log(err)
+    //   )    
+
+}
+
 
 export default{
     login,
@@ -419,6 +463,7 @@ export default{
     logHours,
     getOrderById,
     updateOrder,
-    setProjections
+    setProjections,
+    sendEmail
 }
 

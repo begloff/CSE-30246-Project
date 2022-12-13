@@ -60,6 +60,8 @@
 import { deleteDoc, updateDoc, doc, collection, onSnapshot, query, orderBy, setDoc } from "firebase/firestore"
 import { ordersCollection, weeklyCollection, operationCollection, weeklyPrefix, db} from "../../firebase"
 import ConfirmModal  from "./ConfirmModal.vue"
+import axios from 'axios'
+
 export default {
     components:{
         ConfirmModal
@@ -73,7 +75,15 @@ export default {
     methods: {
         async toggleDone( order ){
           // Read done value from order and flip it
+          if(order[10] == "0"){ //Making order complete
+            var sql = `select email from customers where id = ${Number(order[7])};`
+            var email = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
+            email = email.data[0][0]
+
+            var response = await axios.post('https://us-central1-db-duncangrille.cloudfunctions.net/email',{id: order[7], email: email, name: this.$store.state.customerBaseInd[order[7]][2], items: this.decodeOrder(order[2]), price: Number(order[1]).toFixed(2)})
+          }
           this.$store.dispatch('completeOrder', {order: order});
+
         },
         toggleModal(){
             this.deleteModal = !this.deleteModal

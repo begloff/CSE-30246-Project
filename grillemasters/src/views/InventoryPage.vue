@@ -127,10 +127,25 @@ export default {
       inventoryExist: true
     }
   },
+
+  async mounted(){
+
+    //Need to set this.selectedWeek
+    this.selectedWeek = this.$store.state.weeks.filter( week => week[0] == this.$store.state.currWeek)[0]
+
+    await this.compileSupply()
+    await this.fetchCosts()
+    await this.fetchInventory()
+  },
+
   methods:{
     async changeWeek(){
       //Change week and make subsequent calls for each food item --> Cheese, Chicken, Bacon, Tortillas, Chips
+
       if(this.myBarChart) this.myBarChart.destroy()
+
+      this.$store.dispatch("selectWeek", Number(this.selectedWeek[0]))
+
       await this.compileSupply()
       await this.fetchCosts()
       await this.fetchInventory()
@@ -145,6 +160,7 @@ export default {
       var CBR_count = 0
       var chickenNacho_count = 0
       var cheeseNacho_count = 0
+
       //2 dubs, 1 single = 45
       //Extract 2 dubs?
       //Compile each supply item
@@ -222,15 +238,14 @@ export default {
       this.baconUsage = Math.round( this.bacon / 11)
     },
     async fetchInventory(){
-      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory where week_id = ${this.selectedWeek[0]};`})
-      console.log("yes")
+      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory;`})
       if(chickenStorage.data.length==0) this.inventoryExist=false
       this.chickenStorage = Number(chickenStorage.data[0])
-      const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory where week_id = ${this.selectedWeek[0]};`})
+      const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory;`})
       this.cheeseStorage=Number(cheeseStorage.data[0])
-      const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory where week_id = ${this.selectedWeek[0]};`})
+      const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory;`})
       this.chipsStorage=Number(chipsStorage.data[0])
-      const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory where week_id = ${this.selectedWeek[0]};`})
+      const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory;`})
       this.baconStorage=Number(baconStorage.data[0])
     },
     async fetchCosts(){

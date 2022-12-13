@@ -183,10 +183,6 @@ const getWeeksSQL = async ( context ) => {
 
 }
 
-const selectWeek = (context, week) => {
-    context.commit("SELECT_WEEK",week)
-}
-
 const setProjections = async (context) => {
     const costProjectString = `select c.Tot/w.Tot from (select sum(cost) as Tot from costs) C, (select count(*) as Tot from weeks) w`
     const revProjectString  = `select r.Tot/w.Tot from (select sum(price) as Tot from orders) r, (select count(*) as Tot from weeks) w`
@@ -202,11 +198,11 @@ const updateFinancePage = async (context) => {
 
     var revObj = {}
     var costObj = {}
-    const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.sWeek}`
-    const costString        = `select cost, date, reason from costs where week_id = ${context.state.sWeek}`
-    const workersString     = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
-    const workerHoursString = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.sWeek} and employee_id = id group by H.employee_id`
-    const workingEString    = `select day_of_week, w1,w2,w3 from schedule where week_id = ${context.state.sWeek}`
+    const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.currWeek}`
+    const costString        = `select cost, date, reason from costs where week_id = ${context.state.currWeek}`
+    const workersString     = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.currWeek} and employee_id = id group by H.employee_id`
+    const workerHoursString = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.currWeek} and employee_id = id group by H.employee_id`
+    const workingEString    = `select day_of_week, w1,w2,w3 from schedule where week_id = ${context.state.currWeek}`
 
     const revResponse           = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
     const costResponse          = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})
@@ -218,18 +214,46 @@ const updateFinancePage = async (context) => {
     const costData          = costResponse.data
     const workerHoursData   = workerHoursResponse.data
     const workersData       = workersResponse.data
-    const workingEData      = workingEResponse.data
+    var workingEData      = workingEResponse.data
 
     let weekLabels = []
     let venmo = []
     let cash = []
+    var temp = Array(5).fill(0)
+
+    for( var i = 0; i < temp.length; i++){
+        temp[i] = ['-','-','-']
+    }
 
     var totalRev = 0
     var totalCashRev = 0
     var totalVenmoRev = 0
     var totalWeekFee = 0
 
-    // prepare week revenue data for charts
+    for( var i = 0; i < workingEData.length; i++){
+
+        if (workingEData[i][0] == 'SU'){
+            temp[0] = workingEData[i]
+        }
+        if (workingEData[i][0] == 'MO'){
+            temp[1] = workingEData[i]
+        }
+        if (workingEData[i][0] == 'TU'){
+            temp[2] = workingEData[i]
+        }
+        if (workingEData[i][0] == 'WE'){
+            temp[3] = workingEData[i]
+        }
+        if (workingEData[i][0] == 'TH'){
+            temp[4] = workingEData[i]
+        }
+
+    }
+
+    workingEData = temp
+
+    console.log(workingEData)
+
 
     //Need a list for labels, list for cash and list for venmo
     for( var i=0; i<revData.length; i++) {
@@ -286,6 +310,10 @@ const getOrdersByDay = async (context) => {
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
     let orders = response.data
     context.dispatch('commitOrders', { o: orders})
+}
+
+const selectWeek = (context, id) => {
+    context.commit('SET_CURR_WEEK', id)
 }
 
 const commitOrders = async (context, o) => {

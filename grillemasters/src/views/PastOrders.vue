@@ -11,14 +11,14 @@
   </div>
   <div style="float: left; width: 20%; margin-left: 5%">
     <p>Select Day</p>
-    <div v-if="this.$store.state.sWeek" class="listContainer">
+    <div v-if="this.$store.state.currWeek" class="listContainer">
         <ul style="padding-left: 0px;">
             <li v-for="days in daysOfWeek" @click="setDay(days)" :class = "{selected: isSelectedDay(days)}">{{days}}</li>
         </ul>
     </div>
   </div>
   <div style="float: right; width: 30%; margin-right: 15px; margin-top: 60px;">
-    <button @click="fetchOrders()" :disabled = "!(this.$store.state.sWeek && this.selectedDay)" >Get Orders</button>
+    <button @click="fetchOrders()" :disabled = "!(this.$store.state.currWeek && this.selectedDay)" >Get Orders</button>
   </div>
   <div style="float: right; width: 30%; margin-right: 15px; margin-top: 60px;">
     <button @click="fetchTestOrders()">Get Test Orders</button>
@@ -96,7 +96,7 @@ export default {
             this.selectedDay = day
         },
         isSelectedWeek(week){
-            if(this.$store.state.sWeek == week){
+            if(this.$store.state.currWeek == week){
                 return true
             }
         },
@@ -106,7 +106,7 @@ export default {
             }
         },
         async fetchOrders(){
-            const sql = `SELECT * from orders where week_id = ${this.$store.state.sWeek[0]} and order_day = '${this.selectedDay}' order by order_datetime asc`
+            const sql = `SELECT * from orders where week_id = ${this.$store.state.currWeek} and order_day = '${this.selectedDay}' order by order_datetime asc`
             const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
             this.orders = response.data
         },

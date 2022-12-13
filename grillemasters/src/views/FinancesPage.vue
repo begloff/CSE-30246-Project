@@ -3,8 +3,8 @@
 <!--WeeklyFinances/-->
   <div style="max-width:40%; margin-left:30%; margin-right:30%; margin-bottom:20px; text-align:center;">
     <label for="weeks">Financial Info For:</label>
-    
-    <select name="weeks" id="weeks" @change="updateFinances()" v-model="this.selectedWeek" > 
+
+    <select name="selectWeek" id="selectedWeek" @change="updateFinances()" v-model="selectedWeek"> 
       <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
     </select>
   </div>
@@ -96,34 +96,71 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="day in this.$store.state.workingEmployees">
+      <tr v-for="day in schedule">
         <td>
           {{day[0]}}
         </td>
         <td v-for="i in (day.length-1)">
-          <input type="text" name="" v-model=day[i] style="text-align:center;">
+          <input type="text" name="" v-model="day[i]" style="text-align:center;">
         </td>
       </tr>
     </tbody>
     </table>
-    <button onclick="updateSchedule()"> Submit Schedule </button>
+    <button @click="updateSchedule()"> Submit Schedule </button>
   </div>
 </template>
 <script>
 import WeeklyFinances from '../components/financial/WeeklyFinances.vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import axios from 'axios';
 
 export default{
   components:{
     WeeklyFinances,
   },
+
+  async mounted(){
+    this.selectedWeek = this.$store.state.weeks.filter( week => week[0] == this.$store.state.currWeek)[0]
+    await this.$store.dispatch("updateFinancePage")
+
+    if(this.myBarChart){
+      this.myBarChart.destroy()
+    }
+
+    if(this.myDoughnutChart){
+      this.myDoughnutChart.destroy()
+    }
+
+
+    this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
+    this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
+
+    this.schedule = this.$store.state.workingEmployees
+    console.log(this.schedule)
+
+  },
+
   methods:{
 
     async updateSchedule() {
+      console.log(this.schedule)
+
+      //Need to prevent SQL injection here
+      var sql = ''
+
+      //Need to update
+      for( var i = 0; i < this.schedule.length; i++){
+        console.log(this.schedule[i])
+        sql = sql.concat(`UPDATE schedule set w1 = '${this.schedule[i][1]}', w2 = '${this.schedule[i][2]}', w3 = '${this.schedule[i][3]}' where week_id = ${this.selectedWeek[0]} and day_of_week = '${this.schedule[i][0]}'; `)
+      }
+
+      await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+
     },
 
     async updateFinances(){
+
       await this.$store.dispatch("selectWeek", Number(this.selectedWeek[0]))
 
       await this.$store.dispatch("updateFinancePage")
@@ -138,6 +175,9 @@ export default{
 
       this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
       this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
+
+      this.schedule = this.$store.state.workingEmployees
+
 
     },
 
@@ -267,9 +307,10 @@ export default{
   },
   data(){
     return{
-      selectedWeek: [],
+      selectedWeek: null,
       myBarChart: null,
       myDoughnutChart: null,
+      schedule: []
     }
   },
   beforeMount(){

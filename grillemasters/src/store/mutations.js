@@ -15,10 +15,6 @@ const SET_WEEKS = (state,payload) => {
     state.weeks = payload
 }
 
-const SELECT_WEEK = (state,payload) => {
-    state.sWeek = payload
-}
-
 const SET_CUSTOMERS = (state,payload) => {
     state.customerBase = payload
 }
@@ -98,7 +94,6 @@ export default{
     CLEAR_USER,
     SET_EMPLOYEE_ROLE,
     SET_WEEKS,
-    SELECT_WEEK,
     SET_CUSTOMERS,
     SET_WEEK_DATA,
     SET_VENMO_REV,

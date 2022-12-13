@@ -8,7 +8,7 @@ export default createStore({
 
     user: null, //User
     weeks: null, //SQL
-    sWeek: null, //SQL
+    // sWeek: null, //SQL
     customerBase: [], //SQL
     customerBaseInd: {},
     weeklyRev: 0,

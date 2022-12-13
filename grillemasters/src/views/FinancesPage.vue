@@ -305,7 +305,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 .components{
   display: inline-block;
   width: 100px;

@@ -20,7 +20,7 @@ const SET_WEEKS = (state,payload) => {
 }
 
 const SELECT_WEEK = (state,payload) => {
-    state.sWeek = payload
+    state.currWeek = payload
 }
 
 const SET_CUSTOMERS = (state,payload) => {

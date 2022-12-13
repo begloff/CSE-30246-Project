@@ -168,6 +168,16 @@ export default {
       daysLeft: {chicken: 0, cheese: 0, bacon: 0, chips: 0}
     }
   },
+
+  async mounted(){
+    //Need to set this.selectedWeek
+    this.selectedWeek = this.$store.state.weeks.filter( week => week[0] == this.$store.state.currWeek)[0]
+    await this.compileSupply()
+    await this.fetchCosts()
+    await this.fetchInventory()
+    await this.historicalstats()
+  },
+
   methods:{
     async changeWeek(){
       //Change week and make subsequent calls for each food item --> Cheese, Chicken, Bacon, Tortillas, Chips

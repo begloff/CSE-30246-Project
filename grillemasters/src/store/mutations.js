@@ -86,7 +86,11 @@ const SET_PROJECTIONS = (state, payload) => {
 }
 
 const SET_WORKING_E = (state, payload) => {
-    state.workingEmployees = payload;
+    state.scheduledEmployees = payload;
+}
+
+const SET_EMPLOYEE_HOURS = (state,payload) => {
+    state.employeeHours = payload
 }
 
 export default{
@@ -110,5 +114,6 @@ export default{
     SET_WORKER_HOURS,
     SET_WAGE,
     SET_PROJECTIONS,
-    SET_WORKING_E
+    SET_WORKING_E,
+    SET_EMPLOYEE_HOURS
 }

@@ -252,8 +252,6 @@ const updateFinancePage = async (context) => {
 
     workingEData = temp
 
-    console.log(workingEData)
-
 
     //Need a list for labels, list for cash and list for venmo
     for( var i=0; i<revData.length; i++) {
@@ -292,6 +290,9 @@ const updateFinancePage = async (context) => {
         return element * wage
     })
 
+    console.log(workersData, workerHoursData)
+
+
     context.commit("SET_WEEK_DATA", revObj)
     context.commit("SET_WEEK_COSTS", costData)
     context.commit("SET_TOTAL_REV", totalRev)
@@ -303,6 +304,7 @@ const updateFinancePage = async (context) => {
     context.commit("SET_WORKER_HOURS", {wH: workerWages, w: workersData, tH:totalHours})
     context.commit("SET_WAGE", wage)
     context.commit("SET_WORKING_E", workingEData)
+    context.commit("SET_EMPLOYEE_HOURS", workerHoursData)
 }
 
 const getOrdersByDay = async (context) => {

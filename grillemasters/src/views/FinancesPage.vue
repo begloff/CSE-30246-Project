@@ -136,15 +136,13 @@ export default{
     this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
     this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
 
-    this.schedule = this.$store.state.workingEmployees
-    console.log(this.schedule)
+    this.schedule = this.$store.state.scheduledEmployees
 
   },
 
   methods:{
 
     async updateSchedule() {
-      console.log(this.schedule)
 
       //Need to prevent SQL injection here
       var sql = ''
@@ -152,10 +150,10 @@ export default{
       //Need to update
       for( var i = 0; i < this.schedule.length; i++){
         console.log(this.schedule[i])
-        sql = sql.concat(`UPDATE schedule set w1 = '${this.schedule[i][1]}', w2 = '${this.schedule[i][2]}', w3 = '${this.schedule[i][3]}' where week_id = ${this.selectedWeek[0]} and day_of_week = '${this.schedule[i][0]}'; `)
+        sql = `UPDATE schedule set w1 = '${this.schedule[i][1]}', w2 = '${this.schedule[i][2]}', w3 = '${this.schedule[i][3]}' where week_id = ${this.selectedWeek[0]} and day_of_week = '${this.schedule[i][0]}';`
+        await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
       }
 
-      await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
 
     },
 
@@ -176,7 +174,7 @@ export default{
       this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
       this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
 
-      this.schedule = this.$store.state.workingEmployees
+      this.schedule = this.$store.state.scheduledEmployees
 
 
     },

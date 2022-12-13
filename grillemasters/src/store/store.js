@@ -35,6 +35,7 @@ export default createStore({
     projections: {r:0, c:0},
     workingEmployees: [],
     weeklyEmployees: [],
+    custId: 0
   },
   mutations: mutations,
 

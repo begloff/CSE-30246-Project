@@ -13,6 +13,7 @@ const login = async (context, details) => {
     try{
 
         await signInWithEmailAndPassword(auth, email, password)
+        context.commit('SET_CUST_ID', Number(context.state.customerBase.filter((cust) => cust[1] == email)[0][0]))
 
     } catch(error) {
 
@@ -41,8 +42,8 @@ const login = async (context, details) => {
         // await context.dispatch('getWeeksOfOperation')
         // await context.dispatch('getSchedule')
         // await context.dispatch('getHours')
-        await context.dispatch('getCustomerBase')
-        await context.dispatch('getWeeksSQL')
+        // await context.dispatch('getCustomerBase')
+        //await context.dispatch('getWeeksSQL')
         // context.dispatch('getOrders')
         context.commit('SET_LOGGED_IN', auth.currentUser)
         router.push('/finances')
@@ -394,6 +395,12 @@ const setProjections = async (context) => {
     const revProject        = revPResponse.data
     context.commit("SET_PROJECTIONS", {r: Number(revProject[0]), c: Number(costProject[0])})
 }
+const onlineTrigger = async (context) => {
+    axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'placeorder'})
+    setTimeout(() => {
+        axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'reset'})
+    }, 10000);
+}
 
 
 export default{
@@ -414,6 +421,7 @@ export default{
     logHours,
     getOrderById,
     updateOrder,
-    setProjections
+    setProjections,
+    onlineTrigger
 }
 

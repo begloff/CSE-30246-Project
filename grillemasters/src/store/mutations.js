@@ -20,7 +20,7 @@ const SET_WEEKS = (state,payload) => {
 }
 
 const SELECT_WEEK = (state,payload) => {
-    state.currWeek = payload
+    state.selWeek = payload
 }
 
 const SET_CUSTOMERS = (state,payload) => {
@@ -67,6 +67,10 @@ const SET_EDIT_ORDER = (state, payload) => {
 
 const SET_CURR_WEEK = (state, payload) => {
     state.currWeek = payload
+}
+
+const SET_SEL_WEEK = (state, payload) => {
+    state.selWeek = payload
 }
 
 const SET_CURR_DAY = (state, payload) => {
@@ -121,6 +125,7 @@ export default{
     SET_COST,
     SET_ORDERS,
     SET_CURR_WEEK,
+    SET_SEL_WEEK,
     SET_CURR_DAY,
     SET_CUSTOMERS_IND,
     SET_CHART_DATA,

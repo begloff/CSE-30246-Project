@@ -120,7 +120,7 @@ export default{
     WeeklyFinances,
   },
   async mounted(){
-    this.selectedWeek = this.$store.state.weeks.filter( week => week[0] == this.$store.state.currWeek)[0]
+    this.selectedWeek = this.$store.state.weeks.filter( week => week[0] == this.$store.state.selWeek)[0]
     await this.$store.dispatch("updateFinancePage")
     if(this.myBarChart){
       this.myBarChart.destroy()
@@ -131,6 +131,7 @@ export default{
     this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
     this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
     this.schedule = this.$store.state.weeklyEmployees
+
   },
   methods:{
 
@@ -156,6 +157,9 @@ export default{
         sql = `UPDATE schedule set w1 = '${this.schedule[i][1]}', w2 = '${this.schedule[i][2]}', w3 = '${this.schedule[i][3]}' where week_id = ${this.selectedWeek[0]} and day_of_week = '${this.schedule[i][0]}';`
         await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
       }
+
+      alert("Schedule Successfully Submitted")
+
     },
 
     async updateFinances(){

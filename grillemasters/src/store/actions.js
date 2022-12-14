@@ -182,6 +182,7 @@ const getWeeksSQL = async ( context ) => {
 
 
     context.commit("SET_CURR_WEEK", Number(response2.data[0][0]))
+    context.commit("SET_SEL_WEEK", Number(response2.data[0][0]))
     
     //find day of the week as a number and make it a day code
     let wkday = null;
@@ -206,11 +207,11 @@ const updateFinancePage = async (context) => {
 
     var revObj = {}
     var costObj = {}
-    const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.currWeek}`
-    const costString        = `select cost, date, reason from costs where week_id = ${context.state.currWeek}`
-    const workersString     = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.currWeek} and employee_id = id group by H.employee_id`
-    const workerHoursString = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.currWeek} and employee_id = id group by H.employee_id`
-    const workingEString    = `select day_of_week, w1,w2,w3 from schedule where week_id = ${context.state.currWeek}`
+    const revString         = `SELECT day_of_week, total_revenue, cash_revenue, venmo_revenue, date, online_fee FROM nightly_stats WHERE week_id = ${context.state.selWeek}`
+    const costString        = `select cost, date, reason from costs where week_id = ${context.state.selWeek}`
+    const workersString     = `SELECT cust_name from hours H, customers C where H.week_id = ${context.state.selWeek} and employee_id = id group by H.employee_id`
+    const workerHoursString = `SELECT sum(hours_worked) from hours H, customers C where H.week_id = ${context.state.selWeek} and employee_id = id group by H.employee_id`
+    const workingEString    = `select day_of_week, w1,w2,w3 from schedule where week_id = ${context.state.selWeek}`
 
     const revResponse           = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: revString})
     const costResponse          = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: costString})

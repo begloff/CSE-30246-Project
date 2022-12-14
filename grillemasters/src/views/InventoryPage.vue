@@ -2,6 +2,34 @@
   <h3>Inventory Page</h3>
 
   <!-- Week Selector -->
+  <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+    <p> Inventory in Stock</p>
+    <p>Chicken Units: {{chickenStorage}} Bags. Will last {{daysLeft.chicken}} days</p>
+    <p>Cheese Units: {{cheeseStorage}} Bags. Will last {{daysLeft.cheese}} days</p>
+    <p>Chips Units: {{chipsStorage}} Bags. Will last {{daysLeft.chips}} days</p>
+    <p>Bacon Units: {{baconStorage}} Bags. Will last {{daysLeft.bacon}} days</p>
+
+  </div>
+  <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
+    <!-- <label for="dateInput">Week of Inventory Update</label>
+    <select name="weeks" id="weeks" v-model="selectedWeekInven" >
+      <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
+    </select>
+    <p> {{selectedWeekInven}} </p> -->
+
+    <p>Update Inventory</p>
+    <label for="chickenInput">Chicken Storage</label>
+    <input type="number" min="0" step="1" name="chickenInput" v-model="chickenInvenUpdate">
+    <label for="cheeseInput">Cheese Storage</label>
+    <input type="number" min="0" step="1" name="cheeseInput" v-model="cheeseInvenUpdate">
+    <label for="chipsInput">Chips Storage</label>
+    <input type="number" min="0" step="1" name="chipsnInput" v-model="chipsInvenUpdate">
+    <label for="baconInput">bacon Storage</label>
+    <input type="number" min="0" step="1" name="baconInput" v-model="baconInvenUpdate">
+    <button @click="updateInventory" :disabled="!chickenInvenUpdate && !cheeseInvenUpdate && !chipsInvenUpdate && ! baconInvenUpdate">Update Inventory</button>
+    
+  </div> 
+  
   <label for="weeks">Inventory Info For:</label> 
   <select name="weeks" id="weeks" @change="changeWeek" v-model="selectedWeek" >
     <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
@@ -57,33 +85,6 @@
 
   </div>
   <hr>
-  <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
-    <p> Inventory in Stock</p>
-    <p>Chicken Units: {{chickenStorage}} Bags. Will last {{daysLeft.chicken}} days</p>
-    <p>Cheese Units: {{cheeseStorage}} Bags. Will last {{daysLeft.cheese}} days</p>
-    <p>Chips Units: {{chipsStorage}} Bags. Will last {{daysLeft.chips}} days</p>
-    <p>Bacon Units: {{baconStorage}} Bags. Will last {{daysLeft.bacon}} days</p>
-
-  </div>
-  <div v-if="selectedWeek" class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
-    <!-- <label for="dateInput">Week of Inventory Update</label>
-    <select name="weeks" id="weeks" v-model="selectedWeekInven" >
-      <option v-for="week in this.$store.state.weeks" :value="week"> Week of {{week[1].split(" ")[0]}} </option>
-    </select>
-    <p> {{selectedWeekInven}} </p> -->
-
-    <p>Update Inventory</p>
-    <label for="chickenInput">Chicken Storage</label>
-    <input type="number" min="0" step="1" name="chickenInput" v-model="chickenInvenUpdate">
-    <label for="cheeseInput">Cheese Storage</label>
-    <input type="number" min="0" step="1" name="cheeseInput" v-model="cheeseInvenUpdate">
-    <label for="chipsInput">Chips Storage</label>
-    <input type="number" min="0" step="1" name="chipsnInput" v-model="chipsInvenUpdate">
-    <label for="baconInput">bacon Storage</label>
-    <input type="number" min="0" step="1" name="baconInput" v-model="baconInvenUpdate">
-    <button @click="updateInventory" :disabled="!chickenInvenUpdate && !cheeseInvenUpdate && !chipsInvenUpdate && ! baconInvenUpdate">Update Inventory</button>
-    
-  </div>
   <div class="card" style="width: 98%; margin-right: 10px; margin-left: 10px;">
     <p>Historical Stats</p>
       <canvas id="TotalChart" style="max-width: 50%; max-height: 600px; margin-top: 5px; margin-left: 25%;"></canvas>
@@ -198,26 +199,28 @@ export default {
       var CBR_count = 0
       var chickenNacho_count = 0
       var cheeseNacho_count = 0     
-      const dubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,3) = 0;`})
-      const singlebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,5) = 0;`})
-      const singleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,11) = 0;`})
-      const CBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,7) = 0;`})
-      const chickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,17) = 0;`})
-      const cheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,13) = 0;`})
-      const test=await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,3) = 0;`})
-      console.log("yes")
-      console.log(test.data[0])
-      const wdubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,3) = 0;`})
-      const wsinglebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,5) = 0;`})
-      const wsingleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,11) = 0;`})
-      const wCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,7) = 0;`})
-      const wchickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items , order_day from orders where MOD(items,17) = 0;`})
-      const wcheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,13) = 0;`})
+      const dubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders;`})
+      // const singlebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,5) = 0;`})
+      // const singleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,11) = 0;`})
+      // const CBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,7) = 0;`})
+      // const chickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,17) = 0;`})
+      // const cheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where MOD(items,13) = 0;`})
+      // const test=await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,3) = 0;`})
+      // console.log("yes")
+      // console.log(test.data[0])
+      const wdubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders;`})
+      // const wsinglebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,5) = 0;`})
+      // const wsingleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,11) = 0;`})
+      // const wCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,7) = 0;`})
+      // const wchickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items , order_day from orders where MOD(items,17) = 0;`})
+      // const wcheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items, order_day from orders where MOD(items,13) = 0;`})
       const noSU = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='SU';`})
       const noMO= await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='MO';`})
       const noTU = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='TU';`})
       const noWE = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='WE';`})
       const noTH = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id) from orders where order_day='TH';`})
+
+//      const newq=await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT count(DISTINCT week_id),order_day from orders group by order_day;`})
       var db = {
         'SU':0,
         'MO':0,
@@ -267,42 +270,41 @@ export default {
           total /= 3
         }
       }
-      for( var item in wsinglebuff.data){
-        var total = wsinglebuff.data[item][0]
+      for( var item in wdubbuff.data){
+        var total = wdubbuff.data[item][0]
         while(total % 5 == 0){
           sb[wdubbuff.data[item][1]] += 1
           total /= 5
         }
       }
-      for( var item in wsingleCBR.data){
-        var total = wsingleCBR.data[item][0]
+      for( var item in wdubbuff.data){
+        var total = wdubbuff.data[item][0]
         while(total % 11 == 0){
           sc[wdubbuff.data[item][1]] += 1
           total /= 11
         }
       }
-      for( var item in wCBR.data){
-        var total = wCBR.data[item][0]
+      for( var item in wdubbuff.data){
+        var total = wdubbuff.data[item][0]
         while(total % 7 == 0){
           c[wdubbuff.data[item][1]] += 1
           total /= 7
         }
       }
-      for( var item in wchickenNacho.data){
-        var total = wchickenNacho.data[item][0]
+      for( var item in wdubbuff.data){
+        var total = wdubbuff.data[item][0]
         while(total % 17 == 0){
           cin[wdubbuff.data[item][1]]+= 1
           total /= 17
         }
       }
-      for( var item in wcheeseNacho.data){
-        var total = wcheeseNacho.data[item][0]
+      for( var item in wdubbuff.data){
+        var total = wdubbuff.data[item][0]
         while(total % 13 == 0){
           cen[wdubbuff.data[item][1]] += 1
           total /= 13
         }
       }
-      console.log(db['SU']/Number(noSU.data[0]))
       db['SU']/=Number(noSU.data[0])
       sb['SU']/=Number(noSU.data[0])
       sc['SU']/=Number(noSU.data[0])
@@ -355,36 +357,36 @@ export default {
           total /= 3
         }
       }
-      for( var item in singlebuff.data){
-        var total = singlebuff.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 5 == 0){
           singlebuff_count += 1
           total /= 5
         }
       }
-      for( var item in singleCBR.data){
-        var total = singleCBR.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 11 == 0){
           singleCBR_count += 1
           total /= 11
         }
       }
-      for( var item in CBR.data){
-        var total = CBR.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 7 == 0){
           CBR_count += 1
           total /= 7
         }
       }
-      for( var item in chickenNacho.data){
-        var total = chickenNacho.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 17 == 0){
           chickenNacho_count += 1
           total /= 17
         }
       }
-      for( var item in cheeseNacho.data){
-        var total = cheeseNacho.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 13 == 0){
           cheeseNacho_count += 1
           total /= 13
@@ -412,12 +414,12 @@ export default {
       //2 dubs, 1 single = 45
       //Extract 2 dubs?
       //Compile each supply item
-      const dubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,3) = 0;`})
-      const singlebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,5) = 0;`})
-      const singleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,11) = 0;`})
-      const CBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,7) = 0;`})
-      const chickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,17) = 0;`})
-      const cheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,13) = 0;`})
+      const dubbuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]};`})
+      // const singlebuff = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,5) = 0;`})
+      // const singleCBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,11) = 0;`})
+      // const CBR = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,7) = 0;`})
+      // const chickenNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,17) = 0;`})
+      // const cheeseNacho = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT items from orders where week_id = ${this.selectedWeek[0]} and MOD(items,13) = 0;`})
       for( var item in dubbuff.data){
         var total = dubbuff.data[item][0]
         while(total % 3 == 0){
@@ -425,36 +427,36 @@ export default {
           total /= 3
         }
       }
-      for( var item in singlebuff.data){
-        var total = singlebuff.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 5 == 0){
           singlebuff_count += 1
           total /= 5
         }
       }
-      for( var item in singleCBR.data){
-        var total = singleCBR.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 11 == 0){
           singleCBR_count += 1
           total /= 11
         }
       }
-      for( var item in CBR.data){
-        var total = CBR.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 7 == 0){
           CBR_count += 1
           total /= 7
         }
       }
-      for( var item in chickenNacho.data){
-        var total = chickenNacho.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 17 == 0){
           chickenNacho_count += 1
           total /= 17
         }
       }
-      for( var item in cheeseNacho.data){
-        var total = cheeseNacho.data[item][0]
+      for( var item in dubbuff.data){
+        var total = dubbuff.data[item][0]
         while(total % 13 == 0){
           cheeseNacho_count += 1
           total /= 13
@@ -542,16 +544,16 @@ export default {
     },
 
     async fetchInventory(){
-      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken from inventory;`})
+      const chickenStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chicken,cheese,chips,bacon from inventory;`})
       // console.log("yes")
       if(chickenStorage.data.length==0) this.inventoryExist=false
-      this.chickenStorage = Number(chickenStorage.data[0])
-      const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory;`})
-      this.cheeseStorage=Number(cheeseStorage.data[0])
-      const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory;`})
-      this.chipsStorage=Number(chipsStorage.data[0])
-      const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory;`})
-      this.baconStorage=Number(baconStorage.data[0])
+      this.chickenStorage = Number(chickenStorage.data[0][0])
+      // const cheeseStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT cheese from inventory;`})
+      this.cheeseStorage=Number(chickenStorage.data[0][1])
+      // const chipsStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT chips from inventory;`})
+      this.chipsStorage=Number(chickenStorage.data[0][2])
+      // const baconStorage = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT bacon from inventory;`})
+      this.baconStorage=Number(chickenStorage.data[0][3])
     },
     async fetchCosts(){
       const costs = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT * from costs where week_id = ${this.selectedWeek[0]};`})

@@ -40,9 +40,11 @@ export default{
     const store = useStore()
 
     onBeforeMount( async () => {
-      await store.dispatch('fetchUser')
+      await store.dispatch('getCustomerBase');
+      await store.dispatch('fetchUser');
       await store.dispatch('getWeeksSQL');
       await store.dispatch('getEmployees');
+      store.dispatch('listener')
     })
   },
 

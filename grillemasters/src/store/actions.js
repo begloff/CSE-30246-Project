@@ -10,12 +10,17 @@ function onlyLettersAndNumbers(str) {
     return str.replace(/[^a-z0-9]+/gi, " ");
 }
 
+const setCustId = async (context) => {
+    context.commit('SET_CUST_ID', Number(context.state.customerBase.filter((cust) => cust[1] == context.state.user.email)[0][0]))
+}
+
 const login = async (context, details) => {
     const { email, password } = details
 
     try{
 
         await signInWithEmailAndPassword(auth, email, password)
+        context.commit('SET_CUST_ID', Number(context.state.customerBase.filter((cust) => cust[1] == email)[0][0]))
 
     } catch(error) {
 
@@ -44,8 +49,8 @@ const login = async (context, details) => {
         // await context.dispatch('getWeeksOfOperation')
         // await context.dispatch('getSchedule')
         // await context.dispatch('getHours')
-        await context.dispatch('getCustomerBase')
-        await context.dispatch('getWeeksSQL')
+        // await context.dispatch('getCustomerBase')
+        //await context.dispatch('getWeeksSQL')
         // context.dispatch('getOrders')
         context.commit('SET_LOGGED_IN', auth.currentUser)
         router.push('/finances')
@@ -388,7 +393,6 @@ const getCustomerBase = async (context) => {
       arr.push(data[i])
       obj[data[i][0]] = data[i]
     }
-    
     context.commit("SET_CUSTOMERS",arr)
     context.commit("SET_CUSTOMERS_IND",obj)
 }
@@ -402,7 +406,33 @@ const setProjections = async (context) => {
     const revProject        = revPResponse.data
     context.commit("SET_PROJECTIONS", {r: Number(revProject[0]), c: Number(costProject[0])})
 }
+const onlineTrigger = async (context) => {
+    axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'placeorder'})
+    setTimeout(() => {
+        axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'reset'})
+    }, 31000);
+}
 
+const listener = async (context) => {
+    const delay = async (ms = 30000) => new Promise(resolve => setTimeout(resolve, ms))
+    let counter = 0;
+    while(true){
+        await delay();
+        let response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'listen'});
+        if(response.data[0] == 1){
+            counter++;
+            context.dispatch('getOrdersByDay');
+        }
+        else{
+            counter = 0;
+        }
+
+        if(counter > 2){
+            axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'reset'})
+        }
+    }
+
+}
 
 export default{
     login,
@@ -422,6 +452,9 @@ export default{
     logHours,
     getOrderById,
     updateOrder,
-    setProjections
+    setProjections,
+    onlineTrigger,
+    listener,
+    setCustId
 }
 

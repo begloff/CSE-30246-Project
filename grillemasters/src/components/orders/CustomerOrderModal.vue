@@ -26,7 +26,7 @@
             <input type="number" v-if="toggleQuantity" placeholder="Quantity:" @input="addPizzaRolls" v-model="pizzaRolls" @focus="toggleQuantity=true">
 
             <hr>
-            <p style="">Items (click to delete)</p>
+            <p style="">Items (click to delete) {{currentOrder.custId}}</p>
 
             <div v-for="item in currentOrder.items" :key="item" class="pill">
                 <span @click="delItem(item)" >{{item}}</span>
@@ -49,9 +49,10 @@
 
 import { ordersCollection } from '../../firebase'
 import { addDoc } from 'firebase/firestore'
+import { encode } from 'punycode'
+import axios from 'axios'
 
 export default {
-
     methods: {
         closeModal(){
             this.$emit('close')
@@ -167,8 +168,52 @@ export default {
             let d = new Date()
 
             this.currentOrder.time = d.toLocaleTimeString()
-            await addDoc( ordersCollection, this.currentOrder )
+            //await addDoc( ordersCollection, this.currentOrder )
+            let o = this.currentOrder
+            this.insertOrder(o.price, this.encodeOrders(o.items), o.custId, this.$store.state.currDay, this.$store.state.currWeek, o.cash, o.online, o.done, o.comments)
 
+        },
+        async insertOrder(price, items, cust_id, dayofweek, week_id, cash, online, done, comments) {
+            let today = new Date()
+            const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
+            try{
+                //console.log(sql)
+                await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+                this.$store.dispatch('onlineTrigger')
+            }
+            catch (err){
+                console.log(err)
+            }
+            // console.log(res.data)
+            await this.$store.dispatch('getOrdersByDay');
+        },
+        formatDate(date) {
+            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
+        },
+        encodeOrders(items){
+            let primes = {
+                'pizza'                 : 2,
+                'dubbuff'               : 3,
+                'singlebuff'            : 5,
+                'cbr'                   : 7,
+                'single'                : 11,
+                'cheese'                : 13,
+                'chicken'               : 17,
+                'soda/gatorade'         : 19,
+                'ice'                   : 23
+            }
+            let num = 1
+            for(let i = 0 ; i < items.length; i++){
+                if(items[i].includes("Pizza")){
+                    let p = items[i].split(" ")
+                    num *= Math.pow(2,Number(p[0]))
+                }
+                else {
+                    let x = items[i].split(" ")[0]
+                    num *= primes[x.toLowerCase()]
+                }
+            }
+            return num
         },
 
     },
@@ -178,7 +223,7 @@ export default {
         return{
             
             currentOrder: {
-                name: this.$store.state.customer,
+                custId: this.$store.state.custId,
                 items: [],
                 comments: '',
                 price: 0.5,
@@ -187,7 +232,6 @@ export default {
                 done: false,
                 cash: false,
                 online: true,
-                email: this.$store.state.user.email,
             },
             dayOfWeek: new Date().getDay(),
             currentTime: new Date(), //Need to cut off online orders at 9:05-11:45,

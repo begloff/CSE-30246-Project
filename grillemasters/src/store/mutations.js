@@ -31,6 +31,10 @@ const SET_CUSTOMERS_IND = (state,payload) => {
     state.customerBaseInd = payload
 }
 
+const SET_CUST_ID = (state, payload) => {
+    state.custId = payload;
+}
+
 const SET_WEEK_DATA = (state,payload) => {
     state.weekData = payload
 }
@@ -128,4 +132,5 @@ export default{
     SET_WAGE,
     SET_PROJECTIONS,
     SET_WORKING_E,
+    SET_CUST_ID,
 }

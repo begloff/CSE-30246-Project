@@ -15,7 +15,7 @@
       <th scope="col">Price</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody v-if="this.$store.state.orders">
     <tr v-for="(order,index) in this.$store.state.orders" :class="
      { online: order[9] == '1' && order[10] == '0', completed : order[10] == '1' }">
         <th scope="row"> {{ index + 1 }}</th>
@@ -70,6 +70,7 @@ export default {
             delId: null,
         }
     },
+    
     methods: {
         async toggleDone( order ){
           // Read done value from order and flip it

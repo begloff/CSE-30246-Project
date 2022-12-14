@@ -1,7 +1,7 @@
 <template>
   <CustomerOrderModal v-if="showOrderModal" @close="toggleOrderModal" @success="toggleSuccess"/>
   <div style="color: #f8f8f8;">
-    <h3>Welcome to the Grille, {{$store.state.customer}}</h3>
+    <h3>Welcome to the Grille, {{}}</h3>
     <hr>
     <h1>Online Ordering Policy:</h1>
     <li>Online Ordering hours: <b><u>Sun - Thurs from 10:05pm - 11:45pm</u></b></li>
@@ -17,12 +17,11 @@
     </div>
 
     <div style="">
-        <p v-if="$store.state.queue.indexOf($store.state.customer) > -1">Your Order Is {{$store.state.queue.indexOf($store.state.customer) + 1}}/{{$store.state.queue.length}} In the Queue</p>
-        <p v-else>Number of Orders in Queue: {{$store.state.queue.length}}</p>
+        <p v-if="false">Your Order Is {{}}/{{}} In the Queue</p>
+        <p v-else>Number of Orders in Queue: {{}}</p>
     </div>
 
-    <button @click="toggleOrderModal" :disabled="dayOfWeek > 4 || currentTime.getHours() < 22 || 
-    (currentTime.getHours() == 22 && currentTime.getMinutes() < 5) || (currentTime.getHours() == 23 && currentTime.getMinutes() > 44)" class="register">New Online Order</button>
+    <button @click="toggleOrderModal" :disabled="false" class="register">New Online Order</button>
     <!-- <button @click="toggleOrderModal" class="register">New Online Order</button> -->
     <p v-if="success" style="color:green;">Your order was submitted successfully!</p>
     <p v-if="(currentTime.getHours() < 22 || (currentTime.getHours() == 22 && currentTime.getMinutes() < 5)
@@ -36,9 +35,11 @@
 <script>
 
 import CustomerOrderModal from '../components/orders/CustomerOrderModal.vue'
-
+//dayOfWeek > 4 || currentTime.getHours() < 22 || (currentTime.getHours() == 22 && currentTime.getMinutes() < 5) || (currentTime.getHours() == 23 && currentTime.getMinutes() > 44)
 export default {
-
+    created() {
+        this.$store.dispatch('setCustId');
+    },
     data(){
         return{
             showOrderModal: false,

@@ -56,6 +56,7 @@ const SET_COST = (state, payload) => {
 }
 
 const SET_ORDERS = (state,payload) => {
+    console.log(payload)
     state.orders = payload.o;
     state.nightTotal = payload.t;
     state.nightOnlineFee = payload.of;

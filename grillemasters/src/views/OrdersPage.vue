@@ -23,8 +23,8 @@ export default {
         }
     },
     mounted(){
-        this.$store.dispatch('getOrdersByDay');
-    },  
+        this.$store.dispatch('getOrdersByDay')
+    },    
     methods:{
         toggleOrderModal(){
             this.showOrderModal = !this.showOrderModal

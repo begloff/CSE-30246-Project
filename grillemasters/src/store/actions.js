@@ -315,6 +315,7 @@ const updateFinancePage = async (context) => {
 }
 
 const getOrdersByDay = async (context) => {
+    console.log('Got orders')
     const sql = `SELECT * from orders where week_id = ${context.state.currWeek} and order_day = '${context.state.currDay}' order by order_datetime asc`
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
     let orders = response.data
@@ -389,7 +390,6 @@ const getCustomerBase = async (context) => {
       arr.push(data[i])
       obj[data[i][0]] = data[i]
     }
-    
     context.commit("SET_CUSTOMERS",arr)
     context.commit("SET_CUSTOMERS_IND",obj)
 }
@@ -410,6 +410,17 @@ const onlineTrigger = async (context) => {
     }, 10000);
 }
 
+const listener = async (context) => {
+    const delay = async (ms = 5000) => new Promise(resolve => setTimeout(resolve, ms))
+    while(true){
+        await delay();
+        let response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'listen'});
+        if(response.data[0] == 1){
+            //context.dispatch('getOrdersByDay');
+        }
+    }
+
+}
 
 export default{
     login,
@@ -430,6 +441,7 @@ export default{
     getOrderById,
     updateOrder,
     setProjections,
-    onlineTrigger
+    onlineTrigger,
+    listener
 }
 

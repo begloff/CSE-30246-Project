@@ -134,13 +134,25 @@ export default{
   },
   methods:{
 
+    async onlyLettersAndNumbers(str) {
+      return str.replace(/[^a-z0-9]+/gi, " ");
+    },
+
 
     async updateSchedule() {
       //Need to prevent SQL injection here
+
+      //loop through all strings to prevent sql injection --> only allow letters and numbers
+      for( var i = 0; i < this.schedule.length; i++ ){
+        for( var j = 1; j < 4; j++){
+          this.schedule[i][j] = this.onlyLettersAndNumbers(this.schedule[i][j])
+        }
+      }
+
+
       var sql = ''
       //Need to update
       for( var i = 0; i < this.schedule.length; i++){
-        console.log(this.schedule[i])
         sql = `UPDATE schedule set w1 = '${this.schedule[i][1]}', w2 = '${this.schedule[i][2]}', w3 = '${this.schedule[i][3]}' where week_id = ${this.selectedWeek[0]} and day_of_week = '${this.schedule[i][0]}';`
         await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
       }

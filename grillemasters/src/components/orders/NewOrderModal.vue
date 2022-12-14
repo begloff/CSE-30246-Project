@@ -183,13 +183,13 @@ export default {
                 return cust[2] == this.currentOrder.name
             })
 
-
             if(person.length != 0){
                 this.currentOrder.custId = Number(person[0][0]);
             }
             else{
                 this.currentOrder.custId = 155;
             }
+            
             let d = new Date()
             this.currentOrder.time = d.toLocaleTimeString()
             let items = this.encodeOrders(this.currentOrder.items)

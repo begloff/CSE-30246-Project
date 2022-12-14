@@ -134,8 +134,8 @@ export default{
   },
   methods:{
 
-    async onlyLettersAndNumbers(str) {
-      return str.replace(/[^a-z0-9]+/gi, " ");
+    onlyLettersAndNumbers(str) {
+      return str.replace(/[^a-z0-9A-Z ]+/gi, " ");
     },
 
 

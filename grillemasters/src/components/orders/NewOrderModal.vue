@@ -176,6 +176,11 @@ export default {
                 }
             }
         },
+
+        onlyLettersAndNumbers(str) {
+            return str.replace(/[^a-z0-9 ]+/gi, " ");
+        },
+
         async submitOrder(){
             this.$emit('close')
             
@@ -193,6 +198,9 @@ export default {
             let d = new Date()
             this.currentOrder.time = d.toLocaleTimeString()
             let items = this.encodeOrders(this.currentOrder.items)
+
+            this.currentOrder.comments = this.onlyLettersAndNumbers(this.currentOrder.comments)
+
             try{
                 let o = this.currentOrder
                 this.insertOrder(o.price, items, this.currentOrder.custId, this.$store.state.currDay, this.$store.state.currWeek, o.cash, o.online, o.done, o.comments)

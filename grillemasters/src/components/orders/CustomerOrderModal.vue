@@ -161,9 +161,15 @@ export default {
 
         },
 
+        onlyLettersAndNumbers(str) {
+            return str.replace(/[^a-z0-9A-Z ]+/gi, " ");
+        },
+
         async submitOrder(){
 
             this.$emit('success')
+
+            this.currentOrder.comments = this.onlyLettersAndNumbers(this.currentOrder.comments)
 
             let d = new Date()
 

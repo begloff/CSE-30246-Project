@@ -11,6 +11,7 @@ function onlyLettersAndNumbers(str) {
 }
 
 const setCustId = async (context) => {
+    await context.dispatch('getCustomerBase')
     context.commit('SET_CUST_ID', Number(context.state.customerBase.filter((cust) => cust[1] == context.state.user.email)[0][0]))
 }
 
@@ -98,6 +99,8 @@ const register = async (context, details) => {
     await setDoc(doc(db,"customers",na),{ //Customers Collection is to load autofill within Employee Orders and to send emails out
         email: context.state.user.email
     })
+
+    context.dispatch('setCustId')
 }
 
 const logout = async (context) => {

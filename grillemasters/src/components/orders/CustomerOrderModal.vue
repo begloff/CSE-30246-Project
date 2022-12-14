@@ -3,7 +3,7 @@
         <div class="new-modal" @click.self="toggleQuantity=false">
 
             <div style="display: inline">
-            <h1 style="display: inline">{{currentOrder.name}}'s Order</h1>
+            <h1 style="display: inline">{{this.$store.state.customerBaseInd[this.$store.state.custId][2]}}'s Order</h1>
             <button  @click="closeModal" type="button" style="display: inline; float: right " class="btn-close pull-right" aria-label="Close"></button>
             </div>
 
@@ -26,7 +26,7 @@
             <input type="number" v-if="toggleQuantity" placeholder="Quantity:" @input="addPizzaRolls" v-model="pizzaRolls" @focus="toggleQuantity=true">
 
             <hr>
-            <p style="">Items (click to delete) {{currentOrder.custId}}</p>
+            <p style="">Items (click to delete)</p>
 
             <div v-for="item in currentOrder.items" :key="item" class="pill">
                 <span @click="delItem(item)" >{{item}}</span>

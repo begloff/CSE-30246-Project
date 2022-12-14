@@ -19,6 +19,7 @@ export default createStore({
     totalCost: [],
     currDay: null,
     currWeek: null,
+    selWeek: null,
     orders: [],
     nightTotal: null,
     nightOnlineFee: null,

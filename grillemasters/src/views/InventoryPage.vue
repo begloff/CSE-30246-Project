@@ -589,18 +589,23 @@ export default {
       this.cheeseStorage=cheese
       this.baconStorage=bacon
       this.project()
+      alert("Successfully Updated Inventory!")
     },
     async addStoreRun(){
       const d = this.storeDate.split('-')
       const date = new Date(d[0],d[1]-1,d[2],-4,0,0,0).toISOString().slice(0, 19).replace('T', ' ')
       const cost = this.storeCost
-      const reason = onlyLettersAndNumbers(this.storeReason)
+      const reason = this.onlyLettersAndNumbers(this.storeReason)
       const sql = `insert into costs (week_id, cost, date, reason) values (${this.selectedWeek[0]}, ${cost}, '${date}', '${reason}');`
       const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
       //Need to get week id
       const sql2 = `SELECT * from costs where week_id = ${this.selectedWeek[0]} and date = '${date}' and cost = ${cost} and reason = '${reason}';`
       const da = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql2})
       this.weeklyCosts.push(da.data[0])
+      alert("Successfully Added Cost")
+      this.storeCost = null
+      this.storeReason = null
+      this.storeDate = null
     },
     barChart( items ){
       const ctx = document.getElementById('myBarChart').getContext('2d');

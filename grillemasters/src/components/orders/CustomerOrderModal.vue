@@ -160,7 +160,15 @@ export default {
 
         },
 
+        onlyLettersAndNumbers(str) {
+            return str.replace(/[^a-z0-9A-Z ]+/gi, " ");
+        },
+
         async submitOrder(){
+
+
+            //Check comments
+            this.currentOrder.comments = this.onlyLettersAndNumbers(this.currentOrder.comments)
 
             this.$emit('success')
 

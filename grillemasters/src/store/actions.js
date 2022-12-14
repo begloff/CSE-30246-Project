@@ -7,7 +7,7 @@ import { ordersCollection, viewCollection, operationCollection, weeklyPrefix, db
 import axios from 'axios';
 
 function onlyLettersAndNumbers(str) {
-    return str.replace(/[^a-z0-9]+/gi, " ");
+    return str.replace(/[^a-z0-9A-Z ]+/gi, " ");
 }
 
 const login = async (context, details) => {
@@ -35,18 +35,13 @@ const login = async (context, details) => {
 
     }
     
+    
     await context.dispatch('getRole')
 
     if(context.state.employeeRole){
 
-        // await context.dispatch('getFinancialData')
-        // await context.dispatch('getStoreData')
-        // await context.dispatch('getWeeksOfOperation')
-        // await context.dispatch('getSchedule')
-        // await context.dispatch('getHours')
         await context.dispatch('getCustomerBase')
         await context.dispatch('getWeeksSQL')
-        // context.dispatch('getOrders')
         context.commit('SET_LOGGED_IN', auth.currentUser)
         router.push('/finances')
 
@@ -57,6 +52,15 @@ const login = async (context, details) => {
 }
 const register = async (context, details) => {
     const { name, email, password } = details
+
+    var n
+
+    //Removes semicolon and quotes disallowing SQL injection
+    n = name.replace(";","")
+    n = name.replace("\"","")
+
+    const na = n
+
 
     try{
 
@@ -79,6 +83,10 @@ const register = async (context, details) => {
         return
 
     }
+
+    //Need to add user to db
+    var sql = `Insert into customers (email, cust_name, employee) values ('${email}', '${na}', 0);`
+    var adduser = axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
     
     context.commit('SET_LOGGED_IN', auth.currentUser)
     router.push('/customer')
@@ -86,7 +94,7 @@ const register = async (context, details) => {
     await setDoc(doc(db,"auth",context.state.user.email),{ //Auth collection is to verify employees and load email/name when someone makes an order
         name: name
     })
-    await setDoc(doc(db,"customers",name),{ //Customers Collection is to load autofill within Employee Orders and to send emails out
+    await setDoc(doc(db,"customers",na),{ //Customers Collection is to load autofill within Employee Orders and to send emails out
         email: context.state.user.email
     })
 }
@@ -111,19 +119,13 @@ const fetchUser = async (context, user) => {
             await context.dispatch('getRole')
             if(context.state.employeeRole){
 
-            await context.dispatch('getWeeksSQL')
-            await context.dispatch('getCustomerBase')
+                await context.dispatch('getWeeksSQL')
+                await context.dispatch('getCustomerBase')
 
-            // context.dispatch('getOrders')
-
-            if (router.isReady() && router.currentRoute.value.path == '/login'){
                 router.push('/finances')
-            }
+
             } else {
-            if (router.isReady() && router.currentRoute.value.path == '/login'){
-                const queue = await getDoc(doc(db,"orders","daily-queue"))
                 router.push('/customer')
-            }
             }
         }
     })

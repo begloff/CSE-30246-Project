@@ -16,11 +16,6 @@
         <img src="https://images.squarespace-cdn.com/content/v1/54dfd429e4b0549c366f98dd/1441391694273-GK2IJEZSPW4WPH1U0BBF/Ducnan+Hall+CBR.png?format=1500w" alt="" width=300 height=300 style="float: left;">
     </div>
 
-    <div style="">
-        <p v-if="$store.state.queue.indexOf($store.state.customer) > -1">Your Order Is {{$store.state.queue.indexOf($store.state.customer) + 1}}/{{$store.state.queue.length}} In the Queue</p>
-        <p v-else>Number of Orders in Queue: {{$store.state.queue.length}}</p>
-    </div>
-
     <button @click="toggleOrderModal" :disabled="dayOfWeek > 4 || currentTime.getHours() < 22 || 
     (currentTime.getHours() == 22 && currentTime.getMinutes() < 5) || (currentTime.getHours() == 23 && currentTime.getMinutes() > 44)" class="register">New Online Order</button>
     <!-- <button @click="toggleOrderModal" class="register">New Online Order</button> -->

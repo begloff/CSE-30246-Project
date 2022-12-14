@@ -214,6 +214,7 @@ export default {
             }
             // console.log(res.data)
             await this.$store.dispatch('getOrdersByDay');
+            this.$store.dispatch('updateDaily');
         },
         /*
         currentOrder: {

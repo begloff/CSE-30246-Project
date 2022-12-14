@@ -115,12 +115,7 @@
 import { faBuildingCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Chart from 'chart.js/auto'
-export default {
-  async mounted(){
-    await this.fetchInventory()
-    await this.historicalstats()
-    this.project()
-  },  
+export default {  
   data(){
     return{
       selectedWeek: null,
@@ -177,6 +172,7 @@ export default {
     await this.fetchCosts()
     await this.fetchInventory()
     await this.historicalstats()
+    this.project()
   },
 
   methods:{
@@ -592,6 +588,7 @@ export default {
       this.chipsStorage=chips
       this.cheeseStorage=cheese
       this.baconStorage=bacon
+      this.project()
     },
     async addStoreRun(){
       const d = this.storeDate.split('-')

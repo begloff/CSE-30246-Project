@@ -1,7 +1,7 @@
 <template>
   <CustomerOrderModal v-if="showOrderModal" @close="toggleOrderModal" @success="toggleSuccess"/>
   <div style="color: #f8f8f8;">
-    <h3>Welcome to the Grille, {{}}</h3>
+    <h3>Welcome to the Grille, {{this.$store.state.customerBaseInd[this.$store.state.custId][2]}}</h3>
     <hr>
     <h1>Online Ordering Policy:</h1>
     <li>Online Ordering hours: <b><u>Sun - Thurs from 10:05pm - 11:45pm</u></b></li>
@@ -16,10 +16,6 @@
         <img src="https://images.squarespace-cdn.com/content/v1/54dfd429e4b0549c366f98dd/1441391694273-GK2IJEZSPW4WPH1U0BBF/Ducnan+Hall+CBR.png?format=1500w" alt="" width=300 height=300 style="float: left;">
     </div>
 
-    <div style="">
-        <p v-if="false">Your Order Is {{}}/{{}} In the Queue</p>
-        <p v-else>Number of Orders in Queue: {{}}</p>
-    </div>
 
     <button @click="toggleOrderModal" :disabled="false" class="register">New Online Order</button>
     <!-- <button @click="toggleOrderModal" class="register">New Online Order</button> -->

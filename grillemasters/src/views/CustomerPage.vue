@@ -37,7 +37,9 @@
 import CustomerOrderModal from '../components/orders/CustomerOrderModal.vue'
 //dayOfWeek > 4 || currentTime.getHours() < 22 || (currentTime.getHours() == 22 && currentTime.getMinutes() < 5) || (currentTime.getHours() == 23 && currentTime.getMinutes() > 44)
 export default {
-
+    created() {
+        this.$store.dispatch('setCustId');
+    },
     data(){
         return{
             showOrderModal: false,

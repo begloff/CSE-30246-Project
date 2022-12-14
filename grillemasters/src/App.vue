@@ -44,7 +44,6 @@ export default{
       await store.dispatch('fetchUser');
       await store.dispatch('getWeeksSQL');
       await store.dispatch('getEmployees');
-      //console.log(store.customerBaseInd)
       store.dispatch('listener')
     })
   },

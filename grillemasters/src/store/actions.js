@@ -10,6 +10,10 @@ function onlyLettersAndNumbers(str) {
     return str.replace(/[^a-z0-9]+/gi, " ");
 }
 
+const setCustId = async (context) => {
+    context.commit('SET_CUST_ID', Number(context.state.customerBase.filter((cust) => cust[1] == context.state.user.email)[0][0]))
+}
+
 const login = async (context, details) => {
     const { email, password } = details
 
@@ -315,7 +319,6 @@ const updateFinancePage = async (context) => {
 }
 
 const getOrdersByDay = async (context) => {
-    console.log('Got orders')
     const sql = `SELECT * from orders where week_id = ${context.state.currWeek} and order_day = '${context.state.currDay}' order by order_datetime asc`
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
     let orders = response.data
@@ -407,16 +410,25 @@ const onlineTrigger = async (context) => {
     axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'placeorder'})
     setTimeout(() => {
         axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'reset'})
-    }, 10000);
+    }, 31000);
 }
 
 const listener = async (context) => {
-    const delay = async (ms = 5000) => new Promise(resolve => setTimeout(resolve, ms))
+    const delay = async (ms = 30000) => new Promise(resolve => setTimeout(resolve, ms))
+    let counter = 0;
     while(true){
         await delay();
         let response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'listen'});
         if(response.data[0] == 1){
-            //context.dispatch('getOrdersByDay');
+            counter++;
+            context.dispatch('getOrdersByDay');
+        }
+        else{
+            counter = 0;
+        }
+
+        if(counter > 2){
+            axios.post('https://duncan-grille-api.azurewebsites.net/api/listener',{task: 'reset'})
         }
     }
 
@@ -442,6 +454,7 @@ export default{
     updateOrder,
     setProjections,
     onlineTrigger,
-    listener
+    listener,
+    setCustId
 }
 

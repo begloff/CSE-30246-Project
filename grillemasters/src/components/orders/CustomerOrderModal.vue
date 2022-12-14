@@ -26,7 +26,7 @@
             <input type="number" v-if="toggleQuantity" placeholder="Quantity:" @input="addPizzaRolls" v-model="pizzaRolls" @focus="toggleQuantity=true">
 
             <hr>
-            <p style="">Items (click to delete)</p>
+            <p style="">Items (click to delete) {{currentOrder.custId}}</p>
 
             <div v-for="item in currentOrder.items" :key="item" class="pill">
                 <span @click="delItem(item)" >{{item}}</span>
@@ -53,7 +53,6 @@ import { encode } from 'punycode'
 import axios from 'axios'
 
 export default {
-
     methods: {
         closeModal(){
             this.$emit('close')
@@ -170,7 +169,6 @@ export default {
 
             this.currentOrder.time = d.toLocaleTimeString()
             //await addDoc( ordersCollection, this.currentOrder )
-            console.log(this.currentOrder)
             let o = this.currentOrder
             this.insertOrder(o.price, this.encodeOrders(o.items), o.custId, this.$store.state.currDay, this.$store.state.currWeek, o.cash, o.online, o.done, o.comments)
 

@@ -156,6 +156,29 @@ const logHours = async (context, payload) => {
 }
 
 const getWeeksSQL = async ( context ) => {
+
+
+    //get week id from the database if it exists
+    let date = new Date()
+    let d = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
+    let response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
+    
+    if(response2.data.length == 0){
+      console.log("Inserting new week")
+      //insert new week if the week doesn't exist yet
+      let start_date = new Date()
+      let end_date = new Date()
+      start_date.setDate(date.getDate() - date.getDay()) 
+      end_date.setDate(start_date.getDate() + 6)
+      start_date.setHours(-5); start_date.setMinutes(0); start_date.setSeconds(0);
+      end_date.setHours(18); end_date.setMinutes(59); end_date.setSeconds(59);
+      await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO weeks (start_date, end_date) values( "${start_date.toISOString().slice(0, 19).replace('T', ' ')}", "${end_date.toISOString().slice(0, 19).replace('T', ' ')}")`})
+      response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
+    }
+
+    context.commit("SET_CURR_WEEK", Number(response2.data[0][0]))
+    context.commit("SET_SEL_WEEK", Number(response2.data[0][0]))
+
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks order by start_date desc;'})
     const weeks = []
 
@@ -165,27 +188,6 @@ const getWeeksSQL = async ( context ) => {
     }
 
     context.commit("SET_WEEKS", weeks)
-
-    //get week id from the database if it exists
-    let date = new Date()
-    let d = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
-    let response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
-    
-    if(response2.data.length == 0){
-      //insert new week if the week doesn't exist yet
-      let start_date = new Date()
-      let end_date = new Date()
-      start_date.setDate(date.getDate() - date.getDay()) 
-      end_date.setDate(start_date.getDate() + 6)
-      start_date.setHours(-5); start_date.setMinutes(0); start_date.setSeconds(0);
-      end_date.setHours(18); end_date.setMinutes(59); end_date.setSeconds(59);
-      axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO weeks (start_date, end_date) values( "${start_date.toISOString().slice(0, 19).replace('T', ' ')}", "${end_date.toISOString().slice(0, 19).replace('T', ' ')}")`})
-      response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
-    }
-
-
-    context.commit("SET_CURR_WEEK", Number(response2.data[0][0]))
-    context.commit("SET_SEL_WEEK", Number(response2.data[0][0]))
     
     //find day of the week as a number and make it a day code
     let wkday = null;
@@ -345,6 +347,7 @@ const commitOrders = async (context, o) => {
       }
     }
     context.commit("SET_ORDERS", {o: orders, t: nightTot, of: onlineTot})
+    await context.dispatch("updateDaily")
 }
 
 const deleteOrder = async (context, payload) => {
@@ -455,6 +458,23 @@ const updateDaily = async (context) => {
     const online  = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: sql})
     
     await response; await tot; await cash; await online;
+
+    console.log(response.data, tot.data)
+
+    if(tot.data.length == 0 && response.data.length == 0){ //No data and no entry
+        let date = new Date()
+        date.setHours(date.getHours() - 5);
+        date = date.toISOString().slice(0, 19).replace('T', ' ')
+        sql = `insert into nightly_stats (week_id, day_of_week, date,  total_revenue, cash_revenue, venmo_revenue, online_fee, num_orders) values(${context.state.currWeek},"${context.state.currDay}", "${date}", 0, 0, 0, 0, 0)`
+        console.log(sql)
+        await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})    
+        return   
+    } else if ( tot.data.length == 0 ){
+        sql = `update nightly_stats set total_revenue = 0, cash_revenue = 0, venmo_revenue = 0, online_fee = 0, num_orders = 0 where week_id = ${context.state.currWeek} and day_of_week = "${context.state.currDay}"`
+        console.log(sql)
+        await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+        return
+    }
     
 
     let ordercount = tot.data[0][1]
@@ -468,7 +488,7 @@ const updateDaily = async (context) => {
         totonline = online.data[0][0] 
     } 
     
-    if(response.data.length == 0){
+    if(response.data.length == 0){ //No entry yet
         let date = new Date()
         date.setHours(date.getHours() - 5);
         date = date.toISOString().slice(0, 19).replace('T', ' ')

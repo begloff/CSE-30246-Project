@@ -42,7 +42,6 @@ export default{
     onBeforeMount( async () => {
       await store.dispatch('getCustomerBase');
       await store.dispatch('fetchUser');
-      await store.dispatch('getWeeksSQL');
       await store.dispatch('getEmployees');
       store.dispatch('listener')
     })

@@ -230,33 +230,16 @@ const updateFinancePage = async (context) => {
     const workersData       = workersResponse.data
     var workingEData      = workingEResponse.data
 
-    var x = Array.apply(null, Array(5)).map(function () {})
+    if(workingEData.length == 0){
 
-    for( var i = 0; i < x.length; i++){
-        x[i] = ['-','-','-']
-    }
+        workingEData = [['SU', '-', '-', '-'],['MO', '-', '-', '-'],['TU', '-', '-', '-'],['WE', '-', '-', '-'],['TH', '-', '-', '-'],]
+        for( var i = 0; i < workingEData.length; i++){
+            var sql = `INSERT into schedule (week_id,day_of_week,w1,w2,w3) values (${context.state.selWeek}, '${workingEData[i][0]}', '${workingEData[i][1]}', '${workingEData[i][2]}', '${workingEData[i][3]}');`
+            console.log(sql)
+            await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
+        }
 
-
-    for( var i = 0; i < workingEData.length; i++){
-        var y = workingEData[i]
-        if(y[0] == 'SU'){
-            x[0] = y
-        }
-        if(y[0] == 'MO'){
-            x[1] = y
-        }
-        if(y[0] == 'TU'){
-            x[2] = y
-        }
-        if(y[0] == 'WE'){
-            x[3] = y
-        }
-        if(y[0] == 'TH'){
-            x[4] = y
-        }
-    }
-
-    workingEData = x
+    } 
 
     let weekLabels = []
     let venmo = []

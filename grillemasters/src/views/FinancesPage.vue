@@ -1,6 +1,7 @@
 <template>
+<AddEmployeeModal v-if="addEmployee" @close="triggerAddEmployee"/>
+<RemoveEmployeeModal v-if="removeEmployee" @close="triggerRemoveEmployee"/>
   <h3>Duncan Grille Finances</h3>
-<!--WeeklyFinances/-->
   <div style="max-width:40%; margin-left:30%; margin-right:30%; margin-bottom:20px; text-align:center;">
     <label for="weeks">Financial Info For:</label>
     
@@ -108,9 +109,15 @@
     </table>
     <button @click="updateSchedule()"> Submit Schedule </button>
   </div>
+
+  <hr>
+  <button @click="triggerAddEmployee" style="margin-right: 10px;">Add Employee</button>
+  <button style="background-color: red; margin-left: 10px;" @click="triggerRemoveEmployee">Remove Employee</button>
 </template>
 <script>
 import WeeklyFinances from '../components/financial/WeeklyFinances.vue'
+import AddEmployeeModal from '../components/financial/AddEmployeeModal.vue'
+import RemoveEmployeeModal from '../components/financial/RemoveEmployeeModal.vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import axios from 'axios'
@@ -118,6 +125,8 @@ import axios from 'axios'
 export default{
   components:{
     WeeklyFinances,
+    AddEmployeeModal,
+    RemoveEmployeeModal
   },
   async mounted(){
     this.selectedWeek = this.$store.state.weeks.filter( week => week[0] == this.$store.state.selWeek)[0]
@@ -131,6 +140,7 @@ export default{
     this.barChart(this.$store.state.weekVenmo, this.$store.state.weekCash, this.$store.state.weekLabels)
     this.doughnutChart(this.$store.state.workerHours, this.$store.state.workingEmployees)
     this.schedule = this.$store.state.weeklyEmployees
+    console.log(this.schedule)
 
   },
   methods:{
@@ -139,6 +149,12 @@ export default{
       return str.replace(/[^a-z0-9A-Z ]+/gi, " ");
     },
 
+    triggerAddEmployee(){
+      this.addEmployee = !this.addEmployee
+    },
+    triggerRemoveEmployee(){
+      this.removeEmployee = !this.removeEmployee
+    },
 
     async updateSchedule() {
       //Need to prevent SQL injection here
@@ -306,12 +322,15 @@ export default{
 
 
   },
+
   data(){
     return{
       selectedWeek: [],
       myBarChart: null,
       myDoughnutChart: null,
-      schedule: []
+      schedule: [],
+      addEmployee: false,
+      removeEmployee: false
     }
   },
   beforeMount(){

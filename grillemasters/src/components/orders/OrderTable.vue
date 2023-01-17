@@ -74,7 +74,7 @@ export default {
     methods: {
         async toggleDone( order ){
           // Read done value from order and flip it
-          this.$store.dispatch('completeOrder', {order: order});
+          this.$store.dispatch('completeOrder', {order: order, name: this.$store.state.customerBaseInd[order[7]][2] , email:this.$store.state.customerBaseInd[order[7]][1], price: Number(order[1]).toFixed(2), items: this.decodeOrder(order[2]),});
         },
         toggleModal(){
             this.deleteModal = !this.deleteModal

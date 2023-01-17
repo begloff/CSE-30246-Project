@@ -363,6 +363,9 @@ const completeOrder = async ( context, payload) => {
     }
     else {
         order[10] = "1"
+        if( order[7] != 155){
+            await axios.post('https://grille.azurewebsites.net/api/email-trigger?code=s6sPXo_8Osb45MfMQmZf4TkYwz7inhMYz55WesGG5kOfAzFusxsXtg==&clientId=default', {email: payload.email, name: payload.name, items: payload.items, price: payload.price})
+        }
     }
     const sql = `UPDATE orders set done = ${order[10]} where id = ${order[0]}`
     await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})

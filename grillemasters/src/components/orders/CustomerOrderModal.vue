@@ -183,7 +183,7 @@ export default {
             let today = new Date()
             const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
             try{
-                //console.log(sql)
+                console.log(sql)
                 await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
                 this.$store.dispatch('onlineTrigger')
             }

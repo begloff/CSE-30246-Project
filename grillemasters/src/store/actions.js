@@ -121,11 +121,10 @@ const fetchUser = async (context, user) => {
             context.commit('SET_LOGGED_IN',user)
 
             await context.dispatch('getRole')
+            await context.dispatch('getWeeksSQL')
+            await context.dispatch('getCustomerBase')
+            
             if(context.state.employeeRole){
-
-                await context.dispatch('getWeeksSQL')
-                await context.dispatch('getCustomerBase')
-
                 router.push('/finances')
             } else {
                 router.push('/customer')
@@ -445,19 +444,19 @@ const updateDaily = async (context) => {
     
     await response; await tot; await cash; await online;
 
-    console.log(response.data, tot.data)
+    // console.log(response.data, tot.data)
 
     if(tot.data.length == 0 && response.data.length == 0){ //No data and no entry
         let date = new Date()
         date.setHours(date.getHours() - 5);
         date = date.toISOString().slice(0, 19).replace('T', ' ')
         sql = `insert into nightly_stats (week_id, day_of_week, date,  total_revenue, cash_revenue, venmo_revenue, online_fee, num_orders) values(${context.state.currWeek},"${context.state.currDay}", "${date}", 0, 0, 0, 0, 0)`
-        console.log(sql)
+        // console.log(sql)
         await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})    
         return   
     } else if ( tot.data.length == 0 ){
         sql = `update nightly_stats set total_revenue = 0, cash_revenue = 0, venmo_revenue = 0, online_fee = 0, num_orders = 0 where week_id = ${context.state.currWeek} and day_of_week = "${context.state.currDay}"`
-        console.log(sql)
+        // console.log(sql)
         await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
         return
     }
@@ -479,12 +478,12 @@ const updateDaily = async (context) => {
         date.setHours(date.getHours() - 5);
         date = date.toISOString().slice(0, 19).replace('T', ' ')
         sql = `insert into nightly_stats (week_id, day_of_week, date,  total_revenue, cash_revenue, venmo_revenue, online_fee, num_orders) values(${context.state.currWeek},"${context.state.currDay}", "${date}", ${totalrev}, ${totcash}, ${totalrev - totcash}, ${totonline/2}, ${ordercount})`
-        console.log(sql)
+        // console.log(sql)
         await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
     }                               
     else {
         sql = `update nightly_stats set total_revenue = ${totalrev}, cash_revenue = ${totcash}, venmo_revenue = ${totalrev - totcash}, online_fee = ${totonline/2}, num_orders = ${ordercount} where week_id = ${context.state.currWeek} and day_of_week = "${context.state.currDay}"`
-        console.log(sql)
+        // console.log(sql)
         await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
     }
 }

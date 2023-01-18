@@ -175,6 +175,8 @@ const getWeeksSQL = async ( context ) => {
       response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks where "' + d + '" between start_date and end_date;'})
     }
 
+    console.log(response2.data[0][0])
+
     context.commit("SET_CURR_WEEK", Number(response2.data[0][0]))
     context.commit("SET_SEL_WEEK", Number(response2.data[0][0]))
 

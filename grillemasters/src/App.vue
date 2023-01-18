@@ -36,16 +36,14 @@ export default{
     CustomerNavBar
   },
 
-  setup(){
+  async beforeMount(){
     const store = useStore()
-
-    onBeforeMount( async () => {
-      await store.dispatch('getCustomerBase');
-      await store.dispatch('fetchUser');
-      await store.dispatch('getEmployees');
-      store.dispatch('listener')
-    })
-  },
+    await store.dispatch('getCustomerBase');
+    await store.dispatch('fetchUser');
+    await store.dispatch('getWeeksSQL');
+    await store.dispatch('getEmployees');
+    await store.dispatch('listener')
+  }
 
 }
 

@@ -328,6 +328,7 @@ const commitOrders = async (context, o) => {
       nightTot += Number(orders[i][1])
       if(orders[i][9] == '1'){
         onlineTot += .5;
+        nightTot -= .5;
       }
     }
     context.commit("SET_ORDERS", {o: orders, t: nightTot, of: onlineTot})

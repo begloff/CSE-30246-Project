@@ -192,7 +192,11 @@ export default {
             this.orders = response.data
 
             this.price = this.orders.map( (index) => {
-                return Number(index[1]).toFixed(2)
+                if(index[9] == '0'){
+                    return Number(index[1]).toFixed(2)
+                } else {
+                    return Number(index[1] - 0.5).toFixed(2)
+                }
             })
 
             this.price = this.price.reduce((total, num) => {

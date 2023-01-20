@@ -596,7 +596,7 @@ export default {
       const date = new Date(d[0],d[1]-1,d[2],-4,0,0,0).toISOString().slice(0, 19).replace('T', ' ')
       const cost = this.storeCost
       const reason = this.onlyLettersAndNumbers(this.storeReason)
-      const sql = `insert into costs (week_id, cost, date, reason) values (${this.$store.state.currWeek}, ${cost}, '${date}', '${reason}');`
+      const sql = `insert into costs (week_id, cost, date, reason) values (${this.selectedWeek[0]}, ${cost}, '${date}', '${reason}');`
       const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order', {sql: sql})
       //Need to get week id
       const sql2 = `SELECT * from costs where week_id = ${this.selectedWeek[0]} and date = '${date}' and cost = ${cost} and reason = '${reason}';`

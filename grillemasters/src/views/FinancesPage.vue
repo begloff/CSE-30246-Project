@@ -82,6 +82,8 @@
       <div id="chart-wrapper">
         <canvas id="myDoughnutChart" width="500" height="270" style="margin-top: 5px;"></canvas>
       </div>
+      <h2>Hours Worked:</h2>
+      <p v-for="employee in this.$store.state.hourLabels">{{employee}}</p>
     </div>
 </div>
 <hr style="width:80%; margin: auto;">

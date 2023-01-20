@@ -109,6 +109,10 @@ const SET_WORKING_E = (state, payload) => {
     state.weeklyEmployees = payload;
 }
 
+const SET_HOUR_LABELS = (state, payload) => {
+    state.hourLabels = payload;
+}
+
 
 
 export default{
@@ -138,4 +142,5 @@ export default{
     SET_PROJECTIONS,
     SET_WORKING_E,
     SET_CUST_ID,
+    SET_HOUR_LABELS
 }

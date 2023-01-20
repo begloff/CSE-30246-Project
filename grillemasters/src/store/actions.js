@@ -180,6 +180,25 @@ const getWeeksSQL = async ( context ) => {
     context.commit("SET_CURR_WEEK", Number(response2.data[0][0]))
     context.commit("SET_SEL_WEEK", Number(response2.data[0][0]))
 
+    //If it is friday or later make a new week
+    let dDate = new Date()
+
+    if(dDate.getDay() > 4){
+        //Need to make the next week
+        //insert new week if the week doesn't exist yet
+        let start_date = new Date()
+        let end_date = new Date()
+        start_date.setDate(date.getDate() + 7 - date.getDay()) 
+        end_date.setDate(start_date.getDate() + 6)
+        start_date.setHours(-5); start_date.setMinutes(0); start_date.setSeconds(0);
+        end_date.setHours(18); end_date.setMinutes(59); end_date.setSeconds(59);
+        let response2 = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: `SELECT * from weeks where start_date = '${start_date.toISOString().slice(0, 19).replace('T', ' ')}';`})
+        if(response2.data.length == 0){
+            console.log("Inserting new week")
+            await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: `INSERT INTO weeks (start_date, end_date) values( "${start_date.toISOString().slice(0, 19).replace('T', ' ')}", "${end_date.toISOString().slice(0, 19).replace('T', ' ')}")`})
+        }
+    }
+
     const response = await axios.post('https://duncan-grille-api.azurewebsites.net/api/get-orders',{sql: 'SELECT * from weeks order by start_date desc;'})
     const weeks = []
 
@@ -263,9 +282,11 @@ const updateFinancePage = async (context) => {
     }
     
     // prepare week cost data for table
-    for( var i=0; i<costData.length; i++) {
-      costObj[costData[i][1]] = [costData[i][0], costData[i][2]]
-    }
+    // for( var i=0; i<costData.length; i++) {
+    //     console.log(costData)
+    //   costObj[costData[i][1]] = [costData[i][0], costData[i][2]]
+    // }
+    // console.log(costObj)
 
     // find total weekly revenue
     for( var i = 0; i<revData.length; i++) {
@@ -277,7 +298,8 @@ const updateFinancePage = async (context) => {
     // find total cost
     var totalCost = 0
     for( var i= 0; i < costData.length; i++) {
-      totalCost = totalCost + Number(costObj[costData[i][1]][0])
+        // console.log(costObj)
+      totalCost = totalCost + Number(costData[i][0])
     }
 
     // find workers hours
@@ -285,6 +307,13 @@ const updateFinancePage = async (context) => {
 
     var wage     = Number( ( (0.9 * (totalRev - totalCost)) / totalHours).toFixed(2) )
 
+    console.log(workerHoursData, workersData)
+
+    var hourLabels = []
+
+    for( var i = 0; i < workerHoursData.length; i++){
+        hourLabels.push(`${workersData[i]} : ${workerHoursData[i]}`)
+    }
 
     var workerWages = workerHoursData.map( function(element){
         return element * wage
@@ -303,6 +332,7 @@ const updateFinancePage = async (context) => {
     context.commit("SET_WORKER_HOURS", {wH: workerWages, w: workersData, tH:totalHours})
     context.commit("SET_WAGE", wage)
     context.commit("SET_WORKING_E", workingEData)
+    context.commit("SET_HOUR_LABELS", hourLabels)
 }
 
 const getOrdersByDay = async (context) => {

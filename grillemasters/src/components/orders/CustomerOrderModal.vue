@@ -188,6 +188,7 @@ export default {
                 this.$store.dispatch('onlineTrigger')
             }
             catch (err){
+                console.log(sql)
                 console.log(err)
             }
             // console.log(res.data)

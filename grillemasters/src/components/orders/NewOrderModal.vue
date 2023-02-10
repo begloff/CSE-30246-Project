@@ -213,11 +213,15 @@ export default {
         },
         async insertOrder(price, items, cust_id, dayofweek, week_id, cash, online, done, comments) {
             let today = new Date()
-            const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
+
+            console.log(today.toTimeString().slice(0,8))
+
+            const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${String(today.toTimeString().slice(0,8))}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
             try{
                 await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
             }
             catch (err){
+                console.log(sql)
                 console.log(err)
             }
             // console.log(res.data)
@@ -263,7 +267,9 @@ export default {
             return num
         },
         formatDate(date) {
-            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
+            //console.log(date)
+            //console.log(`${date.getFullYear()}-${date.getMonth() + 1 >= 10 ? date.getMonth() + 1: '0' + (date.getMonth() + 1)}-${date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`)
+            return `${date.getFullYear()}-${date.getMonth() + 1 >= 10 ? date.getMonth() + 1: '0' + (date.getMonth() + 1)}-${date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()} ${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}:${date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()}`
         },
         hallStaffCheckBox(){
             //Takes time to model to this.hallStaffOrder so flip the values

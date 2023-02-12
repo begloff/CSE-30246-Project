@@ -167,7 +167,7 @@ export default {
 
         async submitOrder(){
 
-            this.$emit('success')
+            
 
             this.currentOrder.comments = this.onlyLettersAndNumbers(this.currentOrder.comments)
 
@@ -181,15 +181,18 @@ export default {
         },
         async insertOrder(price, items, cust_id, dayofweek, week_id, cash, online, done, comments) {
             let today = new Date()
-            const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${today.toLocaleTimeString()}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
+            const sql = `INSERT INTO orders (price, items, order_time, order_day, order_datetime, week_id, cust_id, cash, online, done, comments) values (${price}, ${items},\"${String(today.toTimeString().slice(0,8))}\", \"${dayofweek}\", \"${this.formatDate(today)}\", ${week_id}, ${cust_id}, ${cash}, ${online}, ${done}, \"${comments}\");`
             try{
                 console.log(sql)
                 await axios.post('https://duncan-grille-api.azurewebsites.net/api/place-order',{sql: sql})
                 this.$store.dispatch('onlineTrigger')
+                alert("Successfully submitted order! Please Venmo @DuncanGrille")
+                this.$emit('success')
             }
             catch (err){
-                console.log(sql)
                 console.log(err)
+                alert("Error: Order Could not be placed, please try again")
+                this.$emit('failure')
             }
             // console.log(res.data)
             await this.$store.dispatch('getOrdersByDay');
